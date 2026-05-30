@@ -1,0 +1,230 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Picshaw Brand - Refined cinematic palette */
+  --background: #050505;
+  --foreground: #FAFAF8;
+  --card: #0A0A0A;
+  --card-foreground: #FAFAF8;
+  --popover: #0A0A0A;
+  --popover-foreground: #FAFAF8;
+  --primary: #FF4A2B;
+  --primary-foreground: #050505;
+  --secondary: #7B6EF6;
+  --secondary-foreground: #FAFAF8;
+  --muted: #141414;
+  --muted-foreground: #8A8A8A;
+  --accent: #C9A86C;
+  --accent-foreground: #050505;
+  --destructive: #FF4A2B;
+  --destructive-foreground: #FAFAF8;
+  --border: rgba(255, 255, 255, 0.08);
+  --input: rgba(255, 255, 255, 0.06);
+  --ring: #FF4A2B;
+  --chart-1: #FF4A2B;
+  --chart-2: #7B6EF6;
+  --chart-3: #C9A86C;
+  --chart-4: #FAFAF8;
+  --chart-5: #8A8A8A;
+  --radius: 0.5rem;
+}
+
+@theme inline {
+  --font-sans: 'Space Grotesk', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Geist Mono', monospace;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "ss01", "ss02", "cv01";
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* Cinematic noise overlay */
+.noise-texture::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  opacity: 0.025;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+/* Glass morphism */
+.glass {
+  background: rgba(10, 10, 10, 0.85);
+  backdrop-filter: blur(20px) saturate(1.2);
+  -webkit-backdrop-filter: blur(20px) saturate(1.2);
+}
+
+/* Hero gradient - subtle and cinematic */
+.hero-gradient {
+  background: 
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(255, 74, 43, 0.12) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 40% at 100% 0%, rgba(123, 110, 246, 0.08) 0%, transparent 40%);
+}
+
+/* Section gradient glow */
+.gradient-glow {
+  background: radial-gradient(ellipse 100% 80% at 50% -20%, rgba(255, 74, 43, 0.08) 0%, transparent 60%);
+}
+
+/* Fine grid lines */
+.grid-lines {
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 80px 80px;
+}
+
+/* Custom selection */
+::selection {
+  background: rgba(255, 74, 43, 0.25);
+  color: #FAFAF8;
+}
+
+/* Scrollbar hide */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Editorial headline styling */
+.headline-editorial {
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+}
+
+/* Smooth image reveal */
+.image-reveal {
+  clip-path: inset(0 0 0 0);
+  transition: clip-path 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+/* Magnetic hover effect base */
+.magnetic-hover {
+  transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* Stagger animation delays */
+.stagger-1 { --stagger-delay: 0.1s; }
+.stagger-2 { --stagger-delay: 0.2s; }
+.stagger-3 { --stagger-delay: 0.3s; }
+.stagger-4 { --stagger-delay: 0.4s; }
+.stagger-5 { --stagger-delay: 0.5s; }
+
+/* Line animation */
+@keyframes line-grow {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+.animate-line-grow {
+  animation: line-grow 1s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+  transform-origin: left;
+}
+
+/* Fade up animation */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+  animation-delay: var(--stagger-delay, 0s);
+  opacity: 0;
+}
+
+/* Project card hover state */
+.project-card {
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.project-card:hover {
+  transform: translateY(-8px);
+}
+
+.project-card:hover .project-image {
+  transform: scale(1.05);
+}
+
+/* Text gradient */
+.text-gradient {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Cursor follower dot */
+.cursor-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--primary);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: difference;
+}
