@@ -2,7 +2,7 @@
 
 import { motion, useReducedMotion } from "framer-motion"
 import { AnimatedButton } from "./AnimatedButton"
-import { Check, ArrowRight, Zap } from "lucide-react"
+import { Check, ArrowRight, Zap, ShieldCheck } from "lucide-react"
 
 const packages = [
   {
@@ -22,7 +22,7 @@ const packages = [
       "Basic analytics setup",
       "Live in 7-10 days",
     ],
-    cta: "Refresh My Website",
+    cta: "Get Your Free Website Review",
     featured: true,
   },
   {
@@ -40,7 +40,7 @@ const packages = [
       "Custom photography direction",
       "2 revision rounds",
     ],
-    cta: "Plan a Growth Site",
+    cta: "Get Your Free Website Review",
     featured: false,
   },
   {
@@ -58,7 +58,7 @@ const packages = [
       "Analytics review calls",
       "Priority support",
     ],
-    cta: "Ask About Monthly",
+    cta: "Get Your Free Website Review",
     featured: false,
   },
 ]
@@ -130,6 +130,11 @@ export function Pricing() {
                   <AnimatedButton href="#contact" size="lg" showArrow>
                     {packages[0].cta}
                   </AnimatedButton>
+                  {/* Risk reversal guarantee */}
+                  <p className="mt-4 flex items-start gap-2 text-sm text-muted-foreground">
+                    <ShieldCheck size={16} className="mt-0.5 shrink-0 text-green-500" />
+                    <span>Unlimited revisions until launch. Love it or we keep refining — free of charge.</span>
+                  </p>
                 </div>
               </div>
               

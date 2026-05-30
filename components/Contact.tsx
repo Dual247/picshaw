@@ -1,44 +1,67 @@
 "use client"
 
 import { useState } from "react"
-import { motion, useReducedMotion } from "framer-motion"
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion"
 import { AnimatedButton } from "./AnimatedButton"
-import { ArrowUpRight } from "lucide-react"
+import { ArrowUpRight, Check, Phone } from "lucide-react"
 
-const budgetOptions = [
+const serviceOptions = [
   { value: "1k", label: "$1,000 Website Refresh" },
   { value: "2.5k", label: "$2,500+ Growth Site" },
   { value: "monthly", label: "Monthly Partnership" },
   { value: "unsure", label: "Not sure yet" },
 ]
 
+// TODO: Replace with actual phone number (CallRail or tracking number)
+const PHONE_NUMBER = "(737) 900-9237"
+const PHONE_NUMBER_TEL = "tel:+17379009237"
+
 export function Contact() {
+  const [step, setStep] = useState(1)
+  const [selectedService, setSelectedService] = useState("")
+  const [serviceError, setServiceError] = useState(false)
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     business: "",
     website: "",
-    budget: "",
     message: "",
   })
-  const [selectedBudget, setSelectedBudget] = useState("")
 
   const prefersReducedMotion = useReducedMotion()
 
+  const handleStep1Continue = (e: React.FormEvent) => {
+    e.preventDefault()
+    
+    // Validate service selection
+    if (!selectedService) {
+      setServiceError(true)
+      return
+    }
+    
+    setServiceError(false)
+    setStep(2)
+  }
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+    // TODO: Wire up to actual form submission endpoint
     alert(
-      "Got it! I&apos;ll review your site and reply with a recommendation within 24 hours."
+      "Got it! I'll review your site and reply with a recommendation within 24 hours."
     )
     setFormData({
       name: "",
       email: "",
       business: "",
       website: "",
-      budget: "",
       message: "",
     })
-    setSelectedBudget("")
+    setSelectedService("")
+    setStep(1)
+  }
+
+  const handleBack = () => {
+    setStep(1)
   }
 
   return (
@@ -80,6 +103,17 @@ export function Contact() {
                 <span>hello@picshaw.com</span>
                 <ArrowUpRight size={14} className="opacity-0 transition-opacity group-hover:opacity-100" />
               </a>
+              {/* Phone number */}
+              <a
+                href={PHONE_NUMBER_TEL}
+                className="group flex items-center gap-3 text-foreground transition-colors hover:text-primary"
+              >
+                <span className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card transition-colors group-hover:border-primary/30">
+                  <Phone size={16} />
+                </span>
+                <span>{PHONE_NUMBER}</span>
+                <ArrowUpRight size={14} className="opacity-0 transition-opacity group-hover:opacity-100" />
+              </a>
               <p className="flex items-center gap-3 text-muted-foreground">
                 <span className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
@@ -112,133 +146,205 @@ export function Contact() {
           </motion.div>
 
           {/* Right - Form */}
-          <motion.form
+          <motion.div
             initial={prefersReducedMotion ? {} : { opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8, delay: 0.1, ease: [0.23, 1, 0.32, 1] }}
-            onSubmit={handleSubmit}
             className="rounded-2xl border border-border bg-card/50 p-8 md:p-10"
           >
-            <div className="space-y-6">
-              {/* Name & Email Row */}
-              <div className="grid gap-6 md:grid-cols-2">
-                <div>
-                  <label htmlFor="contact-name" className="mb-2 block text-sm font-medium text-foreground">
-                    Your name
-                  </label>
-                  <input
-                    type="text"
-                    id="contact-name"
-                    name="name"
-                    required
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full rounded-lg border border-border bg-background px-4 py-3 text-foreground transition-colors placeholder:text-muted-foreground focus:border-primary focus:outline-none"
-                    placeholder="John Smith"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="contact-email" className="mb-2 block text-sm font-medium text-foreground">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    id="contact-email"
-                    name="email"
-                    required
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full rounded-lg border border-border bg-background px-4 py-3 text-foreground transition-colors placeholder:text-muted-foreground focus:border-primary focus:outline-none"
-                    placeholder="john@business.com"
-                  />
-                </div>
+            {/* Progress indicator */}
+            <div className="mb-8 flex items-center justify-between">
+              <span className="text-sm font-medium text-muted-foreground">
+                Step {step} of 2
+              </span>
+              <div className="flex gap-2">
+                <div className={`h-2 w-12 rounded-full transition-colors ${step >= 1 ? "bg-primary" : "bg-border"}`} />
+                <div className={`h-2 w-12 rounded-full transition-colors ${step >= 2 ? "bg-primary" : "bg-border"}`} />
               </div>
-
-              {/* Business & Website Row */}
-              <div className="grid gap-6 md:grid-cols-2">
-                <div>
-                  <label htmlFor="contact-business" className="mb-2 block text-sm font-medium text-foreground">
-                    Business name
-                  </label>
-                  <input
-                    type="text"
-                    id="contact-business"
-                    name="business"
-                    value={formData.business}
-                    onChange={(e) => setFormData({ ...formData, business: e.target.value })}
-                    className="w-full rounded-lg border border-border bg-background px-4 py-3 text-foreground transition-colors placeholder:text-muted-foreground focus:border-primary focus:outline-none"
-                    placeholder="Smith Plumbing Co."
-                  />
-                </div>
-                <div>
-                  <label htmlFor="contact-website" className="mb-2 block text-sm font-medium text-foreground">
-                    Current website
-                  </label>
-                  <input
-                    type="url"
-                    id="contact-website"
-                    name="website"
-                    value={formData.website}
-                    onChange={(e) => setFormData({ ...formData, website: e.target.value })}
-                    className="w-full rounded-lg border border-border bg-background px-4 py-3 text-foreground transition-colors placeholder:text-muted-foreground focus:border-primary focus:outline-none"
-                    placeholder="https://smithplumbing.com"
-                  />
-                </div>
-              </div>
-
-              {/* Budget - Visual Selection */}
-              <div>
-                <label className="mb-3 block text-sm font-medium text-foreground">
-                  What are you looking for?
-                </label>
-                <div className="grid gap-3 sm:grid-cols-2">
-                  {budgetOptions.map((option) => (
-                    <button
-                      key={option.value}
-                      type="button"
-                      onClick={() => {
-                        setSelectedBudget(option.value)
-                        setFormData({ ...formData, budget: option.label })
-                      }}
-                      className={`rounded-lg border px-4 py-3 text-left text-sm transition-all ${
-                        selectedBudget === option.value
-                          ? "border-primary bg-primary/10 text-foreground"
-                          : "border-border bg-background text-muted-foreground hover:border-foreground/20 hover:text-foreground"
-                      }`}
-                    >
-                      {option.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Message */}
-              <div>
-                <label htmlFor="contact-message" className="mb-2 block text-sm font-medium text-foreground">
-                  What&apos;s your biggest frustration with your current site?
-                </label>
-                <textarea
-                  id="contact-message"
-                  name="message"
-                  rows={4}
-                  value={formData.message}
-                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  className="w-full resize-none rounded-lg border border-border bg-background px-4 py-3 text-foreground transition-colors placeholder:text-muted-foreground focus:border-primary focus:outline-none"
-                  placeholder="e.g., &quot;It looks outdated and I&apos;m embarrassed to send people there&quot; or &quot;I&apos;m not getting any calls from it&quot;"
-                />
-              </div>
-
-              {/* Submit */}
-              <AnimatedButton type="submit" size="lg" className="w-full justify-center" showArrow>
-                Get My Free Website Review
-              </AnimatedButton>
-              
-              <p className="text-center text-xs text-muted-foreground">
-                No spam. No sales pitch. Just an honest assessment of your site.
-              </p>
             </div>
-          </motion.form>
+
+            <AnimatePresence mode="wait">
+              {step === 1 ? (
+                <motion.form
+                  key="step1"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.3 }}
+                  onSubmit={handleStep1Continue}
+                  className="space-y-6"
+                >
+                  {/* Website URL */}
+                  <div>
+                    <label htmlFor="contact-website" className="mb-2 block text-sm font-medium text-foreground">
+                      Current website URL <span className="text-primary">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      id="contact-website"
+                      name="website"
+                      required
+                      value={formData.website}
+                      onChange={(e) => setFormData({ ...formData, website: e.target.value })}
+                      className="w-full rounded-lg border border-border bg-background px-4 py-3 text-foreground transition-colors placeholder:text-muted-foreground focus:border-primary focus:outline-none"
+                      placeholder="yourbusiness.com"
+                    />
+                    {/* TODO: Pre-fill from query param for campaign tracking */}
+                  </div>
+
+                  {/* Email */}
+                  <div>
+                    <label htmlFor="contact-email" className="mb-2 block text-sm font-medium text-foreground">
+                      Email <span className="text-primary">*</span>
+                    </label>
+                    <input
+                      type="email"
+                      id="contact-email"
+                      name="email"
+                      required
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      className="w-full rounded-lg border border-border bg-background px-4 py-3 text-foreground transition-colors placeholder:text-muted-foreground focus:border-primary focus:outline-none"
+                      placeholder="you@business.com"
+                    />
+                  </div>
+
+                  {/* Service Selection - Radio Inputs styled as cards */}
+                  <fieldset>
+                    <legend className="mb-3 block text-sm font-medium text-foreground">
+                      What are you looking for? <span className="text-primary">*</span>
+                    </legend>
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      {serviceOptions.map((option) => (
+                        <label
+                          key={option.value}
+                          className={`relative cursor-pointer rounded-lg border px-4 py-3 text-left text-sm transition-all ${
+                            selectedService === option.value
+                              ? "border-primary bg-primary/10 text-foreground"
+                              : "border-border bg-background text-muted-foreground hover:border-foreground/20 hover:text-foreground"
+                          } ${serviceError && !selectedService ? "border-red-500/50" : ""}`}
+                        >
+                          <input
+                            type="radio"
+                            name="service_interest"
+                            value={option.value}
+                            checked={selectedService === option.value}
+                            onChange={(e) => {
+                              setSelectedService(e.target.value)
+                              setServiceError(false)
+                            }}
+                            className="sr-only"
+                            aria-describedby={serviceError ? "service-error" : undefined}
+                          />
+                          <span className="flex items-center gap-2">
+                            {selectedService === option.value && (
+                              <Check size={14} className="text-primary" />
+                            )}
+                            {option.label}
+                          </span>
+                        </label>
+                      ))}
+                    </div>
+                    {serviceError && (
+                      <p id="service-error" className="mt-2 text-sm text-red-500">
+                        Please select what you&apos;re looking for
+                      </p>
+                    )}
+                  </fieldset>
+
+                  {/* Continue Button */}
+                  <AnimatedButton type="submit" size="lg" className="w-full justify-center" showArrow>
+                    Continue
+                  </AnimatedButton>
+                </motion.form>
+              ) : (
+                <motion.form
+                  key="step2"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 20 }}
+                  transition={{ duration: 0.3 }}
+                  onSubmit={handleSubmit}
+                  className="space-y-6"
+                >
+                  {/* Back button */}
+                  <button
+                    type="button"
+                    onClick={handleBack}
+                    className="mb-2 flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+                  >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M19 12H5M12 19l-7-7 7-7" />
+                    </svg>
+                    Back
+                  </button>
+
+                  {/* Name */}
+                  <div>
+                    <label htmlFor="contact-name" className="mb-2 block text-sm font-medium text-foreground">
+                      Your name
+                    </label>
+                    <input
+                      type="text"
+                      id="contact-name"
+                      name="name"
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      className="w-full rounded-lg border border-border bg-background px-4 py-3 text-foreground transition-colors placeholder:text-muted-foreground focus:border-primary focus:outline-none"
+                      placeholder="John Smith"
+                    />
+                  </div>
+
+                  {/* Business Name */}
+                  <div>
+                    <label htmlFor="contact-business" className="mb-2 block text-sm font-medium text-foreground">
+                      Business name
+                    </label>
+                    <input
+                      type="text"
+                      id="contact-business"
+                      name="business"
+                      value={formData.business}
+                      onChange={(e) => setFormData({ ...formData, business: e.target.value })}
+                      className="w-full rounded-lg border border-border bg-background px-4 py-3 text-foreground transition-colors placeholder:text-muted-foreground focus:border-primary focus:outline-none"
+                      placeholder="Smith Plumbing Co."
+                    />
+                  </div>
+
+                  {/* Message */}
+                  <div>
+                    <label htmlFor="contact-message" className="mb-2 block text-sm font-medium text-foreground">
+                      What&apos;s your biggest frustration with your current site?
+                    </label>
+                    <textarea
+                      id="contact-message"
+                      name="message"
+                      rows={4}
+                      value={formData.message}
+                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                      className="w-full resize-none rounded-lg border border-border bg-background px-4 py-3 text-foreground transition-colors placeholder:text-muted-foreground focus:border-primary focus:outline-none"
+                      placeholder="e.g., &quot;It looks outdated and I&apos;m embarrassed to send people there&quot; or &quot;I&apos;m not getting any calls from it&quot;"
+                    />
+                  </div>
+
+                  {/* Hidden fields to include step 1 data */}
+                  <input type="hidden" name="website" value={formData.website} />
+                  <input type="hidden" name="email" value={formData.email} />
+                  <input type="hidden" name="service_interest" value={selectedService} />
+
+                  {/* Submit */}
+                  <AnimatedButton type="submit" size="lg" className="w-full justify-center" showArrow>
+                    Get My Free Website Review
+                  </AnimatedButton>
+                  
+                  <p className="text-center text-xs text-muted-foreground">
+                    No spam. No sales pitch. Just an honest assessment of your site.
+                  </p>
+                </motion.form>
+              )}
+            </AnimatePresence>
+          </motion.div>
         </div>
       </div>
     </section>

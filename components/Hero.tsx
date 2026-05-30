@@ -60,14 +60,24 @@ export function Hero() {
           animate="animate"
           className="max-w-4xl"
         >
-          {/* Eyebrow with credibility */}
+          {/* Descriptor badge - LA Web Design Studio */}
+          <motion.div 
+            variants={prefersReducedMotion ? {} : fadeUp}
+            className="mb-4 flex items-center gap-3"
+          >
+            <span className="inline-flex items-center rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-xs font-medium uppercase tracking-wider text-primary">
+              Los Angeles Web Design Studio
+            </span>
+          </motion.div>
+
+          {/* Scarcity badge with explanation */}
           <motion.div 
             variants={prefersReducedMotion ? {} : fadeUp}
             className="mb-6 flex items-center gap-4"
           >
-            <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-xs font-medium uppercase tracking-wider text-primary">
+            <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-xs font-medium tracking-wide text-primary">
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary" />
-              2 spots left this month
+              Only 2 projects per week — I personally design every site
             </span>
           </motion.div>
 
@@ -119,13 +129,13 @@ export function Hero() {
             </div>
           </motion.div>
 
-          {/* CTAs */}
+          {/* CTAs - Unified language */}
           <motion.div
             variants={prefersReducedMotion ? {} : fadeUp}
             className="mt-10 flex flex-wrap items-center gap-4"
           >
             <AnimatedButton href="#contact" size="lg" showArrow>
-              Get Your Free Quote
+              Get Your Free Website Review
             </AnimatedButton>
             <AnimatedButton href="#work" variant="outline" size="lg">
               See the Work
