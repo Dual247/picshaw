@@ -5,6 +5,10 @@ import { motion, AnimatePresence, useReducedMotion } from "framer-motion"
 import { Menu, X, ArrowUpRight } from "lucide-react"
 import { AnimatedButton } from "./AnimatedButton"
 
+// TODO: Replace with actual phone number (CallRail or tracking number)
+const PHONE_NUMBER = "(737) 900-9237"
+const PHONE_NUMBER_TEL = "tel:+17379009237"
+
 const navItems = [
   { label: "Work", href: "#work" },
   { label: "Services", href: "#services" },
@@ -66,7 +70,7 @@ export function Header() {
           {/* Desktop CTA */}
           <div className="hidden lg:block">
             <AnimatedButton href="#contact" size="sm">
-              Get a Free Quote
+              Get Your Free Website Review
               <ArrowUpRight size={14} />
             </AnimatedButton>
           </div>
@@ -108,7 +112,7 @@ export function Header() {
                   ))}
                   <div className="pt-4">
                     <AnimatedButton href="#contact" className="w-full justify-center">
-                      Get My Free Website Review
+                      Get Your Free Website Review
                     </AnimatedButton>
                   </div>
                 </div>
@@ -125,9 +129,18 @@ export function Header() {
         transition={{ duration: 0.6, delay: 0.3, ease: [0.23, 1, 0.32, 1] }}
         className="fixed bottom-0 left-0 right-0 z-50 glass border-t border-border p-4 lg:hidden"
       >
-        <AnimatedButton href="#contact" className="w-full justify-center" showArrow>
-          Get Your Free Website Review
-        </AnimatedButton>
+        <div className="flex flex-col items-center gap-2">
+          <AnimatedButton href="#contact" className="w-full justify-center" showArrow>
+            Get Your Free Website Review
+          </AnimatedButton>
+          {/* Click-to-call secondary link */}
+          <a 
+            href={PHONE_NUMBER_TEL}
+            className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+          >
+            Or call <span className="underline underline-offset-2">{PHONE_NUMBER}</span>
+          </a>
+        </div>
       </motion.div>
     </>
   )

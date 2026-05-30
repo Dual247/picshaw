@@ -13,12 +13,12 @@ const faqs = [
   {
     question: "Will this actually help me get more customers?",
     answer:
-      "That&apos;s the entire point. Every design decision is made to convert: click-to-call buttons, quote forms above the fold, trust signals, fast loading, mobile optimization. This isn&apos;t art—it&apos;s a sales tool for your business.",
+      "That's the entire point. Every design decision is made to convert: click-to-call buttons, quote forms above the fold, trust signals, fast loading, mobile optimization. This isn't art—it's a sales tool for your business.",
   },
   {
     question: "What if I already have a website?",
     answer:
-      "Perfect—that&apos;s what the refresh is for. I take your existing content, improve the design, fix the mobile experience, optimize for Google, and add conversion elements. Your site goes from \"it works\" to \"it sells.\"",
+      "Perfect—that's what the refresh is for. I take your existing content, improve the design, fix the mobile experience, optimize for Google, and add conversion elements. Your site goes from \"it works\" to \"it sells.\"",
   },
   {
     question: "How does this help me rank on Google?",
@@ -33,18 +33,34 @@ const faqs = [
   {
     question: "Who runs Picshaw?",
     answer:
-      "I&apos;m a Los Angeles-based web designer who got tired of watching local businesses get overcharged by agencies for mediocre work. I started Picshaw to give service businesses, restaurants, and local shops access to premium web design at a price that makes sense.",
+      "I'm a Los Angeles-based web designer who got tired of watching local businesses get overcharged by agencies for mediocre work. I started Picshaw to give service businesses, restaurants, and local shops access to premium web design at a price that makes sense.",
   },
   {
     question: "What happens after my site launches?",
     answer:
-      "You own it. I provide a handoff with everything you need to make basic updates. If you want ongoing optimization, content updates, or new pages, I offer a monthly partnership starting at $500/month. But there&apos;s no pressure—plenty of clients launch and run with it.",
+      "You own it. I provide a handoff with everything you need to make basic updates. If you want ongoing optimization, content updates, or new pages, I offer a monthly partnership starting at $500/month. But there's no pressure—plenty of clients launch and run with it.",
   },
 ]
 
+// Track which FAQ items should be expanded by default (first 2)
+const DEFAULT_EXPANDED_INDICES = [0, 1]
+
 export function FAQ() {
-  const [openIndex, setOpenIndex] = useState<number | null>(0)
+  // Initialize with first 2 items expanded
+  const [openIndices, setOpenIndices] = useState<Set<number>>(new Set(DEFAULT_EXPANDED_INDICES))
   const prefersReducedMotion = useReducedMotion()
+
+  const toggleIndex = (index: number) => {
+    setOpenIndices(prev => {
+      const newSet = new Set(prev)
+      if (newSet.has(index)) {
+        newSet.delete(index)
+      } else {
+        newSet.add(index)
+      }
+      return newSet
+    })
+  }
 
   return (
     <section id="faq" className="relative py-32 md:py-48">
@@ -81,15 +97,15 @@ export function FAQ() {
             {faqs.map((faq, index) => (
               <div key={index}>
                 <button
-                  onClick={() => setOpenIndex(openIndex === index ? null : index)}
+                  onClick={() => toggleIndex(index)}
                   className="group flex w-full items-start justify-between gap-6 py-6 text-left"
-                  aria-expanded={openIndex === index}
+                  aria-expanded={openIndices.has(index)}
                 >
                   <span className="text-lg font-medium text-foreground transition-colors group-hover:text-primary">
                     {faq.question}
                   </span>
                   <motion.span
-                    animate={{ rotate: openIndex === index ? 45 : 0 }}
+                    animate={{ rotate: openIndices.has(index) ? 45 : 0 }}
                     transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
                     className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors group-hover:border-primary group-hover:text-primary"
                   >
@@ -97,7 +113,7 @@ export function FAQ() {
                   </motion.span>
                 </button>
                 <AnimatePresence initial={false}>
-                  {openIndex === index && (
+                  {openIndices.has(index) && (
                     <motion.div
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
