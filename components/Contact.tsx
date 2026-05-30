@@ -181,14 +181,14 @@ export function Contact() {
                       Current website URL <span className="text-primary">*</span>
                     </label>
                     <input
-                      type="url"
+                      type="text"
                       id="contact-website"
                       name="website"
                       required
                       value={formData.website}
                       onChange={(e) => setFormData({ ...formData, website: e.target.value })}
                       className="w-full rounded-lg border border-border bg-background px-4 py-3 text-foreground transition-colors placeholder:text-muted-foreground focus:border-primary focus:outline-none"
-                      placeholder="https://yourbusiness.com"
+                      placeholder="yourbusiness.com"
                     />
                     {/* TODO: Pre-fill from query param for campaign tracking */}
                   </div>
