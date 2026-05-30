@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion"
 import { Menu, X, ArrowUpRight } from "lucide-react"
 import { AnimatedButton } from "./AnimatedButton"
+import { Logo } from "./Logo"
 
 const navItems = [
   { label: "Work", href: "#work" },
@@ -40,15 +41,7 @@ export function Header() {
       >
         <div className="mx-auto flex max-w-[1400px] items-center justify-between px-6 md:px-12 lg:px-20">
           {/* Logo */}
-          <a href="#" className="relative z-10 flex items-center gap-4">
-            <span className="text-xl font-bold tracking-tight text-foreground md:text-2xl">
-              Picshaw
-            </span>
-            <span className="hidden h-4 w-px bg-border md:block" />
-            <span className="hidden text-[11px] uppercase tracking-[0.2em] text-muted-foreground md:block">
-              LA Web Studio
-            </span>
-          </a>
+          <Logo size="md" showTagline={true} />
 
           {/* Desktop Navigation */}
           <nav className="hidden items-center gap-10 lg:flex">
