@@ -13,6 +13,7 @@ interface AnimatedButtonProps {
   className?: string
   showArrow?: boolean
   type?: "button" | "submit"
+  disabled?: boolean
 }
 
 export function AnimatedButton({
@@ -24,6 +25,7 @@ export function AnimatedButton({
   className,
   showArrow = false,
   type = "button",
+  disabled = false,
 }: AnimatedButtonProps) {
   const baseStyles =
     "relative inline-flex items-center justify-center gap-2.5 font-medium transition-all duration-500 rounded-lg overflow-hidden group"
@@ -43,7 +45,7 @@ export function AnimatedButton({
     lg: "px-8 py-4 text-base",
   }
 
-  const combinedClassName = cn(baseStyles, variants[variant], sizes[size], className)
+  const combinedClassName = cn(baseStyles, variants[variant], sizes[size], disabled && "opacity-60 pointer-events-none", className)
 
   const content = (
     <>
@@ -80,6 +82,7 @@ export function AnimatedButton({
     <motion.button
       type={type}
       onClick={onClick}
+      disabled={disabled}
       className={combinedClassName}
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
