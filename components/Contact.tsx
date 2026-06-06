@@ -20,6 +20,7 @@ export function Contact() {
   const [step, setStep] = useState(1)
   const [selectedService, setSelectedService] = useState("")
   const [serviceError, setServiceError] = useState(false)
+  const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle")
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -43,21 +44,37 @@ export function Contact() {
     setStep(2)
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // TODO: Wire up to actual form submission endpoint
-    alert(
-      "Got it! I'll review your site and reply with a recommendation within 24 hours."
-    )
-    setFormData({
-      name: "",
-      email: "",
-      business: "",
-      website: "",
-      message: "",
-    })
-    setSelectedService("")
-    setStep(1)
+    setStatus("submitting")
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...formData,
+          service_interest: selectedService,
+        }),
+      })
+
+      if (!res.ok) {
+        throw new Error("Request failed")
+      }
+
+      setStatus("success")
+      setFormData({
+        name: "",
+        email: "",
+        business: "",
+        website: "",
+        message: "",
+      })
+      setSelectedService("")
+    } catch (err) {
+      console.error("[v0] Contact submit error:", err)
+      setStatus("error")
+    }
   }
 
   const handleBack = () => {
@@ -165,7 +182,36 @@ export function Contact() {
             </div>
 
             <AnimatePresence mode="wait">
-              {step === 1 ? (
+              {status === "success" ? (
+                <motion.div
+                  key="success"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="flex flex-col items-center py-12 text-center"
+                >
+                  <span className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/20 text-primary">
+                    <Check size={28} />
+                  </span>
+                  <h3 className="mt-6 text-2xl font-bold text-foreground">
+                    Message sent!
+                  </h3>
+                  <p className="mt-3 max-w-sm text-muted-foreground">
+                    Got it! I&apos;ll review your site and reply with a recommendation within 24 hours.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setStatus("idle")
+                      setStep(1)
+                    }}
+                    className="mt-8 text-sm font-medium text-primary transition-colors hover:text-primary/80"
+                  >
+                    Send another message
+                  </button>
+                </motion.div>
+              ) : step === 1 ? (
                 <motion.form
                   key="step1"
                   initial={{ opacity: 0, x: -20 }}
@@ -334,10 +380,16 @@ export function Contact() {
                   <input type="hidden" name="service_interest" value={selectedService} />
 
                   {/* Submit */}
-                  <AnimatedButton type="submit" size="lg" className="w-full justify-center" showArrow>
-                    Get My Free Website Review
+                  <AnimatedButton type="submit" size="lg" className="w-full justify-center" showArrow disabled={status === "submitting"}>
+                    {status === "submitting" ? "Sending..." : "Get My Free Website Review"}
                   </AnimatedButton>
-                  
+
+                  {status === "error" && (
+                    <p className="text-center text-sm text-red-500">
+                      Something went wrong. Please try again or email hello@picshaw.com directly.
+                    </p>
+                  )}
+
                   <p className="text-center text-xs text-muted-foreground">
                     No spam. No sales pitch. Just an honest assessment of your site.
                   </p>
