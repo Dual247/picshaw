@@ -49,7 +49,7 @@ export async function POST(request: Request) {
     }
 
     const { error } = await resend.emails.send({
-      from: "Picshaw Contact <onboarding@resend.dev>",
+      from: "Picshaw Contact <hello@picshaw.com>",
       to: ["hello@picshaw.com"],
       replyTo: email,
       subject: `New website review request${name ? ` from ${name}` : ""}`,
