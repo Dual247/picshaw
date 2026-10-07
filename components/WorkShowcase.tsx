@@ -2,47 +2,9 @@
 
 import { motion, useReducedMotion } from "framer-motion"
 import { AnimatedButton } from "./AnimatedButton"
-import { ArrowUpRight, Phone, Calendar, Star } from "lucide-react"
+import { ArrowUpRight } from "lucide-react"
 import Image from "next/image"
-
-const projects = [
-  {
-    title: "Pacific Plumbing Co.",
-    category: "Home Services",
-    tag: "Website Refresh",
-    result: "47% more quote requests",
-    description:
-      "A Glendale plumber stuck with a site from 2016. We rebuilt with service-area pages, emergency contact buttons, and Google-friendly structure. Within 60 days, quote requests nearly doubled.",
-    index: "01",
-    image: "/images/project-plumbing.png",
-    accent: "from-blue-500/20 to-transparent",
-    icon: Phone,
-  },
-  {
-    title: "Glow Aesthetics LA",
-    category: "Med Spa",
-    tag: "Lead Generation",
-    result: "3x consultation bookings",
-    description:
-      "A Beverly Hills med spa losing clients to flashier competitors. We created a polished, premium feel with online booking, treatment galleries, and trust signals. Consultations tripled in the first month.",
-    index: "02",
-    image: "/images/project-medspa.png",
-    accent: "from-rose-400/20 to-transparent",
-    icon: Calendar,
-  },
-  {
-    title: "Ember Kitchen",
-    category: "Restaurant",
-    tag: "Brand Website",
-    result: "First page Google ranking",
-    description:
-      "A Silver Lake restaurant invisible on Google. We built a mobile-first site with schema markup, reservation CTAs, and menu pages that now rank #1 for \"Silver Lake brunch.\"",
-    index: "03",
-    image: "/images/project-restaurant.png",
-    accent: "from-amber-500/20 to-transparent",
-    icon: Star,
-  },
-]
+import { projects } from "@/lib/work-showcase"
 
 export function WorkShowcase() {
   const prefersReducedMotion = useReducedMotion()
@@ -60,13 +22,13 @@ export function WorkShowcase() {
         >
           <span className="mb-4 inline-flex items-center gap-3 text-xs font-medium uppercase tracking-[0.25em] text-muted-foreground">
             <span className="h-px w-8 bg-primary" />
-            Case Studies
+            Design Concepts
           </span>
           <h2 className="headline-editorial text-4xl font-bold text-foreground md:text-5xl lg:text-6xl">
-            Real results for<br />LA businesses
+            Website ideas for<br />LA businesses
           </h2>
           <p className="mt-6 max-w-lg text-lg text-muted-foreground">
-            Not templates. Not mockups. These are real local businesses that went from invisible to fully booked.
+            Explore website design concepts for home services, med spas, and restaurants.
           </p>
         </motion.div>
 
@@ -101,15 +63,27 @@ export function WorkShowcase() {
                         <div className="h-3 w-3 rounded-full bg-green-500/60" />
                       </div>
                       <div className="ml-4 flex-1 rounded-md bg-background/50 px-3 py-1">
-                        <span className="text-xs text-muted-foreground">{project.title.toLowerCase().replace(/\s+/g, '')}.com</span>
+                        {project.destination ? (
+                          <a
+                            href={project.destination.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label={`Visit ${project.title} website (opens in a new tab)`}
+                            className="text-xs text-muted-foreground underline underline-offset-4 hover:text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
+                          >
+                            {project.destination.host}
+                          </a>
+                        ) : (
+                          <span className="text-xs text-muted-foreground">Design concept preview</span>
+                        )}
                       </div>
                     </div>
                     
-                    {/* Actual project image */}
+                    {/* Website concept preview */}
                     <div className="relative aspect-[16/10] overflow-hidden">
                       <Image
                         src={project.image}
-                        alt={`${project.title} website design`}
+                        alt={`${project.title} website design concept`}
                         fill
                         className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
                       />
@@ -133,11 +107,23 @@ export function WorkShowcase() {
                     {project.title}
                   </h3>
                   
-                  {/* Result highlight - big and bold */}
+                  {/* Design focus; measured results require linked evidence. */}
                   <div className="mt-6 inline-flex items-center gap-3 rounded-lg border border-primary/20 bg-primary/5 px-4 py-3">
                     <project.icon size={20} className="text-primary" />
-                    <span className="text-xl font-bold text-primary">{project.result}</span>
+                    <span className="text-xl font-bold text-primary">{project.focus}</span>
                   </div>
+
+                  {project.result && (
+                    <div className="mt-6">
+                      <p className="text-xl font-bold text-primary">{project.result.label}</p>
+                      <a
+                        href={project.result.evidence.url}
+                        className="text-sm text-muted-foreground underline underline-offset-4 hover:text-foreground"
+                      >
+                        {project.result.evidence.label}
+                      </a>
+                    </div>
+                  )}
                   
                   <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
                     {project.description}
@@ -145,7 +131,7 @@ export function WorkShowcase() {
                   
                   <div className="mt-8">
                     <AnimatedButton href="#contact" variant="outline">
-                      I want results like this
+                      Discuss a design like this
                       <ArrowUpRight size={16} />
                     </AnimatedButton>
                   </div>
@@ -164,7 +150,7 @@ export function WorkShowcase() {
           className="mt-32 text-center"
         >
           <p className="text-lg text-muted-foreground">
-            Your business could be next.
+            Let’s build your website.
           </p>
           <div className="mt-6">
             <AnimatedButton href="#contact" size="lg" showArrow>

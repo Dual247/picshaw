@@ -142,7 +142,7 @@ export function Hero() {
             </AnimatedButton>
           </motion.div>
 
-          {/* Social proof - founder-led */}
+          {/* Service focus */}
           <motion.div
             variants={prefersReducedMotion ? {} : fadeUp}
             className="mt-12 flex items-center gap-4 border-t border-border/50 pt-8"
@@ -156,8 +156,8 @@ export function Hero() {
               ))}
             </div>
             <div>
-              <p className="text-sm font-medium text-foreground">50+ LA businesses trust Picshaw</p>
-              <p className="text-xs text-muted-foreground">Averaging 3x more leads after launch</p>
+              <p className="text-sm font-medium text-foreground">Web design for LA businesses</p>
+              <p className="text-xs text-muted-foreground">Clear calls to action, built around your goals</p>
             </div>
           </motion.div>
         </motion.div>
