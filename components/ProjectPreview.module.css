@@ -13,7 +13,7 @@
   overflow: hidden;
 }
 
-.photo { position: absolute; inset: 0 0 0 52%; background: #a8b4af; }
+.photo { position: absolute; inset: 0 0 0 52%; overflow: hidden; background: #a8b4af; }
 .photoImage { object-fit: cover; transition: transform 800ms cubic-bezier(.23, 1, .32, 1); }
 .preview:hover .photoImage { transform: scale(1.035); }
 .shade { display: none; }

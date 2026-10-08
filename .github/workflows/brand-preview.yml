@@ -7,7 +7,16 @@ on:
       - 'lib/work-showcase.ts'
       - 'public/brand/**'
       - 'app/icon*'
-      - 'scripts/check-brand-preview.mjs'
+      - 'scripts/check-*.mjs'
+      - '.github/workflows/brand-preview.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'components/**'
+      - 'lib/work-showcase.ts'
+      - 'public/brand/**'
+      - 'app/icon*'
+      - 'scripts/check-*.mjs'
       - '.github/workflows/brand-preview.yml'
   workflow_dispatch:
 permissions:
@@ -18,7 +27,6 @@ jobs:
     timeout-minutes: 15
     env:
       NEXT_TELEMETRY_DISABLED: '1'
-      # Nonfunctional build-only placeholder; no contact requests are sent.
       RESEND_API_KEY: re_build_validation_only
     steps:
       - uses: actions/checkout@v4
@@ -48,6 +56,9 @@ jobs:
             sleep 2
           done
           node scripts/check-brand-preview.mjs
+      - name: Verify published custom domain
+        if: github.ref == 'refs/heads/main'
+        run: node scripts/check-production.mjs
       - name: Save browser previews and validation report
         if: always()
         uses: actions/upload-artifact@v4
