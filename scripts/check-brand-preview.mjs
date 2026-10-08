@@ -14,7 +14,8 @@ try {
     page.on("pageerror", (error) => errors.push(error.message))
     await page.goto(baseURL, { waitUntil: "domcontentloaded" })
     await page.locator("header img[src='/brand/picshaw-mark.svg']").waitFor()
-    await page.waitForTimeout(1200) // Let hydration and the existing Framer Motion entrances settle.
+    await page.waitForFunction(() => { const h1 = document.querySelector("h1"); return h1 && Number(getComputedStyle(h1).opacity) >= 0.99 }, { timeout: 10000 })
+    await page.waitForTimeout(1200)
     assert.equal(await page.locator("img[src='/brand/picshaw-mark.svg']").count(), 2, "Header and footer must share the supplied mark")
     const icon = await page.locator("link[rel='icon'][href*='icon.svg']").getAttribute("href")
     assert.ok(icon, "SVG favicon missing")
@@ -33,15 +34,12 @@ try {
       await page.waitForTimeout(1000)
       assert.ok(await image.evaluate((img) => img.naturalWidth > 0), `Image ${i + 1} did not load`)
       assert.equal(await card.locator("[role='img'] a, [role='img'] button").count(), 0, "Mock navigation must not be interactive")
-      if (width === 1440) {
-        await card.locator("figure").screenshot({ path: `validation/concept-${i + 1}.png` })
-      }
+      if (width === 1440) await card.locator("figure").screenshot({ path: `validation/concept-${i + 1}.png` })
     }
     assert.ok(!(await page.locator("#work").innerText()).includes("pacificplumbingco..com"))
     assert.ok(!(await page.locator("#work").innerText()).match(/47%|3x consultation|First page Google|fully booked/))
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)
     assert.ok(overflow <= 1, `Horizontal overflow at ${width}px: ${overflow}px`)
-    // Fixed navigation is captured separately, not overlaid across the section export.
     const sectionOnly = await page.addStyleTag({ content: ".fixed { visibility: hidden !important; }" })
     await page.locator("#work").screenshot({ path: `validation/work-${width}.png` })
     await sectionOnly.evaluate((element) => element.remove())
@@ -58,9 +56,14 @@ try {
     await page.waitForTimeout(1000)
     await page.locator("footer").screenshot({ path: `validation/footer-${width}.png` })
     assert.deepEqual(errors, [], "Unexpected client-side JavaScript errors")
-    report.push({ width, logos: 2, conceptImages: 3, iconStatus: 200, horizontalOverflow: overflow, errors })
+    report.push({ width, reducedMotion: true, heroVisible: true, logos: 2, conceptImages: 3, iconStatus: 200, horizontalOverflow: overflow, errors })
     await page.close()
   }
+  const animatedPage = await browser.newPage({ viewport: { width: 1440, height: 1000 }, reducedMotion: "no-preference" })
+  await animatedPage.goto(baseURL, { waitUntil: "domcontentloaded" })
+  await animatedPage.waitForFunction(() => { const h1 = document.querySelector("h1"); return h1 && Number(getComputedStyle(h1).opacity) >= 0.99 }, { timeout: 10000 })
+  report.push({ width: 1440, reducedMotion: false, heroVisible: true })
+  await animatedPage.close()
   console.log(JSON.stringify(report, null, 2))
   await writeFile("validation/browser-report.json", JSON.stringify(report, null, 2))
 } finally {

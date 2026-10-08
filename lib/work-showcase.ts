@@ -53,7 +53,7 @@ export const projects: Project[] = [
       "A confident, easy-to-navigate home-services concept. Architectural photography, clear service information, and a direct route to requesting help.",
     index: "01",
     image: "https://images.unsplash.com/photo-1629079447777-1e605162dc8d?auto=format&fit=crop&w=1200&q=85",
-    imageAlt: "A bright contemporary bathroom with a white vanity and blue cabinetry",
+    imageAlt: "A contemporary bathroom with a white double vanity and blue-tinted window",
     imagePosition: "50% 50%",
     photography: {
       name: "Steven Ungermann",

@@ -36,7 +36,7 @@ jobs:
           cache: npm
       - run: npm ci
       - name: Lint changed TypeScript
-        run: npx eslint components/BrandLogo.tsx components/Header.tsx components/Footer.tsx components/ProjectPreview.tsx components/WorkShowcase.tsx lib/work-showcase.ts
+        run: npx eslint components/BrandLogo.tsx components/Header.tsx components/Footer.tsx components/Hero.tsx components/ProjectPreview.tsx components/WorkShowcase.tsx lib/work-showcase.ts
       - name: Record existing full-repository lint status
         continue-on-error: true
         run: |
