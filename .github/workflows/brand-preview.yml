@@ -1,0 +1,57 @@
+name: Brand and showcase validation
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'components/**'
+      - 'lib/work-showcase.ts'
+      - 'public/brand/**'
+      - 'app/icon*'
+      - 'scripts/check-brand-preview.mjs'
+      - '.github/workflows/brand-preview.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      NEXT_TELEMETRY_DISABLED: '1'
+      # Nonfunctional build-only placeholder; no contact requests are sent.
+      RESEND_API_KEY: re_build_validation_only
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Lint changed TypeScript
+        run: npx eslint components/BrandLogo.tsx components/Header.tsx components/Footer.tsx components/ProjectPreview.tsx components/WorkShowcase.tsx lib/work-showcase.ts
+      - name: Record existing full-repository lint status
+        continue-on-error: true
+        run: |
+          mkdir -p validation
+          npm run lint > validation/full-repository-lint.txt 2>&1
+      - name: Production build
+        run: npm run build -- --webpack
+      - name: Install browser test runner
+        run: |
+          npm install --no-save --package-lock=false playwright@1.58.2
+          npx playwright install --with-deps chromium
+      - name: Desktop and mobile browser checks
+        run: |
+          npm run start > /tmp/picshaw-next.log 2>&1 &
+          for attempt in $(seq 1 60); do
+            if curl --silent --fail http://127.0.0.1:3000 > /dev/null; then break; fi
+            sleep 2
+          done
+          node scripts/check-brand-preview.mjs
+      - name: Save browser previews and validation report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: picshaw-brand-preview
+          path: validation/
+          retention-days: 7
