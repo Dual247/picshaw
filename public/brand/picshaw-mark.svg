@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="88 88 848 848" role="img" aria-labelledby="title desc">
+  <title id="title">Picshaw P mark</title>
+  <desc id="desc">A bold P inside a circle with a folded paper hat detail in the upper-left.</desc>
+  <defs>
+    <clipPath id="circleClip"><circle cx="512" cy="512" r="424"/></clipPath>
+  </defs>
+  <circle cx="512" cy="512" r="424" fill="#0B0B0A"/>
+  <path d="M80 0H496V450H713C1069 450 1292 651 1292 970C1292 1289 1069 1490 713 1490H80ZM496 792V1148H682C807 1148 886 1079 886 970C886 861 807 792 682 792Z" transform="translate(316 856) scale(0.445 -0.445)" fill="#F4F1EA"/>
+  
+  <g clip-path="url(#circleClip)">
+    <polygon points="220,350 352,350 352,492" fill="#EDE5DA"/>
+    <polygon points="352,265 468,265 468,388 352,492" fill="#C6B9AA"/>
+    <polygon points="468,150 468,265 585,265" fill="#EDE5DA"/>
+    <polygon points="468,150 585,265 468,388" fill="#D9CDBF"/>
+    <polygon points="352,350 352,492 468,388 468,265" fill="#A99E92" opacity="0.88"/>
+    <polygon points="220,350 352,492 352,585" fill="#80766B"/>
+  </g>
+</svg>
