@@ -21,7 +21,10 @@ try {
     const response = await page.goto(baseURL + path, { waitUntil: 'networkidle' })
     assert.equal(response.status(), 200, path)
     assert.equal(await page.locator('h1').count(), 1, path)
-    assert.equal(await page.locator('link[rel="canonical"]').getAttribute('href'), origin + path, path)
+    const canonical = await page.locator('link[rel="canonical"]').getAttribute('href')
+    assert.ok(canonical, `Missing canonical for ${path}`)
+    // Next may omit the root slash; URL parsing preserves strict host/path comparison.
+    assert.equal(new URL(canonical).href, new URL(path, origin).href, path)
     assert.ok((await page.locator('meta[name="description"]').getAttribute('content')).length > 20)
     const scripts = await page.locator('script[type="application/ld+json"]').allTextContents()
     assert.ok(scripts.length >= 1)
@@ -29,7 +32,7 @@ try {
     assert.ok(await page.locator('a[href="/#contact"]').count() > 0)
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)
     assert.ok(overflow <= 1, `${path}: overflow ${overflow}`)
-    report.push({ path, status: response.status(), canonical: origin + path, jsonLdBlocks: scripts.length, overflow })
+    report.push({ path, status: response.status(), canonical, jsonLdBlocks: scripts.length, overflow })
     if (path !== '/') await page.screenshot({ path: `validation/search-${path.slice(1).replaceAll('/', '-')}.png`, fullPage: true })
   }
   const robots = await page.request.get(baseURL + '/robots.txt')
@@ -48,7 +51,7 @@ try {
   }
   assert.equal((await page.request.get(baseURL + '/this-page-does-not-exist')).status(), 404)
   assert.equal((await page.request.get(baseURL + '/blog/this-post-does-not-exist')).status(), 404)
-  const response = await page.request.get(baseURL + '/api/contact', { method: 'POST', data: {} })
+  const response = await page.request.post(baseURL + '/api/contact', { data: {} })
   assert.equal(response.status(), 400)
   // UI test intercepts delivery. No real test email is sent.
   await page.route('**/api/contact', route => route.fulfill({ status: 200, contentType: 'application/json', body: '{"success":true}' }))
