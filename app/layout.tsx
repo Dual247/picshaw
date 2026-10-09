@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Space_Grotesk, Geist_Mono } from 'next/font/google'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 import { SiteAnalytics } from '@/components/SiteAnalytics'
 import { absoluteUrl, isPreview, jsonLd, ORGANIZATION_ID, SITE_URL } from '@/lib/site'
 import './globals.css'
@@ -27,6 +28,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <noscript><style>{'[style*="opacity:0"], [style*="opacity: 0"] {opacity:1!important;transform:none!important} header[style] {transform:none!important}'}</style><p className="relative z-[60] bg-card p-4 text-center">JavaScript is off. Read our pages normally, or email <a href="mailto:hello@picshaw.com" className="underline">hello@picshaw.com</a> for a website review.</p></noscript>
         {children}
         <SiteAnalytics production={!isPreview} />
+        <SpeedInsights />
       </body>
     </html>
   )
