@@ -19,12 +19,15 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const organization = { '@context': 'https://schema.org', '@type': 'ProfessionalService', '@id': ORGANIZATION_ID, name: 'Picshaw', description: 'Web design and search foundations for local businesses in Los Angeles.', url: SITE_URL, logo: absoluteUrl('/brand/picshaw-mark.svg'), email: 'hello@picshaw.com', areaServed: { '@type': 'City', name: 'Los Angeles' }, serviceType: ['Web Design', 'Website Redesign', 'Landing Page Design', 'Local SEO Website Structure'], priceRange: '$1,000 - $5,000', address: { '@type': 'PostalAddress', addressLocality: 'Los Angeles', addressRegion: 'CA', addressCountry: 'US' } }
-  return <html lang="en" className={`${spaceGrotesk.variable} ${geistMono.variable} bg-background`}>
-    <head><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(organization) }} /></head>
-    <body className="font-sans antialiased">
-      <a href="#main-content" className="sr-only fixed left-4 top-4 z-[100] rounded bg-primary px-4 py-3 text-primary-foreground focus:not-sr-only">Skip to content</a>
-      <noscript><style>{'[style*="opacity:0"], [style*="opacity: 0"] {opacity:1!important;transform:none!important} header[style] {transform:none!important}'}</style><p className="relative z-[60] bg-card p-4 text-center">JavaScript is off. Read our pages normally, or email <a href="mailto:hello@picshaw.com" className="underline">hello@picshaw.com</a> for a website review.</p></noscript>
-      {children}
-      <SiteAnalytics />
-    </body>
-  </html>
+  return (
+    <html lang="en" className={`${spaceGrotesk.variable} ${geistMono.variable} bg-background`}>
+      <head><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(organization) }} /></head>
+      <body className="font-sans antialiased">
+        <a href="#main-content" className="sr-only fixed left-4 top-4 z-[100] rounded bg-primary px-4 py-3 text-primary-foreground focus:not-sr-only">Skip to content</a>
+        <noscript><style>{'[style*="opacity:0"], [style*="opacity: 0"] {opacity:1!important;transform:none!important} header[style] {transform:none!important}'}</style><p className="relative z-[60] bg-card p-4 text-center">JavaScript is off. Read our pages normally, or email <a href="mailto:hello@picshaw.com" className="underline">hello@picshaw.com</a> for a website review.</p></noscript>
+        {children}
+        <SiteAnalytics production={!isPreview} />
+      </body>
+    </html>
+  )
+}

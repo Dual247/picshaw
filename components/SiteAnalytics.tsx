@@ -6,12 +6,11 @@ import { Analytics } from '@vercel/analytics/next'
 import { track } from '@vercel/analytics'
 import { pageCategory } from '@/lib/analytics'
 
-// Enable only after the owner confirms a plan supporting Vercel custom events.
 const customEventsEnabled = process.env.NEXT_PUBLIC_ANALYTICS_EVENTS === 'true'
-const enabled = process.env.NODE_ENV === 'production' && process.env.NEXT_PUBLIC_VERCEL_ENV !== 'preview'
 
-export function SiteAnalytics() {
+export function SiteAnalytics({ production }: { production: boolean }) {
   const pathname = usePathname()
+  const enabled = production && process.env.NODE_ENV === 'production'
   useEffect(() => {
     if (!enabled || !customEventsEnabled) return
     let started = false
@@ -30,10 +29,9 @@ export function SiteAnalytics() {
     document.addEventListener('focusin', onFocus)
     document.addEventListener('click', onClick)
     return () => { document.removeEventListener('focusin', onFocus); document.removeEventListener('click', onClick) }
-  }, [pathname])
+  }, [pathname, enabled])
   if (!enabled) return null
   return <Analytics beforeSend={event => {
-    // Retain no query string or fragment in pageview/event URLs.
     try { const url = new URL(event.url); url.search = ''; url.hash = ''; return { ...event, url: url.toString() } } catch { return null }
   }} />
 }
