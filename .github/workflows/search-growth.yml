@@ -1,0 +1,70 @@
+name: Search growth validation
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      NEXT_TELEMETRY_DISABLED: '1'
+      VERCEL_ENV: production
+      NEXT_PUBLIC_VERCEL_ENV: production
+      NEXT_PUBLIC_ANALYTICS_EVENTS: 'false'
+      RESEND_API_KEY: re_build_validation_only
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Validate content, routes and draft exclusions
+        run: node scripts/check-search-content.mjs
+      - name: Test contact validation and success events without sending email
+        run: node scripts/check-contact.mjs
+      - name: Lint implementation files
+        run: npx eslint app components/ContentPage.tsx components/SiteAnalytics.tsx components/Header.tsx components/Footer.tsx components/FAQ.tsx lib/site.ts lib/content.ts lib/analytics.ts
+      - name: Record full repository lint without changing existing rules
+        id: lint
+        continue-on-error: true
+        run: |
+          mkdir -p validation
+          set -o pipefail
+          npm run lint 2>&1 | tee validation/full-repository-lint.txt
+      - name: Record independent full TypeScript check
+        id: types
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          npx tsc --noEmit --pretty false 2>&1 | tee validation/full-typescript.txt
+      - name: Production build
+        run: npm run build -- --webpack
+      - name: Install browser runner
+        run: |
+          npm install --no-save --package-lock=false playwright@1.58.2
+          npx playwright install --with-deps chromium
+      - name: Check HTTP, canonicals, draft 404s, mobile and no-JavaScript content
+        run: |
+          npm run start > /tmp/picshaw-next.log 2>&1 &
+          for attempt in $(seq 1 60); do
+            if curl --silent --fail http://127.0.0.1:3000 > /dev/null; then break; fi
+            sleep 2
+          done
+          node scripts/check-search-preview.mjs
+      - name: Record separate lint and type outcomes
+        if: always()
+        run: |
+          echo 'Full repository lint: ${{ steps.lint.outcome }}' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Independent TypeScript check: ${{ steps.types.outcome }}' >> "$GITHUB_STEP_SUMMARY"
+          echo 'See uploaded validation logs. A successful build is not a substitute for these checks.' >> "$GITHUB_STEP_SUMMARY"
+      - name: Save test results and screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: picshaw-search-growth-validation
+          path: validation/
+          retention-days: 14
