@@ -7,11 +7,8 @@ import ts from 'typescript'
 const require = createRequire(import.meta.url)
 const source = readFileSync('app/api/contact/route.ts', 'utf8')
 const compiled = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, esModuleInterop: true } }).outputText
-
 function load(options = {}) {
-  const messages = []
-  const events = []
-  const exports = {}
+  const messages = [], events = [], exports = {}
   class MockResend {
     constructor() {
       this.emails = {
@@ -24,21 +21,11 @@ function load(options = {}) {
     }
   }
   const sandbox = {
-    exports, module: { exports }, Response, Request,
-    console: { error() {}, warn() {}, log() {} },
-    process: { env: {
-      RESEND_API_KEY: options.missingKey ? '' : 're_local_mock_only',
-      VERCEL_ENV: options.preview ? 'preview' : 'production',
-      NEXT_PUBLIC_ANALYTICS_EVENTS: options.eventsOff ? 'false' : 'true',
-    } },
+    exports, module: { exports }, Response, Request, console: { error() {}, warn() {}, log() {} },
+    process: { env: { RESEND_API_KEY: options.missingKey ? '' : 're_local_mock_only', VERCEL_ENV: options.preview ? 'preview' : 'production', NEXT_PUBLIC_ANALYTICS_EVENTS: options.eventsOff ? 'false' : 'true' } },
     require(name) {
       if (name === 'resend') return { Resend: MockResend }
-      if (name === '@vercel/analytics/server') {
-        return { track: async (...args) => {
-          events.push(args)
-          if (options.throwTrack) throw new Error('mock analytics failure')
-        } }
-      }
+      if (name === '@vercel/analytics/server') return { track: async (...args) => { events.push(args); if (options.throwTrack) throw new Error('mock analytics failure') } }
       if (name === 'zod') return require('zod')
       throw new Error(`Unexpected dependency: ${name}`)
     },
@@ -46,47 +33,31 @@ function load(options = {}) {
   vm.runInNewContext(compiled, sandbox)
   return { post: exports.POST, messages, events }
 }
-
 const valid = { name: '<b>Test</b>', email: 'test@example.com', business: 'Test & Co', website: 'https://example.com', message: '<script>test</script>', service_interest: '1k' }
 const request = body => new Request('https://www.picshaw.com/api/contact', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: typeof body === 'string' ? body : JSON.stringify(body) })
 const results = []
-for (const [name, body] of [
-  ['missing fields', {}],
-  ['invalid email', { ...valid, email: 'not-an-email' }],
-  ['unknown service', { ...valid, service_interest: 'unapproved' }],
-  ['wrong type', { ...valid, name: 42 }],
-  ['malformed JSON', '{bad'],
-]) {
-  const app = load()
-  const response = await app.post(request(body))
-  assert.equal(response.status, 400, name)
-  assert.equal(app.messages.length, 0)
-  assert.equal(app.events.length, 0)
+for (const [name, body] of [['missing fields', {}], ['invalid email', { ...valid, email: 'not-an-email' }], ['unknown service', { ...valid, service_interest: 'unapproved' }], ['wrong type', { ...valid, name: 42 }], ['malformed JSON', '{bad']]) {
+  const app = load(); const response = await app.post(request(body))
+  assert.equal(response.status, 400, name); assert.equal(app.messages.length, 0); assert.equal(app.events.length, 0)
   results.push({ test: name, passed: true })
 }
-for (const [name, options, status, events] of [
-  ['success', {}, 200, 1],
-  ['provider rejection', { providerError: true }, 502, 0],
-  ['provider throws', { throwSend: true }, 500, 0],
-  ['analytics failure preserves success', { throwTrack: true }, 200, 1],
-  ['missing configuration', { missingKey: true }, 503, 0],
-  ['preview excludes analytics', { preview: true }, 200, 0],
-  ['events disabled', { eventsOff: true }, 200, 0],
-]) {
-  const app = load(options)
-  const response = await app.post(request(valid))
-  assert.equal(response.status, status, name)
-  assert.equal(app.events.length, events, name)
-  if (app.messages.length) {
-    assert.ok(app.messages[0].html.includes('&lt;script&gt;'))
-    assert.ok(!app.messages[0].html.includes('<script>'))
-  }
-  if (events) {
-    assert.equal(app.events[0][0], 'review_request_completed')
-    assert.equal(JSON.stringify(app.events[0][1]), JSON.stringify({ form: 'website_review' }))
-    assert.ok(!JSON.stringify(app.events).includes(valid.email))
-  }
+for (const [name, options, status, events] of [['success', {}, 200, 1], ['provider rejection', { providerError: true }, 502, 0], ['provider throws', { throwSend: true }, 500, 0], ['analytics failure preserves success', { throwTrack: true }, 200, 1], ['missing configuration', { missingKey: true }, 503, 0], ['preview excludes analytics', { preview: true }, 200, 0], ['events disabled', { eventsOff: true }, 200, 0]]) {
+  const app = load(options); const response = await app.post(request(valid))
+  assert.equal(response.status, status, name); assert.equal(app.events.length, events, name)
+  if (app.messages.length) { assert.ok(app.messages[0].html.includes('&lt;script&gt;')); assert.ok(!app.messages[0].html.includes('<script>')) }
+  if (events) { assert.equal(app.events[0][0], 'review_request_completed'); assert.equal(JSON.stringify(app.events[0][1]), JSON.stringify({ form: 'website_review' })); assert.ok(!JSON.stringify(app.events).includes(valid.email)) }
   results.push({ test: name, passed: true })
+}
+for (const service of ['audit', 'aeo']) {
+  for (const fails of [false, true]) {
+    const app = load({ providerError: fails }); const response = await app.post(request({ ...valid, service_interest: service }))
+    assert.equal(response.status, fails ? 502 : 200)
+    assert.equal(app.events.length, fails ? 0 : 1)
+    assert.ok(app.messages[0].subject.startsWith('New AI visibility enquiry'))
+    assert.ok(app.messages[0].html.includes('No payment'))
+    if (!fails) { assert.equal(app.events[0][0], 'aeo_enquiry_completed'); assert.equal(JSON.stringify(app.events[0][1]), JSON.stringify({ form: 'aeo_enquiry' })); assert.ok(!JSON.stringify(app.events).includes(valid.website)) }
+    results.push({ test: `${service}: ${fails ? 'provider rejection' : 'accepted enquiry'}`, passed: true })
+  }
 }
 mkdirSync('validation', { recursive: true })
 writeFileSync('validation/contact-tests.json', JSON.stringify(results, null, 2))
