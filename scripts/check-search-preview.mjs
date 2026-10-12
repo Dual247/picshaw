@@ -31,7 +31,7 @@ try {
     assert.ok(await page.locator('a[href^="/ai-visibility-audit"]').count() > 0)
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)
     assert.ok(overflow <= 1, `${path}: overflow ${overflow}`)
-    // Check that same-site links point to real routes and existing anchors without sending enquiries.
+    // Validate same-site destinations without sending enquiries.
     const links = await page.locator('a[href]').evaluateAll(elements => elements.map(element => element.getAttribute('href')).filter(href => href.startsWith('/')))
     for (const href of links) assert.ok(paths.includes(href.split('#')[0] || '/'), `Unknown internal destination ${href} on ${path}`)
     report.push({ path, status: response.status(), canonical, title, jsonLdBlocks: scripts.length, overflow })
@@ -47,9 +47,9 @@ try {
   assert.equal((await page.request.get(baseURL + '/this-page-does-not-exist')).status(), 404)
   assert.equal((await page.request.get(baseURL + '/blog/this-post-does-not-exist')).status(), 404)
   assert.equal((await page.request.post(baseURL + '/api/contact', { data: {} })).status(), 400)
-  let intercepted = []
+  const intercepted = []
   await page.route('**/api/contact', route => { intercepted.push(route.request().postDataJSON()); return route.fulfill({ status: 200, contentType: 'application/json', body: '{"success":true}' }) })
-  // Both the retained website offer and the new audit funnel must work. Never send a real email.
+  // Both retained website and new audit funnels must work. Never send a real email.
   for (const [path, type, button] of [['/', '1k', 'Get My Free Website Review'], ['/ai-visibility-audit', 'audit', 'Request my audit scope']]) {
     await page.goto(baseURL + path + '#contact', { waitUntil: 'networkidle' })
     await page.locator('#contact-website').fill('example.com'); await page.locator('#contact-email').fill('test@example.com')
@@ -63,11 +63,12 @@ try {
   assert.equal(intercepted.length, 2)
   await page.unroute('**/api/contact')
   await page.route('**/api/contact', route => route.fulfill({ status: 502, contentType: 'application/json', body: '{"error":"test failure"}' }))
-  await page.goto(baseURL + '/ai-visibility-audit#contact', { waitUntil: 'networkidle' })
+  // Same-URL navigation preserves React state: use the actual reset control.
+  await page.getByRole('button', { name: 'Send another message', exact: true }).click()
   await page.locator('#contact-website').fill('example.com'); await page.locator('#contact-email').fill('test@example.com')
   await page.getByRole('button', { name: 'Continue', exact: true }).click(); await page.getByRole('button', { name: 'Request my audit scope', exact: true }).click()
   await page.getByRole('alert').waitFor(); assert.equal(await page.getByRole('heading', { name: 'Message sent!', exact: true }).count(), 0)
-  report.push({ enquiryUI: 'website and audit accepted; failed audit shows an error; all deliveries intercepted' })
+  report.push({ enquiryUI: 'website and audit accepted; reset works; failed audit shows an error; all deliveries intercepted' })
   assert.deepEqual(errors, []); await context.close()
   for (const width of [1440, 1024, 390, 320]) {
     const mobile = await browser.newPage({ viewport: { width, height: 1000 }, reducedMotion: 'reduce' })
