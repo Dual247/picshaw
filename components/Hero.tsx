@@ -1,119 +1,39 @@
-"use client"
-
-import { motion, useReducedMotion, type Variants } from "framer-motion"
-import { AnimatedButton } from "./AnimatedButton"
-import { CheckCircle2 } from "lucide-react"
+import Link from 'next/link'
+import { ArrowUpRight, Check, Search } from 'lucide-react'
 
 export function Hero() {
-  const prefersReducedMotion = useReducedMotion()
-
-  const stagger = {
-    animate: {
-      transition: {
-        staggerChildren: prefersReducedMotion ? 0 : 0.1,
-      },
-    },
-  }
-
-  // Keep an explicit visible target after hydration. Empty variants can leave
-  // server-rendered opacity: 0 in place for reduced-motion visitors.
-  const fadeUp: Variants = {
-    initial: { opacity: 0, y: prefersReducedMotion ? 0 : 30 },
-    animate: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: prefersReducedMotion ? 0 : 0.7,
-        ease: [0.23, 1, 0.32, 1],
-      },
-    },
-  }
-
   return (
-    <section className="relative min-h-[100svh] overflow-hidden bg-background">
-      <div className="absolute inset-0 hero-gradient" />
-      <div className="absolute inset-0 grid-lines opacity-40" />
-      <div className="pointer-events-none absolute inset-0 flex items-center justify-center overflow-hidden">
-        <motion.span
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 0.02 }}
-          transition={{ duration: prefersReducedMotion ? 0 : 1.5, delay: prefersReducedMotion ? 0 : 0.8 }}
-          className="whitespace-nowrap text-[20vw] font-bold uppercase tracking-tighter text-foreground"
-        >
-          PICSHAW
-        </motion.span>
-      </div>
-      <motion.div
-        initial={{ scaleX: 0 }}
-        animate={{ scaleX: 1 }}
-        transition={{ duration: prefersReducedMotion ? 0 : 1.5, ease: [0.77, 0, 0.175, 1], delay: prefersReducedMotion ? 0 : 0.3 }}
-        className="absolute top-0 left-0 right-0 h-px origin-left bg-gradient-to-r from-primary via-primary/50 to-transparent"
-      />
-      <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-[1400px] flex-col justify-center px-6 py-32 md:px-12 lg:px-20">
-        <motion.div variants={stagger} initial="initial" animate="animate" className="max-w-4xl">
-          <motion.div variants={fadeUp} className="mb-4 flex items-center gap-3">
-            <span className="inline-flex items-center rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-xs font-medium uppercase tracking-wider text-primary">
-              Los Angeles Web Design Studio
-            </span>
-          </motion.div>
-          <motion.div variants={fadeUp} className="mb-6 flex items-center gap-4">
-            <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-xs font-medium tracking-wide text-primary">
-              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary" />
-              Only 2 projects per week — I personally design every site
-            </span>
-          </motion.div>
-          <motion.h1 variants={fadeUp} className="headline-editorial text-[clamp(2.8rem,9vw,7rem)] font-bold leading-[0.9] tracking-tight text-foreground">
-            <span className="block">Your site is</span>
-            <span className="block"><span className="relative inline-block"><span className="text-gradient">costing you</span></span></span>
-            <span className="block">customers.</span>
-          </motion.h1>
-          <motion.p variants={fadeUp} className="mt-8 max-w-xl text-xl leading-relaxed text-muted-foreground md:text-2xl">
-            Every visitor who bounces is calling your competitor.
-            I build fast, modern websites that turn searchers into customers.
-          </motion.p>
-          <motion.div variants={fadeUp} className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted-foreground">
-            {["Mobile-first design", "Google-optimized", "Live in 7-10 days"].map((item) => (
-              <span key={item} className="flex items-center gap-2"><CheckCircle2 size={16} className="text-primary" />{item}</span>
-            ))}
-          </motion.div>
-          <motion.div variants={fadeUp} className="mt-12 inline-flex items-baseline gap-3 rounded-2xl border border-border/50 bg-card/50 px-8 py-6 backdrop-blur-sm">
-            <span className="text-6xl font-bold tracking-tighter text-foreground md:text-7xl">$1k</span>
-            <div className="flex flex-col">
-              <span className="text-lg font-medium text-foreground">complete website</span>
-              <span className="text-sm text-muted-foreground">Not a deposit. Not a down payment.</span>
+    <section className="relative overflow-hidden border-b border-border bg-background">
+      <div aria-hidden="true" className="absolute inset-0 hero-gradient" />
+      <div aria-hidden="true" className="absolute inset-0 grid-lines opacity-60" />
+      <div className="relative mx-auto max-w-[1400px] px-6 pb-20 pt-36 md:px-12 md:pb-24 md:pt-44 lg:px-20">
+        <p className="mb-8 flex flex-wrap items-center gap-3 text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground"><span className="h-2 w-2 rounded-full bg-primary" aria-hidden="true" />AEO & AI-search visibility<span aria-hidden="true" className="text-border">/</span>Los Angeles</p>
+        <div className="grid items-center gap-14 lg:grid-cols-[1.3fr_1fr] lg:gap-12">
+          <div className="min-w-0">
+            <h1 className="text-[clamp(2.8rem,6.4vw,6rem)] font-bold leading-[1.02] tracking-[-0.055em]">Help customers<br className="hidden sm:block" /> find your business<br className="hidden sm:block" /><span className="text-gradient"> in AI search.</span></h1>
+            <p className="mt-8 max-w-xl text-lg leading-8 text-muted-foreground md:text-xl">Make your business easier to discover, understand and choose. We improve your search foundations, turn your expertise into useful content, and measure what changes.</p>
+            <div className="mt-9 flex flex-wrap gap-4">
+              <Link href="/ai-visibility-audit" className="inline-flex items-center justify-center gap-3 rounded-lg bg-primary px-6 py-4 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90">Explore your AI Visibility Audit<ArrowUpRight size={17} aria-hidden="true" /></Link>
+              <Link href="/methodology" className="inline-flex items-center justify-center rounded-lg border border-border px-6 py-4 text-sm font-medium transition-colors hover:border-primary/50">How we measure progress</Link>
             </div>
-          </motion.div>
-          <motion.div variants={fadeUp} className="mt-10 flex flex-wrap items-center gap-4">
-            <AnimatedButton href="#contact" size="lg" showArrow>Get Your Free Website Review</AnimatedButton>
-            <AnimatedButton href="#work" variant="outline" size="lg">See the Work</AnimatedButton>
-          </motion.div>
-          <motion.div variants={fadeUp} className="mt-12 flex items-center gap-4 border-t border-border/50 pt-8">
-            <div className="flex -space-x-2">
-              {[...Array(4)].map((_, i) => (
-                <div key={i} className="h-10 w-10 rounded-full border-2 border-background bg-gradient-to-br from-muted to-muted-foreground/20" />
-              ))}
-            </div>
-            <div>
-              <p className="text-sm font-medium text-foreground">Web design for LA businesses</p>
-              <p className="text-xs text-muted-foreground">Clear calls to action, built around your goals</p>
-            </div>
-          </motion.div>
-        </motion.div>
-        <motion.div
-          initial={prefersReducedMotion ? {} : { opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: prefersReducedMotion ? 0 : 0.8, delay: prefersReducedMotion ? 0 : 1.5 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2"
-        >
-          <motion.div
-            animate={prefersReducedMotion ? {} : { y: [0, 8, 0] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            className="flex flex-col items-center gap-2 text-muted-foreground"
-          >
-            <span className="text-xs uppercase tracking-widest">Scroll</span>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 5v14M5 12l7 7 7-7" /></svg>
-          </motion.div>
-        </motion.div>
+            <p className="mt-5 max-w-lg text-sm leading-6 text-muted-foreground">Already have a good website? Start there. A redesign is not a requirement.</p>
+          </div>
+          <aside aria-label="What an AI Visibility Audit examines" className="min-w-0 rounded-2xl border border-border bg-card p-6 shadow-2xl md:p-8">
+            <div className="mb-7 flex items-center justify-between gap-4"><p className="text-xs font-medium uppercase tracking-[0.18em] text-primary">Start with the right questions</p><Search size={20} className="shrink-0 text-muted-foreground" aria-hidden="true" /></div>
+            <p className="text-2xl font-medium leading-snug tracking-tight md:text-3xl">When someone searches for a business like yours, what do they find?</p>
+            <p className="mt-4 text-sm leading-6 text-muted-foreground">An audit looks at the information behind the answer—not just a screenshot of a mention.</p>
+            <ul className="mt-7 divide-y divide-border">
+              {[
+                ['Access', 'Can search systems read your important pages?'],
+                ['Accuracy', 'Are your services and business details clear?'],
+                ['Evidence', 'What supports choosing you over an alternative?'],
+                ['Enquiries', 'Can a visitor take the next step?'],
+              ].map(([label, text]) => <li key={label} className="flex items-start gap-3 py-4"><Check size={16} className="mt-1 shrink-0 text-primary" aria-hidden="true" /><div><p className="text-sm font-semibold">{label}</p><p className="mt-1 text-sm leading-6 text-muted-foreground">{text}</p></div></li>)}
+            </ul>
+            <p className="mt-4 border-t border-border pt-5 text-xs leading-5 text-muted-foreground">Audit framework shown. Not a live report or a claim of client results.</p>
+          </aside>
+        </div>
+        <div className="mt-14 flex flex-wrap items-center gap-x-8 gap-y-3 border-t border-border pt-7 text-sm text-muted-foreground"><p className="text-foreground">Built for local service businesses.</p><span>Contractors & remodelers</span><span>Home services</span><span>Owner-led businesses</span></div>
       </div>
     </section>
   )
