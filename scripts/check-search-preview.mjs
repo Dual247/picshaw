@@ -31,7 +31,6 @@ try {
     assert.ok(await page.locator('a[href^="/ai-visibility-audit"]').count() > 0)
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)
     assert.ok(overflow <= 1, `${path}: overflow ${overflow}`)
-    // Validate same-site destinations without sending enquiries.
     const links = await page.locator('a[href]').evaluateAll(elements => elements.map(element => element.getAttribute('href')).filter(href => href.startsWith('/')))
     for (const href of links) assert.ok(paths.includes(href.split('#')[0] || '/'), `Unknown internal destination ${href} on ${path}`)
     report.push({ path, status: response.status(), canonical, title, jsonLdBlocks: scripts.length, overflow })
@@ -49,26 +48,30 @@ try {
   assert.equal((await page.request.post(baseURL + '/api/contact', { data: {} })).status(), 400)
   const intercepted = []
   await page.route('**/api/contact', route => { intercepted.push(route.request().postDataJSON()); return route.fulfill({ status: 200, contentType: 'application/json', body: '{"success":true}' }) })
-  // Both retained website and new audit funnels must work. Never send a real email.
-  for (const [path, type, button] of [['/', '1k', 'Get My Free Website Review'], ['/ai-visibility-audit', 'audit', 'Request my audit scope']]) {
-    await page.goto(baseURL + path + '#contact', { waitUntil: 'networkidle' })
-    await page.locator('#contact-website').fill('example.com'); await page.locator('#contact-email').fill('test@example.com')
-    await page.locator(`input[name="service_interest"][value="${type}"]`).check()
-    await page.locator('#contact').getByRole('button', { name: 'Continue', exact: true }).click()
-    await page.locator('#contact-name').fill('Automated test only')
-    await page.locator('#contact').getByRole('button', { name: button, exact: true }).click()
-    await page.getByRole('heading', { name: 'Message sent!', exact: true }).waitFor()
-    assert.equal(intercepted.at(-1).service_interest, type)
-  }
+  // The simplified homepage and retained two-step audit funnel both use the same API.
+  await page.goto(baseURL + '/#contact', { waitUntil: 'networkidle' })
+  await page.locator('#home-website').fill('example.com'); await page.locator('#home-email').fill('test@example.com')
+  await page.locator('#home-service').selectOption('1k')
+  await page.locator('#home-name').fill('Automated test only')
+  await page.locator('#contact').getByRole('button', { name: 'Send enquiry', exact: true }).click()
+  await page.getByRole('heading', { name: "You're on our radar.", exact: true }).waitFor()
+  assert.equal(intercepted.at(-1).service_interest, '1k')
+  await page.goto(baseURL + '/ai-visibility-audit#contact', { waitUntil: 'networkidle' })
+  await page.locator('#contact-website').fill('example.com'); await page.locator('#contact-email').fill('test@example.com')
+  await page.locator('input[name="service_interest"][value="audit"]').check()
+  await page.locator('#contact').getByRole('button', { name: 'Continue', exact: true }).click()
+  await page.locator('#contact-name').fill('Automated test only')
+  await page.locator('#contact').getByRole('button', { name: 'Request my audit scope', exact: true }).click()
+  await page.getByRole('heading', { name: 'Message sent!', exact: true }).waitFor()
+  assert.equal(intercepted.at(-1).service_interest, 'audit')
   assert.equal(intercepted.length, 2)
   await page.unroute('**/api/contact')
   await page.route('**/api/contact', route => route.fulfill({ status: 502, contentType: 'application/json', body: '{"error":"test failure"}' }))
-  // Same-URL navigation preserves React state: use the actual reset control.
   await page.getByRole('button', { name: 'Send another message', exact: true }).click()
   await page.locator('#contact-website').fill('example.com'); await page.locator('#contact-email').fill('test@example.com')
   await page.getByRole('button', { name: 'Continue', exact: true }).click(); await page.getByRole('button', { name: 'Request my audit scope', exact: true }).click()
   await page.getByRole('alert').waitFor(); assert.equal(await page.getByRole('heading', { name: 'Message sent!', exact: true }).count(), 0)
-  report.push({ enquiryUI: 'website and audit accepted; reset works; failed audit shows an error; all deliveries intercepted' })
+  report.push({ enquiryUI: 'Website and audit accepted; reset works; failed audit shows an error; all deliveries intercepted' })
   assert.deepEqual(errors, []); await context.close()
   for (const width of [1440, 1024, 390, 320]) {
     const mobile = await browser.newPage({ viewport: { width, height: 1000 }, reducedMotion: 'reduce' })
@@ -83,7 +86,7 @@ try {
   }
   const nojs = await browser.newPage({ javaScriptEnabled: false, viewport: { width: 1440, height: 1000 } })
   await nojs.goto(baseURL, { waitUntil: 'networkidle' })
-  assert.equal(await nojs.locator('#faq details').count(), 7); assert.equal(await nojs.locator('#faq details p').count(), 7)
+  assert.equal(await nojs.locator('#faq details').count(), 4); assert.equal(await nojs.locator('#faq details p').count(), 4)
   await nojs.locator('#faq details').last().locator('summary').click(); assert.ok(await nojs.locator('#faq details').last().locator('p').isVisible())
   assert.ok((await nojs.locator('h1').innerText()).includes('AI search.'))
   for (const path of ['/ai-visibility-audit', '/methodology', '/ai-receptionist', ...articles.map(article => '/blog/' + article.slug)]) {
@@ -91,6 +94,6 @@ try {
     const article = articles.find(item => path === '/blog/' + item.slug)
     if (article) for (const section of article.sections) assert.ok(text.includes(section.paragraphs[0]), article.slug)
   }
-  report.push({ noJavaScript: 'AEO hero, audit, methodology, receptionist copy, seven homepage FAQ answers and all existing article sections readable' }); await nojs.close()
+  report.push({ noJavaScript: 'AEO hero, audit, methodology, receptionist copy, four homepage FAQ answers and all existing article sections readable' }); await nojs.close()
   console.log(JSON.stringify(report, null, 2)); await writeFile('validation/search-browser-report.json', JSON.stringify(report, null, 2))
 } finally { await browser.close() }
