@@ -4,7 +4,7 @@ import { readFileSync, existsSync, mkdirSync, writeFileSync } from 'node:fs'
 const services = JSON.parse(readFileSync('content/services.json', 'utf8'))
 const articles = JSON.parse(readFileSync('content/articles.json', 'utf8'))
 const published = articles.filter(article => article.status === 'published' && Date.parse(article.publishedAt) <= Date.now())
-const additional = ['/ai-visibility-audit', '/methodology']
+const additional = ['/ai-visibility-audit', '/methodology', '/ai-receptionist']
 const routes = new Set(['/', '/about', '/blog', ...additional, ...services.map(service => `/${service.slug}`), ...published.map(article => `/blog/${article.slug}`)])
 assert.equal(services.length, 4)
 assert.equal(published.length, 4)
