@@ -5,11 +5,12 @@ export const SITE_NAME = 'Picshaw'
 export const ORGANIZATION_ID = `${SITE_URL}/#organization`
 export const isPreview = Boolean(process.env.VERCEL_ENV && process.env.VERCEL_ENV !== 'production')
 export const absoluteUrl = (path = '/') => new URL(path, SITE_URL).toString()
-export const additionalPagePaths = ['/ai-visibility-audit', '/methodology']
+export const additionalPagePaths = ['/ai-visibility-audit', '/methodology', '/ai-receptionist']
 
 export const serviceLinks = [
   { label: 'AI Visibility Audit', href: '/ai-visibility-audit' },
   { label: 'AI-search optimization', href: '/ai-search-optimization' },
+  { label: 'AI receptionist', href: '/ai-receptionist' },
   { label: 'Website redesign', href: '/website-redesign' },
   { label: 'Local SEO', href: '/local-seo' },
   { label: 'Contractor websites', href: '/web-design-for-contractors' },
