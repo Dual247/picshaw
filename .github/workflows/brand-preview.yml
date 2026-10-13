@@ -6,6 +6,7 @@ on:
       - 'components/**'
       - 'lib/work-showcase.ts'
       - 'public/brand/**'
+      - 'app/page.tsx'
       - 'app/icon*'
       - 'scripts/check-*.mjs'
       - '.github/workflows/brand-preview.yml'
@@ -15,6 +16,7 @@ on:
       - 'components/**'
       - 'lib/work-showcase.ts'
       - 'public/brand/**'
+      - 'app/page.tsx'
       - 'app/icon*'
       - 'scripts/check-*.mjs'
       - '.github/workflows/brand-preview.yml'
@@ -24,7 +26,7 @@ permissions:
 jobs:
   validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     env:
       NEXT_TELEMETRY_DISABLED: '1'
       RESEND_API_KEY: re_build_validation_only
@@ -34,9 +36,10 @@ jobs:
         with:
           node-version: '22'
           cache: npm
-      - run: npm ci
-      - name: Lint changed TypeScript
-        run: npx eslint components/BrandLogo.tsx components/Header.tsx components/Footer.tsx components/Hero.tsx components/ProjectPreview.tsx components/WorkShowcase.tsx lib/work-showcase.ts
+      # Match the established search-growth workaround for the stale lockfile (issue #7).
+      - run: npm install --no-fund --no-audit
+      - name: Lint implementation TypeScript
+        run: npx eslint app/page.tsx components/EditorialHome.tsx components/BrandLogo.tsx components/Header.tsx components/Footer.tsx components/Hero.tsx components/ProjectPreview.tsx components/WorkShowcase.tsx lib/work-showcase.ts
       - name: Record existing full-repository lint status
         continue-on-error: true
         run: |
@@ -56,6 +59,7 @@ jobs:
             sleep 2
           done
           node scripts/check-brand-preview.mjs
+          node scripts/check-editorial-home.mjs
       - name: Verify published custom domain
         if: github.ref == 'refs/heads/main'
         run: node scripts/check-production.mjs
@@ -65,4 +69,4 @@ jobs:
         with:
           name: picshaw-brand-preview
           path: validation/
-          retention-days: 7
+          retention-days: 14
