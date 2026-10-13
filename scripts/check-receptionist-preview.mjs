@@ -94,10 +94,14 @@ try {
     await responsive.goto(base + path, { waitUntil: 'networkidle' })
     assert.ok(await responsive.evaluate(() => document.documentElement.scrollWidth - innerWidth <= 1), `Overflow at ${width}`)
     if (width < 1024) {
-      const sticky = responsive.getByRole('link', { name: 'Request a demo', exact: true }).filter({ hasNot: responsive.locator('main a') })
-      assert.ok(await sticky.count() > 0)
+      const sticky = responsive.locator('div.fixed.bottom-0 a[href="/ai-receptionist#enquiry"]')
+      assert.equal(await sticky.count(), 1)
+      assert.ok(await sticky.isVisible())
       await responsive.getByRole('button', { name: 'Open menu', exact: true }).click()
       await responsive.locator('#mobile-navigation').getByRole('link', { name: 'Request a demo', exact: true }).click()
+      // Closing the menu commits before Next finishes same-page hash navigation.
+      // Wait for the actual URL transition instead of asserting during that race.
+      await responsive.waitForURL(url => url.pathname === path && url.hash === '#enquiry')
       await responsive.locator('#mobile-navigation').waitFor({ state: 'detached' })
       assert.equal(new URL(responsive.url()).hash, '#enquiry')
       await responsive.evaluate(() => window.scrollTo(0, 0))
@@ -113,8 +117,12 @@ try {
   await nojs.locator('#faq details').last().locator('summary').click()
   assert.ok(await nojs.locator('#faq details').last().locator('p').isVisible())
   assert.ok((await nojs.locator('noscript').allTextContents()).join(' ').includes('hello@picshaw.com'))
-  report.push({ test: 'no JavaScript: service copy, pricing, native FAQs and email fallback', passed: true })
+  assert.equal(await nojs.locator('form[data-enquiry-type="receptionist"]').getAttribute('method'), 'post')
+  assert.equal(await nojs.locator('#receptionist-fields').isVisible(), false, 'No-JavaScript visitors use the email fallback, not an inert form')
+  report.push({ test: 'no JavaScript: service copy, pricing, native FAQs, hidden form and email fallback without GET submission', passed: true })
   await nojs.close()
-  await writeFile('validation/receptionist-browser-report.json', JSON.stringify(report, null, 2))
   console.log(JSON.stringify(report, null, 2))
-} finally { await browser.close() }
+} finally {
+  await writeFile('validation/receptionist-browser-report.json', JSON.stringify(report, null, 2))
+  await browser.close()
+}
