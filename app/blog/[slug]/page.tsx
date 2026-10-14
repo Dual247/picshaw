@@ -10,7 +10,8 @@ export function generateStaticParams() { return getPublishedArticles().map(artic
 export async function generateMetadata({ params }: Props) {
   const article = getArticle((await params).slug)
   if (!article) return {}
-  return { ...pageMetadata(article.title, article.description, `/blog/${article.slug}`), openGraph: { title: `${article.title} | Picshaw`, description: article.description, url: absoluteUrl(`/blog/${article.slug}`), siteName: 'Picshaw', type: 'article' as const, publishedTime: article.publishedAt, modifiedTime: article.updatedAt ?? article.publishedAt, authors: [absoluteUrl('/about')] } }
+  const metadata = pageMetadata(article.title, article.description, `/blog/${article.slug}`)
+  return { ...metadata, openGraph: { ...metadata.openGraph, type: 'article' as const, publishedTime: article.publishedAt, modifiedTime: article.updatedAt ?? article.publishedAt, authors: [absoluteUrl('/about')] } }
 }
 export default async function ArticlePage({ params }: Props) {
   const article = getArticle((await params).slug)

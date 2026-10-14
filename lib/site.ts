@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import seoTitleData from '@/content/seo-titles.json'
 
 export const SITE_URL = 'https://www.picshaw.com'
 export const SITE_NAME = 'Picshaw'
@@ -20,8 +21,12 @@ export const editorialLinks = [
   { label: 'About Picshaw', href: '/about' },
   { label: 'Guides & insights', href: '/blog' },
 ]
+// Complete search titles are separate from the longer on-page editorial headings.
+// Absolute titles prevent the root layout from appending the brand a second time.
+const seoTitles: Readonly<Record<string, string>> = seoTitleData
 export function pageMetadata(title: string, description: string, path: string): Metadata {
   const url = absoluteUrl(path)
-  return { title, description, alternates: { canonical: url }, openGraph: { title: `${title} | Picshaw`, description, url, siteName: SITE_NAME, type: 'website', locale: 'en_US' }, twitter: { card: 'summary', title: `${title} | Picshaw`, description } }
+  const searchTitle = seoTitles[path] ?? `${title} | ${SITE_NAME}`
+  return { title: { absolute: searchTitle }, description, alternates: { canonical: url }, openGraph: { title: searchTitle, description, url, siteName: SITE_NAME, type: 'website', locale: 'en_US' }, twitter: { card: 'summary', title: searchTitle, description } }
 }
 export function jsonLd(value: unknown) { return JSON.stringify(value).replace(/</g, '\\u003c') }
