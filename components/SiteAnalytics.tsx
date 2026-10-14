@@ -2,10 +2,12 @@
 
 import { useEffect } from 'react'
 import { usePathname } from 'next/navigation'
+import Script from 'next/script'
 import { Analytics } from '@vercel/analytics/next'
 import { track } from '@vercel/analytics'
 import { pageCategory } from '@/lib/analytics'
 
+const googleAnalyticsId = 'G-LFJFHY63RR'
 const customEventsEnabled = process.env.NEXT_PUBLIC_ANALYTICS_EVENTS === 'true'
 export function SiteAnalytics({ production }: { production: boolean }) {
   const pathname = usePathname()
@@ -27,5 +29,14 @@ export function SiteAnalytics({ production }: { production: boolean }) {
     return () => { document.removeEventListener('focusin', onFocus); document.removeEventListener('click', onClick) }
   }, [pathname, enabled])
   if (!enabled) return null
-  return <Analytics beforeSend={event => { try { const url = new URL(event.url); url.search = ''; url.hash = ''; return { ...event, url: url.toString() } } catch { return null } }} />
+  return <>
+    <Script id="google-analytics-init" strategy="afterInteractive">{`
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', '${googleAnalyticsId}');
+    `}</Script>
+    <Script id="google-analytics" src={`https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsId}`} strategy="afterInteractive" />
+    <Analytics beforeSend={event => { try { const url = new URL(event.url); url.search = ''; url.hash = ''; return { ...event, url: url.toString() } } catch { return null } }} />
+  </>
 }
