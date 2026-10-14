@@ -3,6 +3,8 @@ import { mkdir, writeFile } from "node:fs/promises"
 import { chromium } from "playwright"
 
 const baseURL = process.env.PREVIEW_URL || "http://127.0.0.1:3000"
+const bathroomPhoto = "photo-1629079447777-1e605162dc8d"
+const bathroomAlt = "A contemporary bathroom with a white double vanity and blue-tinted window"
 await mkdir("validation", { recursive: true })
 const browser = await chromium.launch({ headless: true })
 const report = []
@@ -33,9 +35,12 @@ try {
       await image.evaluate((img) => img.decode())
       await page.waitForTimeout(1000)
       assert.ok(await image.evaluate((img) => img.naturalWidth > 0), `Image ${i + 1} did not load`)
+      assert.ok((await image.getAttribute("alt"))?.trim(), `Image ${i + 1} must have descriptive alt text`)
       assert.equal(await card.locator("[role='img'] a, [role='img'] button").count(), 0, "Mock navigation must not be interactive")
       if (width === 1440) await card.locator("figure").screenshot({ path: `validation/concept-${i + 1}.png` })
     }
+    const bathroomAltText = await page.locator(`img[src*='${bathroomPhoto}']`).evaluateAll(images => images.map(image => image.getAttribute("alt")))
+    assert.deepEqual(bathroomAltText, [bathroomAlt, bathroomAlt], "Hero and showcase bathroom images must both have the descriptive alt text")
     assert.ok(!(await page.locator("#work").innerText()).includes("pacificplumbingco..com"))
     assert.ok(!(await page.locator("#work").innerText()).match(/47%|3x consultation|First page Google|fully booked/))
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)
@@ -56,7 +61,7 @@ try {
     await page.waitForTimeout(1000)
     await page.locator("footer").screenshot({ path: `validation/footer-${width}.png` })
     assert.deepEqual(errors, [], "Unexpected client-side JavaScript errors")
-    report.push({ width, reducedMotion: true, heroVisible: true, logos: 2, conceptImages: 3, iconStatus: 200, horizontalOverflow: overflow, errors })
+    report.push({ width, reducedMotion: true, heroVisible: true, logos: 2, conceptImages: 3, bathroomAltText, iconStatus: 200, horizontalOverflow: overflow, errors })
     await page.close()
   }
   const animatedPage = await browser.newPage({ viewport: { width: 1440, height: 1000 }, reducedMotion: "no-preference" })
