@@ -22,7 +22,7 @@ export function ProjectPreview({ project }: { project: Project }) {
           {!imageUnavailable && (
             <Image
               src={project.image}
-              alt=""
+              alt={project.imageAlt}
               fill
               sizes="(max-width: 767px) 90vw, (max-width: 1023px) 80vw, 650px"
               className={styles.photoImage}
