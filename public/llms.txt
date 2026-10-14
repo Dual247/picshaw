@@ -1,0 +1,26 @@
+# Picshaw | AEO & AI Search Visibility for Service Businesses
+
+> This site provides authoritative information on AI search visibility, AEO audits, website optimization, and practical strategies for service businesses seeking to improve discoverability in AI-powered search.
+
+Picshaw is a specialized studio based in Los Angeles that helps local service businesses enhance their AI-search visibility through audits, website redesigns, content strategies, and practical improvements. The content emphasizes foundation-building, evidence-supported optimization, and actionable steps for business owners and web professionals.
+
+## Core Content
+
+- [AI Search Visibility](https://www.picshaw.com/ai-search-optimization): Explanation of what AI-search visibility entails and how Answer Engine Optimization (AEO) can support discoverability.
+- [How to make your business website eligible for ChatGPT search](https://www.picshaw.com/blog/chatgpt-search-visibility): A detailed guide to public-page access and the information businesses control, without promises of guaranteed AI recommendations.
+- [Why your business website is not appearing in Google](https://www.picshaw.com/blog/website-not-appearing-in-google): Practical diagnosis of crawl access, indexing, and ranking problems.
+- [Website Quality and Optimization](https://www.picshaw.com/ai-search-optimization#access): Technical access so pages can be read and indexed, clear service pages that answer buyer questions, and expertise supported by evidence of real work.
+- [Audit & Improvement Process](https://www.picshaw.com/ai-visibility-audit): An overview of AI Visibility Audits, identifying gaps, establishing a baseline, and prioritizing improvements.
+- [Our measurement methodology](https://www.picshaw.com/methodology): How Picshaw records observations, separates visibility from enquiries, and chooses practical next steps.
+
+## Resources
+
+- [AI Visibility Audit](https://www.picshaw.com/ai-visibility-audit): Explore what an audit entails, baseline assessment, and how to use findings to prioritize actions.
+- [Websites with purpose](https://www.picshaw.com/website-redesign): Strategies for creating user-friendly, clear service websites that help visitors make enquiries.
+- [Next steps and measurement](https://www.picshaw.com/methodology): Guidelines for reviewing performance and iterating improvements.
+
+## Optional
+
+- [Useful reading](https://www.picshaw.com/blog): A collection of guides and articles on AI search, SEO, and website optimization.
+- [How to get started](https://www.picshaw.com/#faq): Answers to common questions about costs, scope, guarantees, and the importance of foundation work.
+- [Contact](mailto:hello@picshaw.com): Reach out for personalized inquiries, quotes, or to begin an audit.
