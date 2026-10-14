@@ -112,7 +112,8 @@ export const projects: Project[] = [
     description:
       "An atmospheric restaurant concept with warm, inviting photography. A distinctive editorial layout puts the dining experience, menu, and reservations first.",
     index: "03",
-    image: "https://images.unsplash.com/photo-1508424757105-b6d5ad9329d0?auto=format&fit=crop&w=1200&q=85",
+    // Same photograph, cropped to the preview's 16:11 ratio; CI enforces a 100 KB budget.
+    image: "https://images.unsplash.com/photo-1508424757105-b6d5ad9329d0?fm=webp&fit=crop&w=640&h=440&q=35",
     imageAlt: "A warm restaurant interior with timber tables, pendant lights, and greenery",
     imagePosition: "50% 55%",
     photography: {

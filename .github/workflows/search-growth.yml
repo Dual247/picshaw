@@ -8,6 +8,16 @@ on:
 permissions:
   contents: read
 jobs:
+  image-budget:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check restaurant image download budget
+        run: node scripts/check-restaurant-image.mjs
   validate:
     runs-on: ubuntu-latest
     timeout-minutes: 20
@@ -56,6 +66,13 @@ jobs:
           done
           node scripts/check-search-preview.mjs
           node scripts/check-receptionist-preview.mjs
+          node scripts/check-seo-audit.mjs
+      - name: Verify SEO fixes on the published site
+        if: github.ref == 'refs/heads/main'
+        env:
+          PREVIEW_URL: https://www.picshaw.com
+          SEO_AUDIT_REPORT: production-seo-audit.json
+        run: node scripts/check-seo-audit.mjs
       - name: Record separate lint outcome
         if: always()
         run: |
