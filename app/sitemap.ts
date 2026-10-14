@@ -1,11 +1,14 @@
 import type { MetadataRoute } from 'next'
-import { services, getPublishedArticles } from '@/lib/content'
+import { services } from '@/lib/content'
+import { getBlogArticles } from '@/lib/blog'
 import { absoluteUrl, additionalPagePaths, isPreview } from '@/lib/site'
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export const revalidate = 300
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   if (isPreview) return []
+  const articles = await getBlogArticles()
   return [
     ...['/', '/about', '/blog', ...additionalPagePaths, ...services.map(service => `/${service.slug}`)].map(path => ({ url: absoluteUrl(path) })),
-    ...getPublishedArticles().map(article => ({ url: absoluteUrl(`/blog/${article.slug}`), lastModified: article.updatedAt ?? article.publishedAt })),
+    ...articles.map(article => ({ url: absoluteUrl(`/blog/${article.slug}`), lastModified: article.updatedAt ?? article.publishedAt })),
   ]
 }
