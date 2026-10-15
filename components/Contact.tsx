@@ -1,6 +1,7 @@
 'use client'
 
 import { useRef, useState, type FormEvent } from 'react'
+import Link from 'next/link'
 import { ArrowUpRight, Check, ArrowLeft } from 'lucide-react'
 import { sendLeadConversion } from '@/lib/google-conversions'
 
@@ -64,7 +65,7 @@ export function Contact({ compact = false }: { compact?: boolean }) {
             <div><label htmlFor="contact-message" className="mb-2 block text-sm font-medium">What do you offer, where do you work, and what would you like to improve?</label><textarea id="contact-message" name="message" rows={4} maxLength={5000} value={data.message} onChange={event => change('message', event.target.value)} className={inputClass} placeholder="For example: home remodeling in Los Angeles. We want more relevant project enquiries." /></div>
             <button type="submit" disabled={status === 'submitting'} className="w-full rounded-lg bg-primary px-5 py-3.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90 disabled:cursor-wait disabled:opacity-60">{status === 'submitting' ? 'Sending…' : isWebsite ? 'Get My Free Website Review' : 'Request my audit scope'}</button>
             {status === 'error' && <p role="alert" className="text-sm leading-6 text-primary">{errorMessage}</p>}
-            <p className="text-xs leading-6 text-muted-foreground">We use these details to respond to your enquiry. This form does not subscribe you to a newsletter or authorise a payment. Please do not include confidential customer information.</p>
+            <p className="text-xs leading-6 text-muted-foreground">We use these details to respond to your enquiry. This form does not subscribe you to a newsletter or authorise a payment. Please do not include confidential customer information. <Link href="/privacy-policy" className="underline underline-offset-4">Privacy Policy</Link>.</p>
           </form>}
         </>}
       </div>

@@ -7,6 +7,8 @@ on:
       - 'components/EditorialHome.tsx'
       - 'components/ReceptionistEnquiry.tsx'
       - 'components/SiteAnalytics.tsx'
+      - 'app/privacy-policy/**'
+      - 'scripts/check-privacy.mjs'
       - 'lib/google-conversions.ts'
       - 'scripts/check-google-conversions*.mjs'
       - '.github/workflows/google-conversions.yml'
@@ -57,6 +59,7 @@ jobs:
             sleep 2
           done
           node scripts/check-google-conversions-browser.mjs
+          node scripts/check-privacy.mjs
       - name: Save conversion checks
         if: always()
         uses: actions/upload-artifact@v4
