@@ -2,6 +2,7 @@
 
 import { useRef, useState, type FormEvent } from 'react'
 import { ArrowUpRight, Check } from 'lucide-react'
+import { sendLeadConversion } from '@/lib/google-conversions'
 
 const inputClass = 'w-full rounded-lg border border-border bg-background px-4 py-3 text-base text-foreground outline-none placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20'
 
@@ -33,6 +34,7 @@ export function ReceptionistEnquiry() {
       })
       const result = await response.json().catch(() => null)
       if (!response.ok || result?.success !== true) throw new Error('Enquiry was not accepted.')
+      sendLeadConversion()
       form.reset()
       setStatus('success')
       requestAnimationFrame(() => statusHeading.current?.focus())

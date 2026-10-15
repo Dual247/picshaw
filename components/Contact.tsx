@@ -2,6 +2,7 @@
 
 import { useRef, useState, type FormEvent } from 'react'
 import { ArrowUpRight, Check, ArrowLeft } from 'lucide-react'
+import { sendLeadConversion } from '@/lib/google-conversions'
 
 const options = [
   { value: 'audit', label: 'AI Visibility Audit' },
@@ -34,6 +35,7 @@ export function Contact({ compact = false }: { compact?: boolean }) {
       const response = await fetch('/api/contact', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...data, service_interest: selectedService }) })
       const result = await response.json().catch(() => null)
       if (!response.ok || result?.success !== true) throw new Error('Please try again or email hello@picshaw.com directly.')
+      sendLeadConversion()
       setStatus('success')
       setData(emptyForm)
     } catch {

@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { ArrowDown, ArrowRight, ArrowUpRight, Check, Plus, Search } from 'lucide-react'
 import { ProjectPreview } from '@/components/ProjectPreview'
 import { projects } from '@/lib/work-showcase'
+import { sendLeadConversion } from '@/lib/google-conversions'
 import styles from './EditorialHome.module.css'
 
 type Guide = { slug: string; title: string; category: string }
@@ -56,6 +57,7 @@ function HomeEnquiry() {
       })
       const result = await response.json().catch(() => null)
       if (!response.ok || result?.success !== true) throw new Error('Enquiry not accepted')
+      sendLeadConversion()
       setStatus('success')
       form.reset()
       requestAnimationFrame(() => statusRef.current?.focus())
@@ -141,7 +143,7 @@ export function EditorialHome({ guides }: { guides: Guide[] }) {
       <div className={styles.sectionHead}><div><p className={styles.eyebrow}>03 / Design directions</p><h2 id="work-heading" className={styles.sectionTitle}>Different businesses.<br /><em>Distinctive websites.</em></h2></div><p className={styles.sideNote}>A selection of illustrative concepts.<br />Design capability, not client results.</p></div>
       <div className={styles.workGrid}>{projects.map(project => <article key={project.title} className={styles.workCard}>
         <figure><div className={styles.workPreview}><ProjectPreview project={project} /></div><figcaption className={styles.photoCredit}><span>Illustrative website design</span><a href={project.photography.url} target="_blank" rel="noopener noreferrer">Photography: {project.photography.name} / Unsplash</a></figcaption></figure>
-        <div className={styles.workCaption}><div><p>{project.category} / {project.tag}</p><h3>{project.title}</h3></div>{project.destination ? <a href={project.destination.url} target="_blank" rel="noopener noreferrer" className={styles.textLink}>Visit {project.destination.host}<ArrowUpRight size={18} aria-hidden="true" /></a> : <Link href="/website-redesign" className={styles.projectLink} aria-label={`Discuss a design like ${project.title}`}><ArrowUpRight size={22} aria-hidden="true" /></Link>}{project.result && <p className={styles.verifiedResult}>{project.result.label} <a href={project.result.evidence.url}>{project.result.evidence.label}</a></p>}</div>
+        <div className={styles.workCaption}><div><p>{project.category} / {project.tag}</p><h3>{project.title}</h3></div>{project.destination ? <a href={project.destination.url} target="_blank" rel="noopener noreferrer" className={styles.textLink}>Visit {project.destination.host}<ArrowUpRight size={22} aria-hidden="true" /></a> : <Link href="/website-redesign" className={styles.projectLink} aria-label={`Discuss a design like ${project.title}`}><ArrowUpRight size={22} aria-hidden="true" /></Link>}{project.result && <p className={styles.verifiedResult}>{project.result.label} <a href={project.result.evidence.url}>{project.result.evidence.label}</a></p>}</div>
       </article>)}</div>
     </div></section>
 

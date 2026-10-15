@@ -1,0 +1,66 @@
+name: Google lead conversion validation
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'components/Contact.tsx'
+      - 'components/EditorialHome.tsx'
+      - 'components/ReceptionistEnquiry.tsx'
+      - 'components/SiteAnalytics.tsx'
+      - 'lib/google-conversions.ts'
+      - 'scripts/check-google-conversions*.mjs'
+      - '.github/workflows/google-conversions.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        environment: [production, preview]
+    env:
+      NEXT_TELEMETRY_DISABLED: '1'
+      VERCEL_ENV: ${{ matrix.environment }}
+      NEXT_PUBLIC_VERCEL_ENV: ${{ matrix.environment }}
+      CONVERSION_TEST_ENV: ${{ matrix.environment }}
+      NEXT_PUBLIC_ANALYTICS_EVENTS: 'false'
+      BABYLOVEGROWTH_BLOG_API_KEY: ''
+      RESEND_API_KEY: re_build_validation_only
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install with the existing repository workaround
+        run: npm install --no-fund --no-audit
+      - name: Lint conversion implementation
+        run: npx eslint components/Contact.tsx components/EditorialHome.tsx components/ReceptionistEnquiry.tsx components/SiteAnalytics.tsx lib/google-conversions.ts
+      - name: Independent TypeScript check
+        run: npx tsc --noEmit --pretty false
+      - name: Helper and integration source tests
+        run: node scripts/check-google-conversions.mjs
+      - name: Production build
+        run: npm run build -- --webpack
+      - name: Install browser runner
+        run: |
+          npm install --no-save --package-lock=false playwright@1.58.2
+          npx playwright install --with-deps chromium
+      - name: Verify accepted and failed submissions without sending email or analytics
+        run: |
+          npm run start > /tmp/picshaw-conversion-next.log 2>&1 &
+          for attempt in $(seq 1 60); do
+            if curl --silent --fail http://127.0.0.1:3000 > /dev/null; then break; fi
+            sleep 2
+          done
+          node scripts/check-google-conversions-browser.mjs
+      - name: Save conversion checks
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: picshaw-google-conversions-${{ matrix.environment }}
+          path: validation/google-conversions-*.json
+          retention-days: 14
