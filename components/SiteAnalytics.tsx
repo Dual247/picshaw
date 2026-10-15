@@ -59,6 +59,7 @@ export function SiteAnalytics({ production }: { production: boolean }) {
   const granted = choice === 'granted' && !gpc
 
   useEffect(() => {
+    queueMicrotask(() => {
     const browserGpc = browserSendsGpc()
     setGpc(browserGpc)
     if (browserGpc) {
@@ -78,6 +79,7 @@ export function SiteAnalytics({ production }: { production: boolean }) {
     } catch { /* Unavailable browser storage: leave optional trackers off. */ }
     ;(window as GoogleWindow)['ga-disable-G-LFJFHY63RR'] = true
     setChoice('unset')
+    })
   }, [])
 
   useEffect(() => {
