@@ -53,11 +53,16 @@ async function open(def, initialMode = 'success', tracking = 'normal') {
     return route.continue()
   })
   await page.goto(new URL(def.path, baseURL).href, { waitUntil: 'networkidle' })
+  // New privacy flow: no optional Google scripts until the visitor explicitly accepts.
+  await page.locator('#privacy-preferences-panel').waitFor()
+  assert.equal(await page.locator('script[src*="googletagmanager.com/gtag/js"]').count(), 0)
   if (enabled) {
+    await page.getByRole('button', { name: 'Allow analytics', exact: true }).click()
     await page.waitForFunction(() => typeof window.gtagSendEvent === 'function')
     assert.equal(await page.locator('script[src*="googletagmanager.com/gtag/js"]').count(), 1, 'No duplicate Google base tag')
     assert.equal(await page.evaluate(() => (window.dataLayer || []).filter(entry => entry[0] === 'config' && entry[1] === 'G-LFJFHY63RR').length), 1)
   } else {
+    await page.getByRole('button', { name: 'Reject optional', exact: true }).click()
     assert.equal(await page.evaluate(() => typeof window.gtagSendEvent), 'undefined')
     assert.equal(await page.locator('script[src*="googletagmanager.com/gtag/js"]').count(), 0)
   }

@@ -66,6 +66,7 @@ jobs:
           done
           node scripts/check-search-preview.mjs
           node scripts/check-receptionist-preview.mjs
+          node scripts/check-privacy.mjs
           node scripts/check-seo-audit.mjs
       - name: Verify SEO fixes on the published site
         if: github.ref == 'refs/heads/main'

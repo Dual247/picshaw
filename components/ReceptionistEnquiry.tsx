@@ -1,6 +1,7 @@
 'use client'
 
 import { useRef, useState, type FormEvent } from 'react'
+import Link from 'next/link'
 import { ArrowUpRight, Check } from 'lucide-react'
 import { sendLeadConversion } from '@/lib/google-conversions'
 
@@ -58,7 +59,7 @@ export function ReceptionistEnquiry() {
         <button type="submit" className="inline-flex min-h-12 w-full items-center justify-center gap-3 rounded-lg bg-primary px-5 py-3.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary disabled:cursor-wait">{status === 'submitting' ? 'Sending…' : 'Request a demo'}<ArrowUpRight size={17} aria-hidden="true" /></button>
       </fieldset>
       {status === 'error' && <p role="alert" className="mt-4 text-sm leading-7 text-primary">We could not confirm your enquiry was sent. Please try again or email <a href="mailto:hello@picshaw.com?subject=AI%20receptionist%20pilot%20enquiry" className="underline underline-offset-4">hello@picshaw.com</a>. Your details have been kept in this form.</p>}
-      <p className="mt-5 text-xs leading-6 text-muted-foreground">We use these details to respond to your enquiry. This does not subscribe you to marketing or authorise payment. Please do not include confidential customer information.</p>
+      <p className="mt-5 text-xs leading-6 text-muted-foreground">We use these details to respond to your enquiry. This does not subscribe you to marketing or authorise payment. Please do not include confidential customer information. <Link href="/privacy-policy" className="underline underline-offset-4">Privacy Policy</Link>.</p>
       <noscript><style>{'#receptionist-fields { display: none; }'}</style><p className="mt-4 text-sm leading-7">This form needs JavaScript to send. Please email <a href="mailto:hello@picshaw.com?subject=AI%20receptionist%20pilot%20enquiry" className="text-primary underline">hello@picshaw.com</a> instead.</p></noscript>
     </form>}
   </div>

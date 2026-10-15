@@ -90,7 +90,7 @@ function HomeEnquiry() {
           <label htmlFor="home-message">What would you like to improve? <span>(optional)</span><textarea id="home-message" name="message" rows={3} maxLength={5000} placeholder="Your services, location and what you have in mind." /></label>
           <button className={styles.primaryButton} type="submit" disabled={status === 'submitting'}>{status === 'submitting' ? 'Sending…' : 'Send enquiry'}<ArrowUpRight size={18} aria-hidden="true" /></button>
           {status === 'error' && <p className={styles.error} role="alert">Your message could not be sent. Please try again or email <a href="mailto:hello@picshaw.com">hello@picshaw.com</a>.</p>}
-          <p className={styles.privacy}>Used only to respond to your enquiry. No newsletter signup or payment authorisation. Please leave out confidential customer information.</p>
+          <p className={styles.privacy}>Used only to respond to your enquiry. No newsletter signup or payment authorisation. Please leave out confidential customer information. <Link href="/privacy-policy" className="underline underline-offset-4">Privacy Policy</Link>.</p>
         </form>}
       </div>
     </div>
