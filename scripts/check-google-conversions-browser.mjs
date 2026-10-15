@@ -74,10 +74,14 @@ async function open(def, initialMode = 'success', tracking = 'normal') {
   return { page, context, deliveries, errors, setMode: value => { mode = value } }
 }
 async function submit(page, form, duplicate = false) {
-  await page.locator(form).evaluate((element, twice) => {
+  if (!duplicate) {
+    await page.locator(form).locator('button[type="submit"]').click()
+    return
+  }
+  await page.locator(form).evaluate(element => {
     element.requestSubmit()
-    if (twice) element.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }))
-  }, duplicate)
+    element.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }))
+  })
 }
 async function checkPayload(page) {
   const entries = await page.evaluate(name => (window.dataLayer || []).filter(entry => entry[0] === 'event' && entry[1] === name).map(entry => ({ keys: Object.keys(entry[2]).sort(), timeout: entry[2].event_timeout, callback: typeof entry[2].event_callback })), eventName)
@@ -105,12 +109,14 @@ try {
     for (const mode of ['http-error', 'success-false', 'malformed', 'network']) {
       const f = await open(def, mode)
       await submit(f.page, def.form)
-      await f.page.getByRole('alert').waitFor()
+      // Do not mistake Next.js's route-announcer alert for the form's error.
+      await f.page.locator(def.form).getByRole('alert').waitFor()
       assert.equal(await count(f.page), 0, `${mode}: no false conversion`)
       assert.equal(await f.page.getByRole('heading', { name: def.success, exact: true }).count(), 0)
       f.setMode('success')
       await submit(f.page, def.form)
       await f.page.getByRole('heading', { name: def.success, exact: true }).waitFor()
+      assert.equal(f.deliveries.length, 2, 'One failed request and one accepted retry')
       assert.equal(await count(f.page), enabled ? 1 : 0, 'Only successful retry counts')
       assert.deepEqual(f.errors, [])
       report.push({ path: def.path, test: `${mode}: no conversion; accepted retry counts only once`, passed: true })
