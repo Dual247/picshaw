@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { ArrowDown, ArrowRight, ArrowUpRight, Check, Plus, Search } from 'lucide-react'
 import { ProjectPreview } from '@/components/ProjectPreview'
 import { projects } from '@/lib/work-showcase'
+import { sendLeadConversion } from '@/lib/google-conversions'
 import styles from './EditorialHome.module.css'
 
 type Guide = { slug: string; title: string; category: string }
@@ -56,6 +57,7 @@ function HomeEnquiry() {
       })
       const result = await response.json().catch(() => null)
       if (!response.ok || result?.success !== true) throw new Error('Enquiry not accepted')
+      sendLeadConversion()
       setStatus('success')
       form.reset()
       requestAnimationFrame(() => statusRef.current?.focus())

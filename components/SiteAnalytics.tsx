@@ -6,6 +6,7 @@ import Script from 'next/script'
 import { Analytics } from '@vercel/analytics/next'
 import { track } from '@vercel/analytics'
 import { pageCategory } from '@/lib/analytics'
+import { googleLeadConversionScript } from '@/lib/google-conversions'
 
 const googleAnalyticsId = 'G-LFJFHY63RR'
 const customEventsEnabled = process.env.NEXT_PUBLIC_ANALYTICS_EVENTS === 'true'
@@ -35,6 +36,7 @@ export function SiteAnalytics({ production }: { production: boolean }) {
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
       gtag('config', '${googleAnalyticsId}');
+      ${googleLeadConversionScript}
     `}</Script>
     <Script id="google-analytics" src={`https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsId}`} strategy="afterInteractive" />
     <Analytics beforeSend={event => { try { const url = new URL(event.url); url.search = ''; url.hash = ''; return { ...event, url: url.toString() } } catch { return null } }} />
