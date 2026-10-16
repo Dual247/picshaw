@@ -7,7 +7,7 @@ import Script from 'next/script'
 import { Analytics } from '@vercel/analytics/next'
 import { track } from '@vercel/analytics'
 import { pageCategory } from '@/lib/analytics'
-import { googleLeadConversionScript } from '@/lib/google-conversions'
+import { googleLeadConversionScript, googleContactConversionScript } from '@/lib/google-conversions'
 
 const googleAnalyticsId = 'G-LFJFHY63RR'
 const preferenceKey = 'picshaw-analytics-consent-v1'
@@ -25,6 +25,7 @@ const initScript = [
   "gtag('js', new Date());",
   "gtag('config','G-LFJFHY63RR',{allow_google_signals:false,allow_ad_personalization_signals:false});",
   googleLeadConversionScript,
+  googleContactConversionScript,
 ].join('\n')
 
 export function PrivacySettingsButton({ className = '' }: { className?: string }) {
@@ -131,6 +132,33 @@ export function SiteAnalytics({ production }: { production: boolean }) {
       document.removeEventListener('click', onClick)
     }
   }, [pathname, enabled, granted])
+
+
+  // Contact clicks are an expression of intent, not verified calls or emails.
+  // Keep this separate from successful-form conversions and optional Vercel events.
+  useEffect(() => {
+    if (!enabled || !granted || pathname === '/privacy-policy') return
+
+    const onContactClick = (event: MouseEvent) => {
+      if (event.defaultPrevented || event.button !== 0 ||
+        event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return
+      if (!(event.target instanceof Element)) return
+
+      const link = event.target.closest<HTMLAnchorElement>('a[href^="mailto:"], a[href^="tel:"]')
+      if (!link || link.hasAttribute('download') || (link.target && link.target !== '_self')) return
+
+      const contactWindow = window as Window & { gtagSendContactEvent?: (url: string) => boolean }
+      try {
+        // If tracking is unavailable, leave mailto:/tel: navigation untouched.
+        if (contactWindow.gtagSendContactEvent?.(link.getAttribute('href') || '') === true) {
+          event.preventDefault()
+        }
+      } catch { /* Analytics errors must never block a contact link. */ }
+    }
+
+    document.addEventListener('click', onContactClick)
+    return () => document.removeEventListener('click', onContactClick)
+  }, [enabled, granted, pathname])
 
   return <>
     {enabled && granted && <>
