@@ -11,6 +11,7 @@ on:
       - 'scripts/check-privacy.mjs'
       - 'lib/google-conversions.ts'
       - 'scripts/check-google-conversions*.mjs'
+      - 'scripts/check-google-contact.mjs'
       - '.github/workflows/google-conversions.yml'
   workflow_dispatch:
 permissions:
@@ -45,6 +46,8 @@ jobs:
         run: npx tsc --noEmit --pretty false
       - name: Helper and integration source tests
         run: node scripts/check-google-conversions.mjs
+      - name: Validate separate Google contact conversion
+        run: node scripts/check-google-contact.mjs
       - name: Production build
         run: npm run build -- --webpack
       - name: Install browser runner

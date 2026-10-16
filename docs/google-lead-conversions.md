@@ -19,3 +19,16 @@ After deployment, use Google Tag Assistant or Analytics Realtime/DebugView to ve
 References:
 - https://developers.google.com/tag-platform/gtagjs/reference/parameters
 - https://support.google.com/analytics/answer/12966437
+
+
+## Contact link conversion (conversion_event_contact)
+
+The Google tag also installs a **separate** window.gtagSendContactEvent(url) helper. The event is exactly conversion_event_contact, with the supplied event_callback and event_timeout: 2000, and no personal-data parameters. This does **not** overwrite window.gtagSendEvent, which is retained exclusively for successful form submissions.
+
+When an opted-in visitor clicks a normal same-tab mailto:hello@picshaw.com or tel:+17379009237 link on a marketing/service page, the handler sends one conversion_event_contact event and allows the callback to open the mail client or dialer. An independent two-second navigation fallback handles blocked Google callbacks. Only the published Picshaw contact destinations are eligible. If the visitor rejects analytics, the tag is not ready, the tag is disabled, or scripts fail, contact links follow native browser behavior without a delay. The Privacy Policy page is excluded so that privacy requests are not counted as marketing conversions. Form attempts and navigation to the contact section are not contact-click conversions.
+
+A contact-link click is a **proxy for intent**, not a verified email or completed telephone call. Actual accepted form enquiries remain measured by conversion_event_submit_lead_form. Do not set both as primary bidding conversions without evaluating double counting.
+
+The supplied code does not include a Google Ads AW-.../label destination. Reporting in Google Ads requires the existing Google tag or GA4 to be connected to the correct Ads conversion action in the relevant Google account. This code cannot verify Ads account linking or import settings.
+
+All local browser integration tests intercept external Google calls and never send real leads or ad events.
