@@ -23,3 +23,5 @@ export function enquiryTerms(value: string) {
     default: return null
   }
 }
+
+export type RetainerService = typeof retainerOptions[number]['value']

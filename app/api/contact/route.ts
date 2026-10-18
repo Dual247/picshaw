@@ -2,11 +2,11 @@ import { Resend } from 'resend'
 import { z } from 'zod'
 import { track } from '@vercel/analytics/server'
 
-const serviceLabels: Record<string, string> = { audit: 'AI Visibility Audit', aeo: 'AEO implementation or ongoing support', receptionist: 'AI receptionist demo / founding pilot', '1k': '$1,000 Website Refresh', '2.5k': '$2,500+ Growth Site', monthly: 'Website Partnership', unsure: 'Help me decide' }
+const serviceLabels: Record<string, string> = { audit: 'AI Visibility Audit — $1,250', 'retainer-core': 'Core AI Visibility Retainer — $1,500 per month', 'retainer-founding': 'Founding LA Core — $1,250/month; availability and case-study consent subject to approval', 'retainer-growth': 'Growth AI Visibility Retainer — from $2,500/month quoted', 'retainer-annual': 'Core annual prepaid — $16,200/year, 10% discount', aeo: 'AEO implementation or ongoing support', receptionist: 'AI receptionist demo / founding pilot', '1k': '$1,000 Website Refresh', '2.5k': '$2,500+ Growth Site', monthly: 'Website Partnership', unsure: 'Help me decide' }
 const inputSchema = z.object({
   name: z.string().trim().max(150).default(''), email: z.string().trim().email().max(254),
   business: z.string().trim().max(200).default(''), website: z.string().trim().max(2048).default(''),
-  message: z.string().trim().max(5000).default(''), service_interest: z.enum(['audit', 'aeo', 'receptionist', '1k', '2.5k', 'monthly', 'unsure']),
+  message: z.string().trim().max(5000).default(''), service_interest: z.enum(['audit', 'aeo', 'retainer-core', 'retainer-founding', 'retainer-growth', 'retainer-annual', 'receptionist', '1k', '2.5k', 'monthly', 'unsure']),
 }).superRefine((input, context) => {
   // A website is not a prerequisite for the receptionist pilot. Retain the existing audit/review requirement.
   if (input.service_interest !== 'receptionist' && !input.website) context.addIssue({ code: z.ZodIssueCode.custom, path: ['website'], message: 'A website is required.' })
@@ -23,7 +23,7 @@ export async function POST(request: Request) {
   if (!parsed.success) return Response.json({ error: 'Please check the required fields and try again.' }, { status: 400 })
   if (!process.env.RESEND_API_KEY) return Response.json({ error: 'Messaging is temporarily unavailable. Please email hello@picshaw.com.' }, { status: 503 })
   const { name, email, business, website, message, service_interest } = parsed.data
-  const isAeo = service_interest === 'audit' || service_interest === 'aeo'
+  const isAeo = service_interest === 'audit' || service_interest === 'aeo' || service_interest.startsWith('retainer-')
   const isReceptionist = service_interest === 'receptionist'
   const enquiryLabel = isReceptionist ? 'AI receptionist enquiry' : isAeo ? 'AI visibility enquiry' : 'website review request'
   try {
