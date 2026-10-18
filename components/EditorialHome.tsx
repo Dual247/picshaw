@@ -6,6 +6,7 @@ import { ArrowDown, ArrowRight, ArrowUpRight, Check, Plus, Search } from 'lucide
 import { ProjectPreview } from '@/components/ProjectPreview'
 import { projects } from '@/lib/work-showcase'
 import { sendLeadConversion } from '@/lib/google-conversions'
+import { retainerOptions, isRetainerService, RETAINER_PATH, corePrice, auditPrice, usd } from '@/lib/retainer'
 import styles from './EditorialHome.module.css'
 
 type Guide = { slug: string; title: string; category: string }
@@ -13,7 +14,7 @@ const questions = [
   { question: 'What is AI-search visibility?', answer: 'It is how easily people can discover and understand your business through AI-powered search. Answer engine optimization (AEO) improves the technical foundations, service information and evidence that support that discovery.' },
   { question: 'Do I need a new website?', answer: 'Not necessarily. We start with what you have. A redesign is a separate scope, recommended only when the existing website or enquiry experience needs it.' },
   { question: 'Can you guarantee a ChatGPT recommendation?', answer: 'No. AI answers vary and placements are not ours to sell. We document the questions tested, changes made and evidence observed, alongside relevant visits and enquiries.' },
-  { question: 'What does it cost to get started?', answer: 'An enquiry is free. A full AI Visibility Audit is a paid, separately quoted service. We agree the scope, fee and delivery date before paid work begins. Website projects and the AI receptionist pilot have their own pricing.' },
+  { question: 'What does it cost to get started?', answer: 'An enquiry is free. A single-location AI Visibility Audit is $1,250. The Core AI Visibility Retainer is $1,500 per month with a three-month minimum, then month to month. Website builds and the AI receptionist pilot are separate.' },
 ]
 const services = [
   { number: '01', title: 'AI-search visibility.', description: 'Find the gaps. Strengthen your search foundations. Make your expertise easier to discover.', href: '/ai-search-optimization', label: 'Explore AEO' },
@@ -21,11 +22,12 @@ const services = [
   { number: '03', title: 'Ready for the call.', description: 'Explore after-hours enquiry capture and callbacks, configured around your business.', href: '/ai-receptionist', label: 'Explore AI receptionist', tag: 'Founding pilot' },
 ]
 const enquiryOptions = [
-  { value: 'audit', label: 'AI Visibility Audit' },
-  { value: 'aeo', label: 'AEO implementation / ongoing support' },
+  { value: 'audit', label: 'AI Visibility Audit — $1,250' },
+  ...retainerOptions,
+  { value: 'aeo', label: 'Other AEO implementation (quoted)' },
   { value: '1k', label: 'Website Refresh — $1,000 scope' },
   { value: '2.5k', label: 'Growth Site — from $2,500' },
-  { value: 'monthly', label: 'Website partnership' },
+  { value: 'monthly', label: 'Website maintenance only (not the AEO retainer)' },
   { value: 'unsure', label: 'Help me decide' },
 ]
 
@@ -36,6 +38,7 @@ function HomeEnquiry() {
   const submitting = useRef(false)
   const statusRef = useRef<HTMLDivElement>(null)
   const isWebsite = ['1k', '2.5k', 'monthly'].includes(service)
+  const isRetainer = isRetainerService(service)
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -76,11 +79,11 @@ function HomeEnquiry() {
       <div className={styles.enquiryPanel}>
         {status === 'success' ? <div ref={statusRef} tabIndex={-1} role="status" className={styles.success}>
           <Check size={32} aria-hidden="true" /><h3>You&apos;re on our radar.</h3>
-          <p>Your enquiry has been accepted. We&apos;ll review it and reply about the next step. No paid work has started.</p>
+          <p>Your enquiry has been accepted. We&apos;ll review it and reply about the next step. No paid work has started. Founding availability is confirmed in writing.</p>
           <button className={styles.textLink} type="button" onClick={() => { setStatus('idle'); setService('audit') }}>Send another enquiry <ArrowRight size={16} aria-hidden="true" /></button>
         </div> : <form onSubmit={submit} className={styles.form} data-enquiry-type={isWebsite ? 'website' : 'aeo'} aria-busy={status === 'submitting'}>
           <h3>A little about your business.</h3>
-          <p className={styles.formNote}>Free to enquire. Audits and projects are quoted before paid work begins.</p>
+          <p className={styles.formNote}>Free to enquire. AI Visibility Audits are $1,250; Core is $1,500/month with a three-month minimum. Pricing is confirmed before paid work begins.</p>
           <div className={styles.fieldPair}>
             <label htmlFor="home-name">Your name <span>(optional)</span><input id="home-name" name="name" autoComplete="name" maxLength={150} /></label>
             <label htmlFor="home-email">Email <span>(required)</span><input id="home-email" name="email" type="email" autoComplete="email" maxLength={254} required /></label>
@@ -88,6 +91,7 @@ function HomeEnquiry() {
           <label htmlFor="home-website">Website <span>(required)</span><input id="home-website" name="website" type="text" inputMode="url" autoComplete="url" maxLength={2048} required placeholder="yourbusiness.com" /></label>
           <label htmlFor="home-service">What are you exploring?<select id="home-service" name="service_interest" value={service} onChange={event => setService(event.target.value)}>{enquiryOptions.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}</select></label>
           <label htmlFor="home-message">What would you like to improve? <span>(optional)</span><textarea id="home-message" name="message" rows={3} maxLength={5000} placeholder="Your services, location and what you have in mind." /></label>
+          {isRetainer && <p className={styles.formNote}>Three-month minimum, then month to month for standard Core. Founding and annual plans have separate terms. See <Link href={RETAINER_PATH} className="underline underline-offset-4">full monthly pricing</Link>.</p>}
           <button className={styles.primaryButton} type="submit" disabled={status === 'submitting'}>{status === 'submitting' ? 'Sending…' : 'Send enquiry'}<ArrowUpRight size={18} aria-hidden="true" /></button>
           {status === 'error' && <p className={styles.error} role="alert">Your message could not be sent. Please try again or email <a href="mailto:hello@picshaw.com">hello@picshaw.com</a>.</p>}
           <p className={styles.privacy}>Used only to respond to your enquiry. No newsletter signup or payment authorisation. Please leave out confidential customer information. <Link href="/privacy-policy" className="underline underline-offset-4">Privacy Policy</Link>.</p>
@@ -117,6 +121,7 @@ export function EditorialHome({ guides }: { guides: Guide[] }) {
             <figcaption>Illustrative journey. Not a live search result or client outcome.</figcaption>
           </figure>}
         </div>
+        <p className="mb-6 text-sm text-muted-foreground">Our Core monthly AEO programme starts at {usd(corePrice)}/month, following a {usd(auditPrice)} audit. <Link href={RETAINER_PATH} className="text-primary underline underline-offset-4">Explore monthly plans</Link>.</p>
         <div className={styles.audience}><span>Built around local expertise.</span><p>Home services<span aria-hidden="true">/</span>Contractors<span aria-hidden="true">/</span>Owner-led businesses</p></div>
       </div>
     </section>
