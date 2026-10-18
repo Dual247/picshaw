@@ -36,6 +36,8 @@ jobs:
       - name: Install dependencies
         # Preserve the existing workaround for the separately tracked stale lockfile.
         run: npm install --no-fund --no-audit
+      - name: Validate retainer pricing consistency
+        run: node scripts/check-retainer-pricing.mjs
       - name: Validate content, routes and draft exclusions
         run: node scripts/check-search-content.mjs
       - name: Test contact validation and success events without sending email
