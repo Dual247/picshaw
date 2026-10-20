@@ -42,24 +42,22 @@ function forTopic(topic: ChatTopic): ChatAnswer {
     default: return answer('unknown', 'I do not have a verified answer for that specific question. I can explain Picshaw’s services and prices, or pass on your request once you review and submit it to Ash. What are you looking to achieve?', [], ['Show me monthly plans', 'Can you improve my website?', 'Talk to Ash'])
   }
 }
-
 export function getChatAnswer(input: string, previous?: ChatTopic): ChatAnswer {
   const q = input.slice(0, 1200).normalize('NFKC').toLowerCase().replace(/[’']/g, '').replace(/\s+/g, ' ').trim()
   if (!q) return forTopic('overview')
-  if (/\b(privacy|personal data|delete my|recording this chat|are you (a bot|ai|human)|live agent|ignore (all|previous)|system prompt|api key|password|credit card|social security)\b/.test(q)) return forTopic('privacy')
+  if (/\b(privacy|personal data|delete my|recording this chat|are you (a bot|ai|a human|human|a person)|live agent|ignore (all|previous)|system prompt|api key|password|credit card|social security)\b/.test(q)) return forTopic('privacy')
   if (/\b(guarantee|guaranteed|proof|testimonials?|case studies|rank first|number one|results?|roi)\b/.test(q)) return forTopic('results')
   if (/\b(ash|talk to|speak to|book a call|proposal|quote|specific request|human|person|get started|sign up|ready to start)\b/.test(q)) return forTopic('human')
   if (/\b(what else|which services|what services|what do you (offer|do))\b/.test(q)) return forTopic('overview')
   const voice = /\b(receptionist|voice|miss(ed)? (a |customer )?calls?|answer(ing)? (the |my )?(phone|calls?)|after.hours|call forwarding|appointment|demo)\b/.test(q)
-  const annual = /\b(annual|yearly|prepay|prepaid|12 months|twelve months)\b/.test(q)
+  const annual = /\b(annual(?:ly)?|yearly|prepay|prepaid|12 months|twelve months)\b/.test(q)
   const founding = /\b(founding|founder rate|first three|first 3|1250 a month)\b/.test(q)
   const discount = /\b(discount|cheaper|offer a deal)\b/.test(q)
   const audit = /\b(audit|scan|assessment)\b/.test(q)
-  const core = /\b(core|retainer|monthly plan)\b/.test(q)
+  const core = /\b(core|retainer|monthly plans?)\b/.test(q)
   const website = /\b(growth site|redesign|rebuild|refresh|new (web)?site|better website|improve my website|website design|web design|build (me |a |my )?(web)?site)\b/.test(q)
   const growth = /\b(growth|two locations|2 locations|second (market|location)|multiple (markets|locations)|multi.location)\b/.test(q)
   const pricing = /\b(price|prices|pricing|cost|costs|how much|charge|budget|expensive|afford)\b/.test(q)
-  // Short follow-ups refer to the last topic; explicit new services take priority.
   const followUp = !voice && !audit && !website && !core && !growth && !founding && q.split(' ').length <= 12
   if (voice || (followUp && previous === 'receptionist' && (pricing || annual || discount))) {
     if (annual || discount) return answer('receptionist', `The published receptionist pilot price is ${usd(receptionistOffer.monthly)}/month plus ${usd(receptionistOffer.setup)} setup. The Core annual and LA founding discounts are for the AI Visibility Retainer, not this voice service. Ask Ash to quote any different receptionist billing arrangement.`, [voiceLink], ['Tell me about the AI receptionist', 'Talk to Ash'])
@@ -74,7 +72,7 @@ export function getChatAnswer(input: string, previous?: ChatTopic): ChatAnswer {
   if (/\b(keep|existing|current|wordpress|squarespace|shopify|wix|webflow|hosting|domain|already have|no website|dont have a website)\b/.test(q)) return forTopic('existing')
   if (growth) return forTopic('growth')
   if (/\b(how (long|soon|fast)|when|deadline|cancel|minimum|commitment|contract|timing|refund)\b/.test(q)) {
-    if (founding || previous === 'founding') return forTopic('founding')
+    if (previous === 'founding') return forTopic('founding')
     if (previous === 'annual') return forTopic('annual')
     return forTopic('timing')
   }
