@@ -29,7 +29,16 @@ export default function ChatPanel({ open, onClose }: { open: boolean; onClose: (
     const frame = requestAnimationFrame(() => (mode === 'lead' ? email.current : heading.current)?.focus({ preventScroll: true }))
     return () => cancelAnimationFrame(frame)
   }, [open, mode])
-  useEffect(() => { if (body.current && mode === 'chat') body.current.scrollTop = body.current.scrollHeight }, [turns, mode])
+  useEffect(() => {
+    const region = body.current
+    if (!region || mode !== 'chat') return
+    const latestAnswer = region.querySelector<HTMLElement>('[data-chat-turn]:last-child [data-chat-answer]')
+    // Start a new conversation at the welcome, and new replies at their first line.
+    // Scrolling to the bottom hides prices and opening sentences on small screens.
+    region.scrollTop = latestAnswer
+      ? region.scrollTop + latestAnswer.getBoundingClientRect().top - region.getBoundingClientRect().top - 16
+      : 0
+  }, [turns, mode])
   function ask(text: string) {
     const trimmed = text.trim().slice(0, 1200)
     if (!trimmed) return
@@ -58,11 +67,14 @@ export default function ChatPanel({ open, onClose }: { open: boolean; onClose: (
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     if (submitting.current) return
+    if (!lead.message.trim()) {
+      setStatus('error'); setError('Please add your question or goal before sending.'); return
+    }
     submitting.current = true
     setStatus('sending'); setError('')
     const controller = new AbortController()
     const timer = setTimeout(() => controller.abort(), 20000)
-    const selected = chatInterests.find(([value]) => value === lead.interest)?.[1] ?? 'Specific request'
+    const selected = chatInterests.find(([value]) => value === lead.interest)?.[1] ?? 'A specific question / other request'
     try {
       const response = await fetch('/api/contact', {
         method: 'POST', headers: { 'Content-Type': 'application/json' }, signal: controller.signal,
@@ -87,11 +99,11 @@ export default function ChatPanel({ open, onClose }: { open: boolean; onClose: (
     </header>
     <p role="status" className={styles.srOnly}>{announcement}</p>
     {mode === 'chat' ? <>
-      <div className={styles.body} ref={body}>
-        <div className={styles.welcome}><p className={styles.eyebrow}>A useful place to start</p><h3>What would you like<br />to improve?</h3><p>Ask about AI visibility, websites, pricing or the receptionist pilot. Get an answer before sharing any contact details.</p></div>
-        <div role="log" aria-live="off" aria-label="Picshaw conversation" className={styles.messages}>{turns.map(turn => <div key={turn.id} className={styles.turn}>
+      <div className={styles.body} ref={body} data-chat-scroll>
+        <div className={styles.welcome} data-chat-welcome><p className={styles.eyebrow}>A useful place to start</p><h3>What would you like<br />to improve?</h3><p>Ask about AI visibility, websites, pricing or the receptionist pilot. Get an answer before sharing any contact details.</p></div>
+        <div role="log" aria-live="off" aria-label="Picshaw conversation" className={styles.messages}>{turns.map(turn => <div key={turn.id} className={styles.turn} data-chat-turn>
           <p className={styles.userMessage}><span className={styles.srOnly}>You: </span>{turn.question}</p>
-          <div className={styles.answer}><p><span className={styles.srOnly}>Picshaw assistant: </span>{turn.answer.text}</p>{turn.answer.links.length > 0 && <div className={styles.sources}>{turn.answer.links.map(link => <Link key={link.href} href={link.href} onClick={onClose}>{link.label}<ArrowUpRight size={13} aria-hidden="true" /></Link>)}</div>}</div>
+          <div className={styles.answer} data-chat-answer><p><span className={styles.srOnly}>Picshaw assistant: </span>{turn.answer.text}</p>{turn.answer.links.length > 0 && <div className={styles.sources}>{turn.answer.links.map(link => <Link key={link.href} href={link.href} onClick={onClose}>{link.label}<ArrowUpRight size={13} aria-hidden="true" /></Link>)}</div>}</div>
         </div>)}</div>
         <div className={styles.suggestions} aria-label="Suggested questions">{suggestions.map(text => <button key={text} type="button" onClick={() => ask(text)}>{text}<ArrowUpRight size={13} aria-hidden="true" /></button>)}</div>
       </div>
