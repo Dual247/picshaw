@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import Link from 'next/link'
 import { Header } from '@/components/Header'
 import { Footer } from '@/components/Footer'
+import { ChatPrivacyNotice } from '@/components/ChatPrivacyNotice'
 import type { ContentSection } from '@/lib/content'
 import { absoluteUrl, jsonLd } from '@/lib/site'
 
@@ -13,6 +14,7 @@ export function ContentPage({ title, intro, eyebrow, path, children }: { title: 
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd({ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: breadcrumbs }) }} />
     <nav aria-label="Breadcrumb" className="mb-10 flex flex-wrap items-center gap-2 text-sm text-muted-foreground"><Link href="/" className="hover:text-foreground">Home</Link><span aria-hidden="true">/</span>{path.startsWith('/blog/') && <><Link href="/blog" className="hover:text-foreground">Guides</Link><span aria-hidden="true">/</span></>}<span aria-current="page" className="max-w-full break-words">{title}</span></nav>
     <header className="mb-12 max-w-4xl border-b border-border pb-10"><p className="mb-5 text-xs font-medium uppercase tracking-[0.2em] text-primary">{eyebrow}</p><h1 className="text-4xl font-bold leading-[1.08] tracking-tight md:text-6xl">{title}</h1><p className="mt-7 max-w-3xl text-lg leading-relaxed text-muted-foreground md:text-xl">{intro}</p></header>
+    {path === '/privacy-policy' && <ChatPrivacyNotice />}
     {children}
   </main><Footer /></>
 }
