@@ -1,0 +1,69 @@
+name: Picshaw chat assistant validation
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'components/Chat*'
+      - 'components/ContentPage.tsx'
+      - 'lib/chatbot.ts'
+      - 'lib/retainer.ts'
+      - 'lib/receptionist.ts'
+      - 'app/layout.tsx'
+      - 'app/api/contact/route.ts'
+      - 'scripts/check-chatbot*.mjs'
+      - '.github/workflows/chat-assistant.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        environment: [production, preview]
+    env:
+      NEXT_TELEMETRY_DISABLED: '1'
+      VERCEL_ENV: ${{ matrix.environment }}
+      NEXT_PUBLIC_ANALYTICS_EVENTS: 'false'
+      BABYLOVEGROWTH_BLOG_API_KEY: ''
+      RESEND_API_KEY: re_build_validation_only
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install using the existing lockfile workaround
+        run: npm install --no-fund --no-audit
+      - name: Lint widget and integrations
+        run: npx eslint components/ChatWidget.tsx components/ChatPanel.tsx components/ChatPrivacyNotice.tsx components/ContentPage.tsx lib/chatbot.ts app/layout.tsx app/api/contact/route.ts
+      - name: TypeScript check
+        run: npx tsc --noEmit --pretty false
+      - name: Answer, pricing and mocked delivery tests
+        run: |
+          node scripts/check-chatbot.mjs
+          node scripts/check-contact.mjs
+          node scripts/check-google-conversions.mjs
+      - name: Build
+        run: npm run build -- --webpack
+      - name: Install browser runner
+        run: |
+          npm install --no-save --package-lock=false playwright@1.58.2
+          npx playwright install --with-deps chromium
+      - name: Test chat interaction, privacy, lead capture and responsive layout
+        run: |
+          npm run start > /tmp/picshaw-chat.log 2>&1 &
+          for attempt in $(seq 1 60); do
+            if curl --silent --fail http://127.0.0.1:3000 > /dev/null; then break; fi
+            sleep 2
+          done
+          node scripts/check-chatbot-browser.mjs
+      - name: Save reports and widget screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: picshaw-chat-${{ matrix.environment }}
+          path: validation/chat-*
+          retention-days: 14
