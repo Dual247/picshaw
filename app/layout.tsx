@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Space_Grotesk, Geist_Mono } from 'next/font/google'
 import { SiteAnalytics } from '@/components/SiteAnalytics'
+import { ChatWidget } from '@/components/ChatWidget'
 import { absoluteUrl, isPreview, jsonLd, ORGANIZATION_ID, SITE_URL } from '@/lib/site'
 import './globals.css'
 
@@ -23,6 +24,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <a href="#main-content" className="sr-only fixed left-4 top-4 z-[100] rounded bg-primary px-4 py-3 text-primary-foreground focus:not-sr-only">Skip to content</a>
       <noscript><style>{'[style*="opacity:0"], [style*="opacity: 0"] {opacity:1!important;transform:none!important} header[style] {transform:none!important}'}</style><p className="relative z-[60] bg-card p-4 text-center">JavaScript is off. Read our pages normally, or email <a href="mailto:hello@picshaw.com" className="underline">hello@picshaw.com</a> to discuss an audit or website project.</p></noscript>
       {children}
+      <ChatWidget />
       <SiteAnalytics production={process.env.VERCEL_ENV === 'production'} />
     </body>
   </html>
