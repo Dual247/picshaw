@@ -107,9 +107,12 @@ try {
   assert.equal(await conversionCount(page), 0, 'Rejecting analytics still allows lead delivery, without conversion event')
   await page.keyboard.press('Escape')
   await dialog.waitFor({ state: 'hidden' })
+  // Closing hides the panel first; focus is deliberately restored on the next frame.
+  await page.waitForFunction(() => document.activeElement?.getAttribute('aria-label') === 'Ask Picshaw a question', undefined, { timeout: 5000 })
   assert.equal(await page.getByRole('button', { name: 'Ask Picshaw a question' }).evaluate(el => document.activeElement === el), true)
   assert.deepEqual(f.errors, [])
   report.push({ test: 'Instant answers, pricing/context, text safety, navigation retention, reviewed lead, errors/retry, duplicate guard, optional website and consent refusal', passed: true })
+  console.log('Chat interaction and reviewed enquiry checks passed')
   await f.context.close()
 
   for (const gpc of [false, true]) {
@@ -145,6 +148,7 @@ try {
       assert.ok(!stickyBox || launcher.y + launcher.height <= stickyBox.y, 'Launcher avoids the mobile contact bar')
     }
     await dialog.screenshot({ path: 'validation/chat-open-' + width + 'x' + height + '.png' })
+    await f.page.screenshot({ path: 'validation/chat-page-' + width + 'x' + height + '.png' })
     await ask(dialog, 'Show me monthly plans')
     await dialog.screenshot({ path: 'validation/chat-answer-' + width + 'x' + height + '.png' })
     await dialog.getByRole('button', { name: 'Send a request to Ash', exact: true }).click()
@@ -153,6 +157,7 @@ try {
     await dialog.screenshot({ path: 'validation/chat-lead-' + width + 'x' + height + '.png' })
     assert.deepEqual(f.errors, [])
     report.push({ viewport: [width, height], fits: true, noOverflow: true, passed: true })
+    console.log('Chat viewport passed: ' + width + 'x' + height)
     await f.context.close()
   }
   console.log(JSON.stringify(report, null, 2))
