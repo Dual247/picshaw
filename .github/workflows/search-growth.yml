@@ -9,7 +9,7 @@ permissions:
   contents: read
 jobs:
   image-budget:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
       - uses: actions/checkout@v4
@@ -19,7 +19,8 @@ jobs:
       - name: Check restaurant image download budget
         run: node scripts/check-restaurant-image.mjs
   validate:
-    runs-on: ubuntu-latest
+    # Pin the supported runner for the existing Playwright version.
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     env:
       NEXT_TELEMETRY_DISABLED: '1'

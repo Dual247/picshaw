@@ -25,7 +25,8 @@ permissions:
   contents: read
 jobs:
   validate:
-    runs-on: ubuntu-latest
+    # Playwright 1.58.2 does not support the new ubuntu-latest 26.04 image.
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     env:
       NEXT_TELEMETRY_DISABLED: '1'
