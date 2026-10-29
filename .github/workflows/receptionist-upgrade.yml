@@ -1,0 +1,61 @@
+name: Receptionist explainer and pricing validation
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'app/ai-receptionist/**'
+      - 'components/Receptionist*.tsx'
+      - 'lib/receptionist*.ts'
+      - 'public/media/receptionist-*'
+      - 'scripts/check-receptionist-upgrade*.mjs'
+      - 'scripts/render-receptionist-explainer.py'
+      - '.github/workflows/receptionist-upgrade.yml'
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      NEXT_TELEMETRY_DISABLED: '1'
+      VERCEL_ENV: production
+      NEXT_PUBLIC_ANALYTICS_EVENTS: 'false'
+      RESEND_API_KEY: re_build_validation_only
+      BABYLOVEGROWTH_BLOG_API_KEY: ''
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install dependencies using existing repository workaround
+        run: npm install --no-fund --no-audit
+      - name: Lint upgraded page and components
+        run: npx eslint app/ai-receptionist/page.tsx components/ReceptionistExplainer.tsx components/ReceptionistUsageEstimator.tsx lib/receptionist-usage.ts
+      - name: Check TypeScript
+        run: npx tsc --noEmit --pretty false
+      - name: Verify pricing mathematics and original video assets
+        run: |
+          if ! command -v ffprobe >/dev/null; then sudo apt-get update && sudo apt-get install -y ffmpeg; fi
+          node scripts/check-receptionist-upgrade.mjs
+      - name: Production build
+        run: npm run build -- --webpack
+      - name: Install browser runner
+        run: |
+          npm install --no-save --package-lock=false playwright@1.58.2
+          npx playwright install --with-deps chromium
+      - name: Test playback, estimator, mobile layout and accessibility
+        run: |
+          npm run start > /tmp/picshaw-receptionist-upgrade.log 2>&1 &
+          for attempt in $(seq 1 60); do
+            if curl --silent --fail http://127.0.0.1:3000 > /dev/null; then break; fi
+            sleep 2
+          done
+          node scripts/check-receptionist-upgrade-browser.mjs
+      - name: Save reports and screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: picshaw-receptionist-upgrade
+          path: validation/receptionist-upgrade-*
+          retention-days: 14
