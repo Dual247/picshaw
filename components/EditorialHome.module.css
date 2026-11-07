@@ -17,16 +17,22 @@
 .textLink { display: inline-flex; align-items: center; gap: 14px; width: fit-content; padding-block: 10px; font-size: 13px; font-weight: 500; line-height: 1.6; text-underline-offset: 5px; }
 .textLink:hover { text-decoration: underline; }
 .textLink svg, .primaryButton svg { flex-shrink: 0; }
-.heroVisual { margin: 0; min-width: 0; padding: 12px 0 0 8px; }
-.query { display: flex; align-items: center; gap: 11px; width: 91%; margin: 0 auto; padding: 16px 18px; border: 1px solid #555b4f; border-radius: 30px; color: #e6e8df; font-size: clamp(10px, 1vw, 13px); background: #20251c; }
-.query > svg { flex-shrink: 0; color: #c2c9b9; }
-.queryCursor { display: block; width: 1px; height: 15px; margin-left: auto; background: var(--primary); }
-.journeyLine { height: 44px; display: flex; flex-direction: column; align-items: center; color: var(--primary); }
-.journeyLine span { width: 1px; flex: 1; background: var(--primary); }
-.heroBrowser { transform: rotate(-2deg); transform-origin: center; border: 1px solid #424638; border-radius: 5px; overflow: hidden; box-shadow: 0 24px 64px #0004; animation: enter-frame .8s ease-out both; }
-.browserBar { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: #282e23; color: #c8cec0; font-size: 9px; letter-spacing: .02em; }
-.browserDots { letter-spacing: 3px; color: #8c9483; }
-.heroVisual > figcaption { margin: 22px 0 0; font-size: 10px; line-height: 1.6; text-align: center; color: var(--quiet); }
+.heroVisual { scroll-margin-top: 100px; margin: 0 0 18px; min-width: 0; container-type: inline-size; }
+.query { display: flex; align-items: center; gap: 11px; width: fit-content; max-width: 96%; margin-inline: auto; padding: 11px 17px; border: 1px solid #484d42; border-radius: 24px; color: #eeeae2; background: #20241d; font-size: 13px; line-height: 1.45; }
+.query > svg { flex-shrink: 0; color: #bec7b5; }
+.journeyLine { height: 27px; display: flex; flex-direction: column; align-items: center; color: var(--primary); }
+.journeyLine span { width: 1px; flex: 1; background: currentColor; }
+.venueCard { position: relative; isolation: isolate; display: flex; flex-direction: column; justify-content: space-between; gap: 38px; width: 100%; aspect-ratio: 3 / 2; min-height: 248px; overflow: hidden; border-radius: 6px; padding: clamp(18px, 5cqi, 32px); background: #373026; color: #fff8e9; box-shadow: 0 18px 48px #0003; }
+.venuePhoto, .venueCard::after { position: absolute; inset: 0; width: 100%; height: 100%; }
+.venuePhoto { z-index: -2; object-fit: cover; object-position: 59% 50%; }
+.venueCard::after { content: ''; z-index: -1; background: linear-gradient(180deg, #19130f77 0%, transparent 30%), linear-gradient(35deg, #120f0beb 0%, #17100957 37%, transparent 68%); }
+.venueMasthead { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.venueBrand { display: inline-flex; align-items: center; gap: 7px; font: 500 clamp(18px, 4.5cqi, 25px)/1 Georgia, serif; letter-spacing: -.045em; }
+.venueLocation { font-size: 10px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; text-shadow: 0 1px 4px #211811; }
+.venueHeadline { margin: 0; color: inherit; font: 400 clamp(36px, 10.5cqi, 68px)/.97 Georgia, 'Times New Roman', serif; letter-spacing: -.055em; }
+.venueHeadline em { font-weight: 400; }
+.venueAction { display: inline-flex; align-items: center; gap: 12px; width: fit-content; margin-top: 16px; padding: 8px 13px; border-radius: 2px; background: #faf0dc; color: #352b21; font-size: 12px; font-weight: 600; line-height: 1.35; }
+.heroVisual > figcaption { margin-top: 10px; color: var(--quiet); font-size: 11px; line-height: 1.5; text-align: center; }
 .audience { display: flex; justify-content: space-between; gap: 18px; padding-block: 26px; margin-top: 76px; border-top: 1px solid var(--line); font-size: 11px; line-height: 1.8; }
 .audience > span { color: var(--quiet); }
 .audience > p { display: flex; flex-wrap: wrap; gap: 18px; margin: 0; }
@@ -143,7 +149,6 @@
 .success { padding: 40px 0; }
 .success > svg { color: var(--primary); margin-bottom: 24px; }
 .success p { max-width: 390px; color: #b7bdb0; font-size: 15px; line-height: 1.8; margin-block: 18px; }
-@keyframes enter-frame { from { transform: translateY(12px) rotate(0); } to { transform: translateY(0) rotate(-2deg); } }
 @media (min-width: 1500px) { .hero { padding-top: 170px; } }
 @media (max-width: 1100px) {
   .heroTitle { font-size: clamp(54px, 7.2vw, 80px); }
@@ -162,9 +167,7 @@
   .heroTitle { font-size: clamp(47px, 10.7vw, 80px); }
   .heroIntro { max-width: 440px; margin-top: 23px; }
   .heroActions { gap: 18px; }
-  .heroVisual { max-width: 550px; width: 100%; margin-inline: auto; padding: 6px; }
-  .query { font-size: 11px; padding: 14px; }
-  .heroVisual > figcaption { font-size: 9px; }
+  .heroVisual { max-width: 550px; width: 100%; margin-inline: auto; }
   .audience { flex-direction: column; gap: 6px; margin-top: 38px; padding-block: 20px; }
   .audience > p { gap: 10px; font-size: 10px; }
   .example, .services, .work, .approach, .insights, .faq, .contact { padding-block: 62px; }
@@ -206,8 +209,6 @@
   .heroActions { gap: 8px; }
   .heroActions .primaryButton { font-size: 12px; padding-inline: 16px; }
   .heroActions .textLink { font-size: 12px; }
-  .query { padding: 12px; font-size: 9px; gap: 8px; }
-  .query svg { width: 14px; }
   .heroTitle { font-size: 45px; }
   .auditSheet { padding: 20px; }
   .auditSheet h3 { font-size: 33px; }
@@ -216,7 +217,6 @@
   .serviceTitle h3 { font-size: 21px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .heroBrowser { animation: none; transform: none; }
   .primaryButton, .serviceRow, .serviceArrow, .guideArt, .question summary > svg { transition: none; }
   .primaryButton:hover { transform: none; }
 }
