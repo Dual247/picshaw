@@ -5,9 +5,10 @@ import { chromium } from 'playwright'
 const baseURL = process.env.PREVIEW_URL || 'http://127.0.0.1:3000'
 const expectedTitles = JSON.parse(await readFile('content/seo-titles.json', 'utf8'))
 const photos = [
-  { id: 'photo-1629079447777-1e605162dc8d', count: 2, alt: 'A contemporary bathroom with a white double vanity and blue-tinted window' },
+  { id: 'photo-1629079447777-1e605162dc8d', count: 1, alt: 'A contemporary bathroom with a white double vanity and blue-tinted window' },
   { id: 'photo-1581182800629-7d90925ad072', count: 1, alt: 'A sunlit natural-beauty portrait used as illustrative editorial photography' },
   { id: 'photo-1508424757105-b6d5ad9329d0', count: 1, alt: 'A warm restaurant interior with timber tables, pendant lights, and greenery' },
+  { id: '/images/malibu-supper.webp', count: 1, alt: 'A candlelit wedding table with coral flowers above the Malibu coastline at sunset' },
 ]
 const originalRestaurantURL = 'https://images.unsplash.com/photo-1508424757105-b6d5ad9329d0?auto=format&fit=crop&w=1200&q=85'
 const report = { baseURL, checkedAt: new Date().toISOString(), titles: [], images: [], restaurant: null }

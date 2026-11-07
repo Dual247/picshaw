@@ -1,8 +1,9 @@
 'use client'
 
 import { useRef, useState, type FormEvent } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowDown, ArrowRight, ArrowUpRight, Check, Plus, Search } from 'lucide-react'
+import { ArrowDown, ArrowRight, ArrowUpRight, Check, Plus, Search, Shell } from 'lucide-react'
 import { ProjectPreview } from '@/components/ProjectPreview'
 import { projects } from '@/lib/work-showcase'
 import { sendLeadConversion } from '@/lib/google-conversions'
@@ -114,12 +115,27 @@ export function EditorialHome({ guides }: { guides: Guide[] }) {
             <p className={styles.heroIntro}>We help local businesses improve their AI-search visibility through clearer websites, useful content and practical improvements.</p>
             <div className={styles.heroActions}><Link href="/ai-visibility-audit" className={styles.primaryButton}>Explore your AI audit<ArrowUpRight size={18} aria-hidden="true" /></Link><a href="#example" className={styles.textLink}>See the approach<ArrowDown size={16} aria-hidden="true" /></a></div>
           </div>
-          {projects[0] && <figure className={styles.heroVisual}>
-            <div className={styles.query}><Search size={18} aria-hidden="true" /><span>Who can help with my home project?</span><span className={styles.queryCursor} aria-hidden="true" /></div>
+          <figure id="venue-concept" className={styles.heroVisual}>
+            <div className={styles.query}>
+              <Search size={18} aria-hidden="true" />
+              <span>Where can we get married by the ocean in Malibu?</span>
+            </div>
             <div className={styles.journeyLine} aria-hidden="true"><span /><ArrowDown size={18} /></div>
-            <div className={styles.heroBrowser}><div className={styles.browserBar}><span className={styles.browserDots} aria-hidden="true">•••</span><span>A clearer place to land</span><ArrowUpRight size={13} aria-hidden="true" /></div><ProjectPreview project={projects[0]} /></div>
-            <figcaption>Illustrative journey. Not a live search result or client outcome.</figcaption>
-          </figure>}
+            <div className={styles.venueCard}>
+              <Image src="/images/malibu-supper.webp" width={1110} height={740} loading="eager"
+                alt="A candlelit wedding table with coral flowers above the Malibu coastline at sunset"
+                className={styles.venuePhoto} />
+              <div className={styles.venueMasthead}>
+                <span className={styles.venueBrand}><Shell size={20} strokeWidth={1.3} aria-hidden="true" />Casa Luma</span>
+                <span className={styles.venueLocation}>Malibu, CA</span>
+              </div>
+              <div className={styles.venueCopy}>
+                <p className={styles.venueHeadline}>Vows above<br /><em>the Pacific.</em></p>
+                <span className={styles.venueAction}>Book a private tour <ArrowUpRight size={14} aria-hidden="true" /></span>
+              </div>
+            </div>
+            <figcaption>Illustrative search journey for a fictional wedding venue.</figcaption>
+          </figure>
         </div>
         <p className="mb-6 text-sm text-muted-foreground">Our Core monthly AEO programme starts at {usd(corePrice)}/month, following a {usd(auditPrice)} audit. <Link href={RETAINER_PATH} className="text-primary underline underline-offset-4">Explore monthly plans</Link>.</p>
         <div className={styles.audience}><span>Built around local expertise.</span><p>Home services<span aria-hidden="true">/</span>Contractors<span aria-hidden="true">/</span>Owner-led businesses</p></div>

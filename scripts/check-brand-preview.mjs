@@ -22,6 +22,17 @@ try {
     const icon = await page.locator("link[rel='icon'][href*='icon.svg']").getAttribute("href")
     assert.ok(icon, "SVG favicon missing")
     assert.equal((await page.request.get(new URL(icon, baseURL).href)).status(), 200)
+    const venue = page.locator("#venue-concept")
+    const venueImage = venue.locator("img[src='/images/malibu-supper.webp']")
+    await venueImage.evaluate(img => img.decode())
+    assert.equal(await venueImage.getAttribute("alt"), "A candlelit wedding table with coral flowers above the Malibu coastline at sunset")
+    assert.match(await venue.innerText(), /Casa Luma/)
+    assert.match(await venue.innerText(), /Vows above/)
+    const fits = await venue.evaluate(figure => {
+      const photo = figure.querySelector("img").getBoundingClientRect()
+      return photo.right <= figure.getBoundingClientRect().right + 1
+    })
+    assert.ok(fits, `Venue card clipped at ${width}px`)
     await page.locator("#work h2").scrollIntoViewIfNeeded()
     await page.waitForTimeout(1000)
 
@@ -40,7 +51,7 @@ try {
       if (width === 1440) await card.locator("figure").screenshot({ path: `validation/concept-${i + 1}.png` })
     }
     const bathroomAltText = await page.locator(`img[src*='${bathroomPhoto}']`).evaluateAll(images => images.map(image => image.getAttribute("alt")))
-    assert.deepEqual(bathroomAltText, [bathroomAlt, bathroomAlt], "Hero and showcase bathroom images must both have the descriptive alt text")
+    assert.deepEqual(bathroomAltText, [bathroomAlt], "The showcase bathroom image must have the descriptive alt text")
     assert.ok(!(await page.locator("#work").innerText()).includes("pacificplumbingco..com"))
     assert.ok(!(await page.locator("#work").innerText()).match(/47%|3x consultation|First page Google|fully booked/))
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)
