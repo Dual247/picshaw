@@ -4,11 +4,11 @@ import { useState, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { Menu, X, ArrowUpRight } from 'lucide-react'
-import { usePortalAccess, usePortalOrigin } from '@/hooks/use-portal-access'
 import { BrandLogo } from './BrandLogo'
 
 const navItems = [
-  { label: 'AEO', href: '/ai-search-optimization' },
+  { label: 'AI visibility', href: '/ai-search-optimization' },
+  { label: 'Websites', href: '/website-redesign' },
   { label: 'Monthly plan', href: '/ai-visibility-retainer' },
   { label: 'AI receptionist', href: '/ai-receptionist' },
   { label: 'Our approach', href: '/methodology' },
@@ -17,16 +17,14 @@ const navItems = [
   { label: 'About', href: '/about' },
 ]
 export function Header() {
-  const portalReady = usePortalAccess()
-  const portalOrigin = usePortalOrigin()
-  const navigation = [...navItems, { label: portalReady ? 'Log in' : 'Portal / Preview', href: portalReady ? `${portalOrigin}/platform/sign-in` : '/#portal' }]
+  const navigation = navItems
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const pathname = usePathname()
   const isReceptionist = pathname === '/ai-receptionist'
   const isRetainer = pathname === '/ai-visibility-retainer'
-  const ctaHref = isReceptionist ? '/ai-receptionist#enquiry' : isRetainer ? '/ai-visibility-retainer#contact' : '/ai-visibility-audit#contact'
-  const ctaLabel = isReceptionist ? 'Request a demo' : isRetainer ? 'Discuss my plan' : 'Request an AI audit'
+  const ctaHref = isReceptionist ? '/ai-receptionist#enquiry' : isRetainer ? '/ai-visibility-retainer#contact' : '/#contact'
+  const ctaLabel = isReceptionist ? 'Request a demo' : isRetainer ? 'Discuss my plan' : 'Discuss my business'
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50)
     const frame = requestAnimationFrame(handleScroll)

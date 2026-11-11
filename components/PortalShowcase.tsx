@@ -1,23 +1,17 @@
 'use client'
 import Link from 'next/link'
 import { ArrowUpRight, Search, ClipboardList } from 'lucide-react'
-import { usePortalAccess, usePortalOrigin } from '@/hooks/use-portal-access'
 import styles from './PortalShowcase.module.css'
 
 export function PortalShowcase() {
-  const ready = usePortalAccess()
-  const portalOrigin = usePortalOrigin()
   return <section id="portal" className={styles.section} aria-labelledby="portal-heading">
     <div className={styles.layout}>
       <div className={styles.copy}>
-        <p className={styles.eyebrow}>The Picshaw portal / Take a look inside</p>
+        <p className={styles.eyebrow}>In development / Reporting preview</p>
         <h2 id="portal-heading">The evidence.<br /><em>The next step.</em></h2>
-        <p>Explore a sample workspace: search visibility, the detail behind the numbers, and a focused list of priorities.</p>
-        <div className={styles.actions}>
-          <Link href={`${portalOrigin}${ready ? '/platform/sign-up' : '/platform/preview'}`} prefetch={false} className={styles.button}>{ready ? 'Create your account' : 'Explore the sample portal'}<ArrowUpRight size={17} aria-hidden="true" /></Link>
-          <Link href={`${portalOrigin}/platform/sign-in`} prefetch={false} className={styles.link}>{ready ? 'Log in' : 'Portal login & access'}<ArrowUpRight size={15} aria-hidden="true" /></Link>
-        </div>
-        <p className={styles.readiness}>{ready ? 'The sample is fictional and separate from your account.' : 'Preview available. Account creation and login are not enabled yet.'}</p>
+        <p>A look at the reporting experience we are building: search visibility, the evidence behind the numbers, and a focused list of priorities.</p>
+        <div className={styles.actions}><Link href="/#contact" className={styles.button}>Discuss visibility reporting<ArrowUpRight size={17} aria-hidden="true" /></Link></div>
+        <p className={styles.readiness}>Portal coming soon. Account creation and login are not enabled yet.</p>
       </div>
       <figure className={styles.figure}>
         <div className={styles.workspace}>
@@ -34,7 +28,7 @@ export function PortalShowcase() {
             <p className={styles.note}>No accounts connected. No real customer results.</p>
           </div>
         </div>
-        <figcaption>A condensed view of the fictional portal preview, rendered as text, not a screenshot. <Link href={`${portalOrigin}/platform/preview`} prefetch={false}>Open the full sample <ArrowUpRight size={12} aria-hidden="true" /></Link></figcaption>
+        <figcaption>A condensed concept for the future portal, rendered as text, not a screenshot. Fictional data, not client results.</figcaption>
       </figure>
     </div>
   </section>
