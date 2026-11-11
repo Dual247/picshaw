@@ -8,7 +8,7 @@ const additional = ['/ai-visibility-audit', '/methodology', '/ai-receptionist', 
 const routes = new Set(['/', '/about', '/blog', ...additional, ...services.map(service => `/${service.slug}`), ...published.map(article => `/blog/${article.slug}`)])
 assert.equal(services.length, 4)
 assert.equal(published.length, 4)
-for (const route of additional) assert.ok(existsSync(`app${route}/page.tsx`))
+for (const route of additional) assert.ok(existsSync(`app/(marketing)${route}/page.tsx`))
 assert.equal(new Set([...services, ...articles].map(item => item.slug)).size, services.length + articles.length)
 assert.equal(new Set([...services, ...published].map(item => item.title)).size, services.length + published.length)
 for (const item of [...services, ...published]) {

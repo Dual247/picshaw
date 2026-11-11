@@ -1,0 +1,3 @@
+# Local Supabase CLI state; never project configuration or migration source.
+.temp/
+.branches/

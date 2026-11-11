@@ -5,7 +5,7 @@ import ts from 'typescript'
 
 const source = readFileSync('lib/google-conversions.ts','utf8')
 const site = readFileSync('components/SiteAnalytics.tsx','utf8')
-const policy = readFileSync('app/privacy-policy/page.tsx','utf8')
+const policy = readFileSync('app/(marketing)/privacy-policy/page.tsx','utf8')
 const compiled = ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText
 const events=[]
 const destinations=[]

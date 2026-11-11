@@ -2,7 +2,7 @@ name: BabyLoveGrowth integration validation
 on:
   pull_request:
     branches: [main]
-    paths: ['app/blog/**', 'app/sitemap.ts', 'app/api/blog/**', 'lib/blog*', 'lib/babylovegrowth*', 'scripts/check-babylovegrowth*', 'package.json', 'package-lock.json', 'pnpm-lock.yaml', '.github/workflows/babylovegrowth.yml']
+    paths: ['app/(marketing)/blog/**', 'app/sitemap.ts', 'app/api/blog/**', 'lib/blog*', 'lib/babylovegrowth*', 'scripts/check-babylovegrowth*', 'package.json', 'package-lock.json', 'pnpm-lock.yaml', '.github/workflows/babylovegrowth.yml']
 permissions:
   contents: read
 jobs:
@@ -21,7 +21,7 @@ jobs:
       - name: Install dependencies
         run: npm install --no-fund --no-audit
       - name: Lint integration files
-        run: npx eslint app/blog app/sitemap.ts app/api/blog lib/blog.ts lib/blog-model.ts lib/babylovegrowth-client.ts
+        run: npx eslint "app/(marketing)/blog" app/sitemap.ts app/api/blog lib/blog.ts lib/blog-model.ts lib/babylovegrowth-client.ts
       - name: TypeScript
         run: npx tsc --noEmit --pretty false
       - name: Unit and client tests

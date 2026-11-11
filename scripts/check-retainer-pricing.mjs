@@ -2,13 +2,13 @@ import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 const read=p=>readFileSync(p,'utf8')
 const pricing=read('lib/retainer.ts')
-const page=read('app/ai-visibility-retainer/page.tsx')
+const page=read('app/(marketing)/ai-visibility-retainer/page.tsx')
 const api=read('app/api/contact/route.ts')
 const main=read('components/EditorialHome.tsx')
 const contact=read('components/Contact.tsx')
 const header=read('components/Header.tsx')
 const sitemap=read('lib/site.ts')
-const audit=read('app/ai-visibility-audit/page.tsx')
+const audit=read('app/(marketing)/ai-visibility-audit/page.tsx')
 for(const value of ['1500','1250','2500','0.1', 'retainer-core', 'retainer-founding', 'retainer-growth', 'retainer-annual'])assert.ok(pricing.includes(value),value)
 for(const value of ['Approximately 20','Google Business Profile','30-minute walkthrough','three-month minimum']) {if(value==='Approximately 20')assert.ok(page.toLowerCase().includes('approximately 20'));else assert.ok(page.includes(value),value)}
 for(const name of ['retainer-core','retainer-founding','retainer-growth','retainer-annual'])assert.ok(api.includes(name) && pricing.includes(name),name)

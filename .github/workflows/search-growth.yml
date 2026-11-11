@@ -18,6 +18,20 @@ jobs:
           node-version: '22'
       - name: Check restaurant image download budget
         run: node scripts/check-restaurant-image.mjs
+  tenant-database:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install locked dependencies for persistence TypeScript tests
+        run: npm ci --no-fund --no-audit
+      - name: Install isolated PostgreSQL test runtime
+        run: npm install --prefix validation/tenant-database-tooling --no-save --package-lock=false --ignore-scripts --no-fund --no-audit @electric-sql/pglite@0.5.16
+      - name: Test tenant policies and evidence constraints in isolation
+        run: npm run check:database
   validate:
     # Pin the supported runner for the existing Playwright version.
     runs-on: ubuntu-24.04
@@ -35,19 +49,26 @@ jobs:
           node-version: '22'
           cache: npm
       - name: Install dependencies
-        # Preserve the existing workaround for the separately tracked stale lockfile.
-        run: npm install --no-fund --no-audit
+        # Validate and install the synchronized lockfile without dependency drift.
+        run: npm ci --no-fund --no-audit
       - name: Validate retainer pricing consistency
         run: node scripts/check-retainer-pricing.mjs
       - name: Validate content, routes and draft exclusions
         run: node scripts/check-search-content.mjs
       - name: Test contact validation and success events without sending email
         run: node scripts/check-contact.mjs
+      - name: Validate platform contracts and privacy boundary
+        run: npm run check:platform
+      - name: Validate portal rendering and disclosure contracts
+        run: node components/platform/portal-render.test.cjs
+      - name: Validate Supabase auth and offline readiness contracts
+        run: npm run check:supabase
+      - name: Validate shared UI stores
+        run: npm run check:ui
       - name: Lint implementation files
         run: npx eslint app components/AEOLanding.tsx components/Hero.tsx components/Contact.tsx components/ReceptionistEnquiry.tsx components/ContentPage.tsx components/SiteAnalytics.tsx components/Header.tsx components/Footer.tsx components/FAQ.tsx lib/site.ts lib/receptionist.ts lib/content.ts lib/analytics.ts
-      - name: Record full repository lint without changing existing rules
+      - name: Require full repository lint
         id: lint
-        continue-on-error: true
         run: |
           mkdir -p validation
           set -o pipefail
@@ -70,6 +91,7 @@ jobs:
           node scripts/check-search-preview.mjs
           node scripts/check-receptionist-preview.mjs
           node scripts/check-privacy.mjs
+          node scripts/check-platform-http.mjs
           node scripts/check-seo-audit.mjs
       - name: Verify SEO fixes on the published site
         if: github.ref == 'refs/heads/main'
@@ -81,7 +103,7 @@ jobs:
         if: always()
         run: |
           echo 'Full repository lint: ${{ steps.lint.outcome }}' >> "$GITHUB_STEP_SUMMARY"
-          echo 'Existing repository lint/dependency findings are tracked separately in issue #7.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Full repository lint and TypeScript are required launch checks.' >> "$GITHUB_STEP_SUMMARY"
       - name: Save test results and screenshots
         if: always()
         uses: actions/upload-artifact@v4
