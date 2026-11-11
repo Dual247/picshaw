@@ -5,8 +5,6 @@ import { setTimeout as pause } from "node:timers/promises"
 const expectedMark = (await readFile("public/brand/picshaw-mark.svg", "utf8")).trim()
 const photos = ["photo-1629079447777-1e605162dc8d", "photo-1581182800629-7d90925ad072", "photo-1508424757105-b6d5ad9329d0"]
 const expectedBathroomAlt = "A contemporary bathroom with a white double vanity and blue-tinted window"
-const venuePhoto = "/images/malibu-supper.webp"
-const expectedVenueAlt = "A candlelit wedding table with coral flowers above the Malibu coastline at sunset"
 const report = { checkedAt: null, requestedURL: "https://picshaw.com", ready: false, attempts: [] }
 
 for (let attempt = 1; attempt <= 18; attempt++) {
@@ -15,8 +13,6 @@ for (let attempt = 1; attempt <= 18; attempt++) {
     const html = await home.text()
     const images = html.match(/<img\b[^>]*>/gi) || []
     const bathroomImages = images.filter(tag => tag.includes(photos[0]))
-    const venueImage = images.find(tag => tag.includes(`src="${venuePhoto}"`))
-    const venueAsset = await fetch(new URL(venuePhoto, home.url), { method: "HEAD", signal: AbortSignal.timeout(15000) })
     const bathroomAltText = bathroomImages.map(tag => tag.match(/\salt="([^"]*)"/)?.[1] ?? null)
     const logo = await fetch(new URL("/brand/picshaw-mark.svg", home.url), { cache: "no-store", signal: AbortSignal.timeout(15000) })
     const svg = await logo.text()
@@ -29,16 +25,18 @@ for (let attempt = 1; attempt <= 18; attempt++) {
       logoReferences: (html.match(/src="\/brand\/picshaw-mark.svg"/g) || []).length,
       newShowcase: html.includes("Distinctive websites."),
       photographs: photos.every((photo) => html.includes(photo)),
-      venueReady: html.includes('id="venue-concept"') && html.includes("Casa Luma") && html.includes("Vows above")
-        && Boolean(venueImage?.includes(`alt="${expectedVenueAlt}"`))
-        && venueAsset.ok && venueAsset.headers.get("content-type")?.startsWith("image/webp"),
+      conversionJourneyReady: html.includes('id="opportunity-heading"') && html.includes("Can they find you?")
+        && html.includes("Why should they choose you?") && html.includes("What happens next?")
+        && html.includes("Discuss my business") && html.includes("$1,000") && html.includes("$1,250") && html.includes("$1,500")
+        && html.includes("Three-month minimum") && html.includes('href="/#services"')
+        && html.includes("Portal coming soon") && !html.includes('href="https://app.picshaw.com'),
       bathroomImageCount: bathroomImages.length,
       bathroomAltText,
       bathroomAltTextCorrect: bathroomAltText.length === 1 && bathroomAltText.every(alt => alt === expectedBathroomAlt),
       svgFavicon: html.includes("icon.svg"),
     }
     report.attempts.push(check)
-    if (home.ok && logo.ok && check.correctLogo && check.logoReferences === 2 && check.newShowcase && check.photographs && check.venueReady && check.bathroomAltTextCorrect && check.svgFavicon) {
+    if (home.ok && logo.ok && check.correctLogo && check.logoReferences === 2 && check.newShowcase && check.photographs && check.conversionJourneyReady && check.bathroomAltTextCorrect && check.svgFavicon) {
       report.ready = true
       break
     }
