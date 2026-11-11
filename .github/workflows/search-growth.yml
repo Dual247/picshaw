@@ -90,6 +90,7 @@ jobs:
             if curl --silent --fail http://127.0.0.1:3000 > /dev/null; then break; fi
             sleep 2
           done
+          PORTAL_TEST_PORT=3000 node scripts/check-service-chunk-http.mjs
           node scripts/check-search-preview.mjs
           node scripts/check-receptionist-preview.mjs
           node scripts/check-privacy.mjs

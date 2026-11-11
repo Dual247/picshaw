@@ -15,6 +15,14 @@ export function portalHref(path: '/platform/sign-in' | '/platform/sign-up' | '/p
 export type BoundaryDecision = 'allow' | 'deny' | 'redirect'
 /** No extension-based exclusions: dotted paths must pass the same boundary. */
 export function portalBoundary(host: string, path: string, method: string, preview = false): BoundaryDecision {
+  // Next emits URL-encoded brackets for dynamic-route JS chunks (for example
+  // app/(marketing)/%5Bservice%5D/page-HASH.js). Decode only those two bytes,
+  // only under the literal static-chunk prefix, and only for read requests.
+  // Never decode separators, dots, percent signs, controls or arbitrary paths.
+  if ((method === 'GET' || method === 'HEAD') &&
+      path.startsWith('/_next/static/chunks/') && path.endsWith('.js')) {
+    path = path.replace(/%5b/gi, '[').replace(/%5d/gi, ']')
+  }
   // Reject ambiguous spellings rather than letting downstream decoding reinterpret them.
   if (!path.startsWith('/') || /[%\\\x00-\x20]/.test(path) || path.includes('//') ||
       path.split('/').some(segment => segment === '.' || segment === '..')) return 'deny'

@@ -61,6 +61,32 @@ for (const host of ['localhost:4174', '127.0.0.1:4174', '[::1]:4174', 'preview.v
 for (const path of ['/_next/static/chunks/app.js', '/icon.svg', '/brand/picshaw-mark.svg']) {
   check('app.picshaw.com', path, 'GET', 'allow'); check('app.picshaw.com', path, 'POST', 'deny')
 }
+
+const dynamicChunk = '/_next/static/chunks/app/(marketing)/%5Bservice%5D/page-123.js'
+for (const host of ['picshaw.com', 'www.picshaw.com', 'app.picshaw.com', 'localhost:4174', 'preview.vercel.app']) {
+  for (const method of ['GET', 'HEAD']) {
+    check(host, dynamicChunk, method, 'allow', true)
+    check(host, dynamicChunk.replace('%5B', '%5b').replace('%5D', '%5d'), method, 'allow', true)
+  }
+  for (const method of ['POST', 'OPTIONS']) check(host, dynamicChunk, method, 'deny', true)
+  for (const path of [
+    '/platform/%5Bservice%5D', '/api/platform/%5Bservice%5D',
+    '/_next/static/chunks/%5Bservice%5D/page.js%2f',
+    '/_next/static/chunks/%5Bservice%5D%2fpage.js',
+    '/_next/static/chunks/%5Bservice%5D/%2e%2e/page.js',
+    '/_next/static/chunks/%5Bservice%5D/../page.js',
+    '/_next/static/chunks/%255Bservice%255D/page.js',
+    '/_next/static/chunks/%5Bservice%5D/%00page.js',
+    '/_next/static/chunks/%5Bservice%5D/%5cpage.js',
+    '/_next/static/chunks/%5Bservice%5D//page.js',
+    '/_next/static/chunks/%5Bservice%5D/page.css',
+    '/_next/static%2fchunks/%5Bservice%5D/page.js',
+  ]) check(host, path, 'GET', 'deny', true)
+}
+for (const host of ['evil.test', 'app.picshaw.com.evil.test', 'app.picshaw.com.', 'app.picshaw.com:443', 'APP.PICSHAW.COM', 'alias.vercel.app']) {
+  check(host, dynamicChunk, 'GET', 'deny')
+}
+
 const { proxy } = load('proxy.ts', { './lib/portal-origin': boundary, 'next/server': { NextRequest, NextResponse } })
 for (const [host, path, expected] of [
   ['app.picshaw.com', '/', 303], ['picshaw.com', '/platform/sign-in?code=secret&next=https://evil.test', 303],
