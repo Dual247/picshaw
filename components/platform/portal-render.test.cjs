@@ -1,6 +1,6 @@
 
 const assert = require('node:assert/strict')
-const { readFileSync } = require('node:fs')
+const { readFileSync, existsSync } = require('node:fs')
 const { resolve, dirname } = require('node:path')
 const vm = require('node:vm')
 const ts = require('typescript')
@@ -8,15 +8,24 @@ const React = require('react')
 const { renderToStaticMarkup } = require('react-dom/server')
 const root = resolve(__dirname, '../..')
 const cache = new Map()
-// Compile only local TSX. Real React, Next Link, next-themes and icons render normally.
+// Compile local TypeScript modules (.ts and .tsx). Real React, Next Link, next-themes and icons render normally.
 function load(file) {
   const path = resolve(root, file)
   if (cache.has(path)) return cache.get(path)
   const localModule = { exports: {} }
   const source = ts.transpileModule(readFileSync(path, 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, jsx: ts.JsxEmit.ReactJSX, target: ts.ScriptTarget.ES2022, esModuleInterop: true } }).outputText
   vm.runInNewContext(source, { module: localModule, exports: localModule.exports, require(name) {
-    if (name.startsWith('@/')) return load(name.slice(2) + '.tsx')
-    if (name.startsWith('.')) return load(resolve(dirname(path), name + '.tsx'))
+    // Render the closed deployment state without loading credentials, DB clients or server-only runtime.
+    // Runtime admission and configuration gates have their own dedicated test suites.
+    if (name === '@/lib/supabase/workspace-runtime') return { readWorkspaceConfig: () => null }
+    if (name === '@/lib/supabase/auth-admission') return { authAdmissionConfigured: false }
+    if (name.startsWith('@/') || name.startsWith('.')) {
+      const base = name.startsWith('@/') ? resolve(root, name.slice(2)) : resolve(dirname(path), name)
+      const candidates = [base + '.ts', base + '.tsx', resolve(base, 'index.ts'), resolve(base, 'index.tsx')]
+      const found = candidates.find(candidate => existsSync(candidate))
+      if (!found) throw new Error('Unresolved local TypeScript module: ' + name + ' from ' + path)
+      return load(found)
+    }
     return require(name)
   }, console }, { filename: path })
   cache.set(path, localModule.exports)
@@ -28,7 +37,7 @@ for (const route of ['', '/preview', '/onboarding']) {
   assert.equal((html.match(/id="main-content"/g) || []).length, 1)
   assert.ok(html.includes('Color theme'))
   assert.ok(html.includes('Light theme') && html.includes('Dark theme') && html.includes('Use system theme'))
-  assert.ok(!html.includes('<form'), 'Setup and preview must not submit personal data')
+  if (route !== '/onboarding') assert.ok(!html.includes('<form'), 'Overview and preview must not submit personal data')
   for (const match of html.matchAll(/href="#([^"]+)"/g)) assert.ok(html.includes('id="' + match[1] + '"'), 'Anchor target exists: ' + match[1])
   if (route === '/preview') {
     assert.ok(html.includes('FICTIONAL SAMPLE WORKSPACE'))
@@ -44,7 +53,16 @@ for (const route of ['', '/preview', '/onboarding']) {
     assert.ok(html.includes('Authentication and live data connections are not configured'))
     assert.ok(html.includes('href="/platform/preview"'))
   } else {
-    assert.ok(html.includes('Nothing is collected or saved here'))
+
+    assert.ok(html.includes('These fields are disabled and no business details are collected'))
+    assert.equal((html.match(/<form/g) || []).length, 1)
+    assert.match(html, /<fieldset[^>]* disabled=""/, 'Unavailable onboarding disables the complete form')
+    assert.match(html, /<button[^>]*disabled=""[^>]*>Open my workspace<\/button>/)
+    assert.match(html, /<fieldset[^>]*disabled=""[\s\S]*id="workspace-name"[\s\S]*id="workspace-site"[\s\S]*type="submit"[\s\S]*<\/fieldset>/, 'Every business field and submit button stays inside the disabled fieldset')
+    assert.ok(!/<form[^>]*action=/.test(html), 'No native form submission target')
+    assert.ok(html.includes('Existing client workspaces are never assigned automatically'))
+    assert.ok(html.includes('We will not visit it or connect any data'))
+
   }
   console.log('PASS real React server render: /platform' + route)
 }
