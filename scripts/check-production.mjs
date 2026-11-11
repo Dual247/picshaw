@@ -2,10 +2,27 @@ import assert from "node:assert/strict"
 import { readFile, mkdir, writeFile } from "node:fs/promises"
 import { setTimeout as pause } from "node:timers/promises"
 
-const expectedMark = (await readFile("public/brand/picshaw-mark.svg", "utf8")).trim()
+const normalizeLineEndings = text => text.replaceAll("\r\n", "\n")
+const expectedMark = normalizeLineEndings((await readFile("public/brand/picshaw-mark.svg", "utf8")).trim())
 const photos = ["photo-1629079447777-1e605162dc8d", "photo-1581182800629-7d90925ad072", "photo-1508424757105-b6d5ad9329d0"]
 const expectedBathroomAlt = "A contemporary bathroom with a white double vanity and blue-tinted window"
 const report = { checkedAt: null, requestedURL: "https://picshaw.com", ready: false, attempts: [] }
+
+
+// Deployment query strings do not change asset identity; origin and pathname do.
+function isBrandMarkSource(src, pageURL) {
+  if (!src) return false
+  try {
+    const url = new URL(src, pageURL)
+    return url.origin === new URL(pageURL).origin && url.pathname === '/brand/picshaw-mark.svg'
+  } catch { return false }
+}
+for (const src of ['/brand/picshaw-mark.svg', '/brand/picshaw-mark.svg?dpl=dpl_fixture']) {
+  assert.equal(isBrandMarkSource(src, 'https://www.picshaw.com/'), true)
+}
+for (const src of ['', 'https://evil.test/brand/picshaw-mark.svg', '//evil.test/brand/picshaw-mark.svg?dpl=x', '/brand/picshaw-mark.svg.fake', '/other/picshaw-mark.svg']) {
+  assert.equal(isBrandMarkSource(src, 'https://www.picshaw.com/'), false)
+}
 
 for (let attempt = 1; attempt <= 18; attempt++) {
   try {
@@ -21,8 +38,8 @@ for (let attempt = 1; attempt <= 18; attempt++) {
       finalURL: home.url,
       homepageStatus: home.status,
       logoStatus: logo.status,
-      correctLogo: svg.trim() === expectedMark,
-      logoReferences: (html.match(/src="\/brand\/picshaw-mark.svg"/g) || []).length,
+      correctLogo: normalizeLineEndings(svg.trim()) === expectedMark,
+      logoReferences: images.filter(tag => isBrandMarkSource(tag.match(/\ssrc="([^"]*)"/)?.[1], home.url)).length,
       newShowcase: html.includes("Distinctive websites."),
       photographs: photos.every((photo) => html.includes(photo)),
       conversionJourneyReady: html.includes('id="opportunity-heading"') && html.includes("Can they find you?")
