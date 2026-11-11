@@ -6,7 +6,7 @@ on:
       - 'components/**'
       - 'lib/work-showcase.ts'
       - 'public/brand/**'
-      - 'app/page.tsx'
+      - 'app/(marketing)/page.tsx'
       - 'app/icon*'
       - 'scripts/check-*.mjs'
       - '.github/workflows/brand-preview.yml'
@@ -16,7 +16,7 @@ on:
       - 'components/**'
       - 'lib/work-showcase.ts'
       - 'public/brand/**'
-      - 'app/page.tsx'
+      - 'app/(marketing)/page.tsx'
       - 'app/icon*'
       - 'scripts/check-*.mjs'
       - '.github/workflows/brand-preview.yml'
@@ -40,7 +40,7 @@ jobs:
       # Match the established search-growth workaround for the stale lockfile (issue #7).
       - run: npm install --no-fund --no-audit
       - name: Lint implementation TypeScript
-        run: npx eslint app/page.tsx components/EditorialHome.tsx components/BrandLogo.tsx components/Header.tsx components/Footer.tsx components/Hero.tsx components/ProjectPreview.tsx components/WorkShowcase.tsx lib/work-showcase.ts
+        run: npx eslint "app/(marketing)/page.tsx" components/EditorialHome.tsx components/BrandLogo.tsx components/Header.tsx components/Footer.tsx components/Hero.tsx components/ProjectPreview.tsx components/WorkShowcase.tsx lib/work-showcase.ts
       - name: Record existing full-repository lint status
         continue-on-error: true
         run: |

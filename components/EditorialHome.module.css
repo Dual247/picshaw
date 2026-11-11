@@ -220,3 +220,30 @@
   .primaryButton, .serviceRow, .serviceArrow, .guideArt, .question summary > svg { transition: none; }
   .primaryButton:hover { transform: none; }
 }
+
+/* Conversion-first entry: a concrete offer, legible prices and an immediate enquiry. */
+.heroTitle { font-size: clamp(48px, 5.7vw, 80px); line-height: 1.04; letter-spacing: -.06em; }
+.heroIntro { max-width: 480px; }
+.heroReassurance { max-width: 510px; margin: 24px 0 0; color: var(--quiet); font-size: 12px; line-height: 1.8; }
+.opportunityCard { background: #eeece5; color: #191b18; padding: clamp(24px,3vw,42px); border-radius: 6px; box-shadow: 12px 12px 0 #252b20; }
+.opportunityTop { display: flex; justify-content: space-between; align-items: center; gap: 15px; font: 9px/1.6 var(--font-mono),monospace; letter-spacing: .09em; color: #535b49; }
+.opportunityCard h2 { font-size: clamp(29px,3.2vw,44px); line-height: 1.1; letter-spacing: -.04em; font-weight: 500; margin: 28px 0 15px; }
+.opportunityCard h2 em { font-family: Georgia,serif; font-weight: 400; }
+.opportunityCard > p { color: #565d4f; font-size: 13px; line-height: 1.7; }
+.opportunitySteps { list-style: none; padding: 0; margin: 25px 0 18px; }
+.opportunitySteps li { display: grid; grid-template-columns: 28px 1fr; gap: 14px; border-top: 1px solid #cdd1c4; padding: 19px 0; }
+.opportunitySteps li > span { color: #8f351f; font: 11px/1.8 var(--font-mono),monospace; }
+.opportunitySteps h3 { font-size: 16px; line-height: 1.5; margin: 0 0 5px; font-weight: 600; }
+.opportunitySteps p { font-size: 12px; line-height: 1.8; color: #535b49; margin: 0; }
+.opportunityLink { display: flex; align-items: center; justify-content: space-between; gap: 15px; padding-top: 18px; border-top: 1px solid #cdd1c4; font-size: 13px; font-weight: 600; }
+.offerGrid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 18px; }
+.offerCard { display: flex; flex-direction: column; padding: 28px; border: 1px solid #3c4534; border-radius: 5px; background: #191e16; min-width: 0; }
+.offerCard .offerLabel { color: #b9c5ad; font-size: 10px; text-transform: uppercase; letter-spacing: .07em; }
+.offerCard h3 { font-size: 24px; font-weight: 500; letter-spacing: -.035em; margin: 17px 0 10px; }
+.offerCard .offerPrice { font-size: 30px; color: #f5f4ee; letter-spacing: -.035em; margin: 0 0 16px; }
+.offerPrice span { font-size: 12px; color: #b8c1af; letter-spacing: 0; display: block; }
+.offerCard > p { color: #bbc3b3; font-size: 13px; line-height: 1.85; margin: 0 0 18px; }
+.offerCard .textLink { margin-top: auto; color: var(--primary); }
+.pricingNote { font-size: 12px; color: #a6b09d; line-height: 1.9; margin: 18px 0 40px; }
+@media (max-width: 900px) { .offerGrid { grid-template-columns: 1fr; } .offerCard { padding: 26px; } }
+@media (max-width: 767px) { .heroTitle { font-size: clamp(43px,9.7vw,72px); } .opportunityCard { box-shadow: 6px 6px 0 #252b20; } .hero { padding-top: 120px; } .fieldPair { grid-template-columns: 1fr; } .form input,.form textarea,.form select { font-size: 16px; } }

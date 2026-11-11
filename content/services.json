@@ -35,7 +35,7 @@
         "links": [
           {
             "label": "See all published packages",
-            "href": "/#pricing"
+            "href": "/#services"
           }
         ]
       },
@@ -235,7 +235,7 @@
         "links": [
           {
             "label": "Compare Picshaw packages",
-            "href": "/#pricing"
+            "href": "/#services"
           },
           {
             "label": "Explore AI-search optimization",

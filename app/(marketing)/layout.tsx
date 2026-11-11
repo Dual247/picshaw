@@ -3,7 +3,7 @@ import { Space_Grotesk, Geist_Mono } from 'next/font/google'
 import { SiteAnalytics } from '@/components/SiteAnalytics'
 import { ChatWidget } from '@/components/ChatWidget'
 import { absoluteUrl, isPreview, jsonLd, ORGANIZATION_ID, SITE_URL } from '@/lib/site'
-import './globals.css'
+import '../globals.css'
 
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], variable: '--font-sans', display: 'swap' })
 const geistMono = Geist_Mono({ subsets: ['latin'], variable: '--font-mono', display: 'swap' })

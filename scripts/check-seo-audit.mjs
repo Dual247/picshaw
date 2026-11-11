@@ -8,7 +8,6 @@ const photos = [
   { id: 'photo-1629079447777-1e605162dc8d', count: 1, alt: 'A contemporary bathroom with a white double vanity and blue-tinted window' },
   { id: 'photo-1581182800629-7d90925ad072', count: 1, alt: 'A sunlit natural-beauty portrait used as illustrative editorial photography' },
   { id: 'photo-1508424757105-b6d5ad9329d0', count: 1, alt: 'A warm restaurant interior with timber tables, pendant lights, and greenery' },
-  { id: '/images/malibu-supper.webp', count: 1, alt: 'A candlelit wedding table with coral flowers above the Malibu coastline at sunset' },
 ]
 const originalRestaurantURL = 'https://images.unsplash.com/photo-1508424757105-b6d5ad9329d0?auto=format&fit=crop&w=1200&q=85'
 const report = { baseURL, checkedAt: new Date().toISOString(), titles: [], images: [], restaurant: null }
@@ -38,7 +37,14 @@ try {
   for (const width of [1440, 390]) {
     await page.setViewportSize({ width, height: 1000 })
     const home = await page.goto(baseURL, { waitUntil: 'domcontentloaded' })
+
     assert.equal(home.status(), 200, 'Homepage')
+    assert.match(await page.locator('h1').innerText(), /Get found\./)
+    assert.equal(await page.locator('aside[aria-labelledby="opportunity-heading"] li').count(), 3, 'Customer journey is server-rendered')
+    assert.equal(await page.locator('#services article').count(), 3, 'Service offers are server-rendered')
+    for (const price of ['$1,000', '$1,250', '$1,500']) assert.ok((await page.locator('#services').innerText()).includes(price))
+    assert.equal(await page.locator('img[src="/images/malibu-supper.webp"]').count(), 0, 'Retired venue hero is not requested')
+
     for (const photo of photos) {
       const descriptions = await page.locator(`img[src*="${photo.id}"]`).evaluateAll(images => images.map(image => image.getAttribute('alt')))
       assert.deepEqual(descriptions, Array(photo.count).fill(photo.alt), `${photo.id}: every occurrence at ${width}px`)

@@ -8,7 +8,7 @@ on:
       - 'lib/chatbot.ts'
       - 'lib/retainer.ts'
       - 'lib/receptionist.ts'
-      - 'app/layout.tsx'
+      - 'app/(marketing)/layout.tsx'
       - 'app/api/contact/route.ts'
       - 'scripts/check-chatbot*.mjs'
       - '.github/workflows/chat-assistant.yml'
@@ -17,7 +17,7 @@ permissions:
   contents: read
 jobs:
   validate:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     strategy:
       fail-fast: false
@@ -38,7 +38,7 @@ jobs:
       - name: Install using the existing lockfile workaround
         run: npm install --no-fund --no-audit
       - name: Lint widget and integrations
-        run: npx eslint components/ChatWidget.tsx components/ChatPanel.tsx components/ChatPrivacyNotice.tsx components/ContentPage.tsx lib/chatbot.ts app/layout.tsx app/api/contact/route.ts
+        run: npx eslint components/ChatWidget.tsx components/ChatPanel.tsx components/ChatPrivacyNotice.tsx components/ContentPage.tsx lib/chatbot.ts "app/(marketing)/layout.tsx" app/api/contact/route.ts
       - name: TypeScript check
         run: npx tsc --noEmit --pretty false
       - name: Answer, pricing and mocked delivery tests

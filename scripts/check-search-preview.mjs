@@ -53,7 +53,7 @@ try {
   await page.locator('#home-website').fill('example.com'); await page.locator('#home-email').fill('test@example.com')
   await page.locator('#home-service').selectOption('1k')
   await page.locator('#home-name').fill('Automated test only')
-  await page.locator('#contact').getByRole('button', { name: 'Send enquiry', exact: true }).click()
+  await page.locator('#contact').getByRole('button', { name: 'Discuss my business', exact: true }).click()
   await page.getByRole('heading', { name: "You're on our radar.", exact: true }).waitFor()
   assert.equal(intercepted.at(-1).service_interest, '1k')
   await page.goto(baseURL + '/ai-visibility-audit#contact', { waitUntil: 'networkidle' })
@@ -88,7 +88,7 @@ try {
   await nojs.goto(baseURL, { waitUntil: 'networkidle' })
   assert.equal(await nojs.locator('#faq details').count(), 4); assert.equal(await nojs.locator('#faq details p').count(), 4)
   await nojs.locator('#faq details').last().locator('summary').click(); assert.ok(await nojs.locator('#faq details').last().locator('p').isVisible())
-  assert.ok((await nojs.locator('h1').innerText()).includes('AI search.'))
+  assert.ok((await nojs.locator('h1').innerText()).includes('a reason to call.'))
   for (const path of ['/ai-visibility-audit', '/methodology', '/ai-receptionist', '/privacy-policy', '/ai-visibility-retainer', ...articles.map(article => '/blog/' + article.slug)]) {
     await nojs.goto(baseURL + path, { waitUntil: 'networkidle' }); const text = await nojs.locator('main').innerText(); assert.ok(text.length > 500)
     const article = articles.find(item => path === '/blog/' + item.slug)

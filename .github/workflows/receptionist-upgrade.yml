@@ -3,7 +3,7 @@ on:
   pull_request:
     branches: [main]
     paths:
-      - 'app/ai-receptionist/**'
+      - 'app/(marketing)/ai-receptionist/**'
       - 'components/Receptionist*.tsx'
       - 'lib/receptionist*.ts'
       - 'public/media/receptionist-*'
@@ -31,7 +31,7 @@ jobs:
       - name: Install dependencies using existing repository workaround
         run: npm install --no-fund --no-audit
       - name: Lint upgraded page and components
-        run: npx eslint app/ai-receptionist/page.tsx components/ReceptionistExplainer.tsx components/ReceptionistUsageEstimator.tsx lib/receptionist-usage.ts
+        run: npx eslint "app/(marketing)/ai-receptionist/page.tsx" components/ReceptionistExplainer.tsx components/ReceptionistUsageEstimator.tsx lib/receptionist-usage.ts
       - name: Check TypeScript
         run: npx tsc --noEmit --pretty false
       - name: Verify pricing mathematics and original video assets

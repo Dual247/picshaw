@@ -7,7 +7,7 @@ on:
       - 'components/EditorialHome.tsx'
       - 'components/ReceptionistEnquiry.tsx'
       - 'components/SiteAnalytics.tsx'
-      - 'app/privacy-policy/**'
+      - 'app/(marketing)/privacy-policy/**'
       - 'scripts/check-privacy.mjs'
       - 'lib/google-conversions.ts'
       - 'scripts/check-google-conversions*.mjs'

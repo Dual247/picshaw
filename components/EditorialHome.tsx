@@ -1,9 +1,9 @@
 'use client'
 
 import { useRef, useState, type FormEvent } from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowDown, ArrowRight, ArrowUpRight, Check, Plus, Search, Shell } from 'lucide-react'
+import { ArrowDown, ArrowRight, ArrowUpRight, Check, Plus, Search } from 'lucide-react'
+import { PortalShowcase } from '@/components/PortalShowcase'
 import { ProjectPreview } from '@/components/ProjectPreview'
 import { projects } from '@/lib/work-showcase'
 import { sendLeadConversion } from '@/lib/google-conversions'
@@ -35,7 +35,7 @@ const enquiryOptions = [
 /** Retains the existing contact API and analytics classification. */
 function HomeEnquiry() {
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle')
-  const [service, setService] = useState('audit')
+  const [service, setService] = useState('unsure')
   const submitting = useRef(false)
   const statusRef = useRef<HTMLDivElement>(null)
   const isWebsite = ['1k', '2.5k', 'monthly'].includes(service)
@@ -72,19 +72,19 @@ function HomeEnquiry() {
   return <section id="contact" className={styles.contact} aria-labelledby="home-contact-heading">
     <div className={`${styles.container} ${styles.contactGrid}`}>
       <div>
-        <p className={styles.eyebrow}>Your next chapter</p>
-        <h2 id="home-contact-heading" className={styles.contactHeading}>Good business.<br />Let&apos;s get it<br /><span>found.</span></h2>
-        <p className={styles.contactIntro}>Tell us where you are now.<br />We&apos;ll help you find the next useful step.</p>
+        <p className={styles.eyebrow}>Start with a conversation</p>
+        <h2 id="home-contact-heading" className={styles.contactHeading}>What&apos;s holding<br />your website<br /><span>back?</span></h2>
+        <p className={styles.contactIntro}>Tell us what you do and where you want to improve. We&apos;ll help you choose a sensible starting point, with scope and pricing agreed before paid work begins.</p>
         <a className={styles.emailLink} href="mailto:hello@picshaw.com">hello@picshaw.com <ArrowUpRight size={18} aria-hidden="true" /></a>
       </div>
       <div className={styles.enquiryPanel}>
         {status === 'success' ? <div ref={statusRef} tabIndex={-1} role="status" className={styles.success}>
           <Check size={32} aria-hidden="true" /><h3>You&apos;re on our radar.</h3>
           <p>Your enquiry has been accepted. We&apos;ll review it and reply about the next step. No paid work has started. Founding availability is confirmed in writing.</p>
-          <button className={styles.textLink} type="button" onClick={() => { setStatus('idle'); setService('audit') }}>Send another enquiry <ArrowRight size={16} aria-hidden="true" /></button>
+          <button className={styles.textLink} type="button" onClick={() => { setStatus('idle'); setService('unsure') }}>Send another enquiry <ArrowRight size={16} aria-hidden="true" /></button>
         </div> : <form onSubmit={submit} className={styles.form} data-enquiry-type={isWebsite ? 'website' : 'aeo'} aria-busy={status === 'submitting'}>
-          <h3>A little about your business.</h3>
-          <p className={styles.formNote}>Free to enquire. AI Visibility Audits are $1,250; Core is $1,500/month with a three-month minimum. Pricing is confirmed before paid work begins.</p>
+          <h3>Let&apos;s find your next step.</h3>
+          <p className={styles.formNote}>Free to enquire. No payment, account or commitment needed. Not sure which service fits? Choose Help me decide.</p>
           <div className={styles.fieldPair}>
             <label htmlFor="home-name">Your name <span>(optional)</span><input id="home-name" name="name" autoComplete="name" maxLength={150} /></label>
             <label htmlFor="home-email">Email <span>(required)</span><input id="home-email" name="email" type="email" autoComplete="email" maxLength={254} required /></label>
@@ -93,7 +93,7 @@ function HomeEnquiry() {
           <label htmlFor="home-service">What are you exploring?<select id="home-service" name="service_interest" value={service} onChange={event => setService(event.target.value)}>{enquiryOptions.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}</select></label>
           <label htmlFor="home-message">What would you like to improve? <span>(optional)</span><textarea id="home-message" name="message" rows={3} maxLength={5000} placeholder="Your services, location and what you have in mind." /></label>
           {isRetainer && <p className={styles.formNote}>Three-month minimum, then month to month for standard Core. Founding and annual plans have separate terms. See <Link href={RETAINER_PATH} className="underline underline-offset-4">full monthly pricing</Link>.</p>}
-          <button className={styles.primaryButton} type="submit" disabled={status === 'submitting'}>{status === 'submitting' ? 'Sending…' : 'Send enquiry'}<ArrowUpRight size={18} aria-hidden="true" /></button>
+          <button className={styles.primaryButton} type="submit" disabled={status === 'submitting'}>{status === 'submitting' ? 'Sending…' : 'Discuss my business'}<ArrowUpRight size={18} aria-hidden="true" /></button>
           {status === 'error' && <p className={styles.error} role="alert">Your message could not be sent. Please try again or email <a href="mailto:hello@picshaw.com">hello@picshaw.com</a>.</p>}
           <p className={styles.privacy}>Used only to respond to your enquiry. No newsletter signup or payment authorisation. Please leave out confidential customer information. <Link href="/privacy-policy" className="underline underline-offset-4">Privacy Policy</Link>.</p>
         </form>}
@@ -111,33 +111,24 @@ export function EditorialHome({ guides }: { guides: Guide[] }) {
         <p className={styles.eyebrow}><span className={styles.dot} aria-hidden="true" />Independent studio / Los Angeles</p>
         <div className={styles.heroGrid}>
           <div>
-            <h1 id="home-title" className={styles.heroTitle}>Be found.<br /><span>In AI search.</span></h1>
-            <p className={styles.heroIntro}>We help local businesses improve their AI-search visibility through clearer websites, useful content and practical improvements.</p>
-            <div className={styles.heroActions}><Link href="/ai-visibility-audit" className={styles.primaryButton}>Explore your AI audit<ArrowUpRight size={18} aria-hidden="true" /></Link><a href="#example" className={styles.textLink}>See the approach<ArrowDown size={16} aria-hidden="true" /></a></div>
+            <h1 id="home-title" className={styles.heroTitle}>Get found.<br /><span>Give customers<br />a reason to call.</span></h1>
+            <p className={styles.heroIntro}>Websites and AI-search visibility for local businesses. Make your services easier to discover, your value easier to understand, and the next step easier to take.</p>
+            <div className={styles.heroActions}><a href="#contact" className={styles.primaryButton}>Discuss my business<ArrowUpRight size={18} aria-hidden="true" /></a><a href="#services" className={styles.textLink}>See services &amp; pricing<ArrowDown size={16} aria-hidden="true" /></a></div>
           </div>
-          <figure id="venue-concept" className={styles.heroVisual}>
-            <div className={styles.query}>
-              <Search size={18} aria-hidden="true" />
-              <span>Where can we get married by the ocean in Malibu?</span>
-            </div>
-            <div className={styles.journeyLine} aria-hidden="true"><span /><ArrowDown size={18} /></div>
-            <div className={styles.venueCard}>
-              <Image src="/images/malibu-supper.webp" width={1110} height={740} loading="eager"
-                alt="A candlelit wedding table with coral flowers above the Malibu coastline at sunset"
-                className={styles.venuePhoto} />
-              <div className={styles.venueMasthead}>
-                <span className={styles.venueBrand}><Shell size={20} strokeWidth={1.3} aria-hidden="true" />Casa Luma</span>
-                <span className={styles.venueLocation}>Malibu, CA</span>
-              </div>
-              <div className={styles.venueCopy}>
-                <p className={styles.venueHeadline}>Vows above<br /><em>the Pacific.</em></p>
-                <span className={styles.venueAction}>Book a private tour <ArrowUpRight size={14} aria-hidden="true" /></span>
-              </div>
-            </div>
-            <figcaption>Illustrative search journey for a fictional wedding venue.</figcaption>
-          </figure>
+
+          <aside className={styles.opportunityCard} aria-labelledby="opportunity-heading">
+            <div className={styles.opportunityTop}><span>PICSHAW / THE CUSTOMER JOURNEY</span><Search size={19} aria-hidden="true" /></div>
+            <h2 id="opportunity-heading">Good at what you do.<br /><em>Clear online, too.</em></h2>
+            <p>Three places your next customer needs clarity.</p>
+            <ol className={styles.opportunitySteps}>
+              <li><span>01</span><div><h3>Can they find you?</h3><p>Search-ready pages that explain your services and where you work.</p></div></li>
+              <li><span>02</span><div><h3>Why should they choose you?</h3><p>A distinctive website with real work, useful answers and a clear offer.</p></div></li>
+              <li><span>03</span><div><h3>What happens next?</h3><p>Simple enquiries and a clear route to a conversation with your business.</p></div></li>
+            </ol>
+            <a href="#example" className={styles.opportunityLink}>See how we approach it <ArrowUpRight size={18} aria-hidden="true" /></a>
+          </aside>
         </div>
-        <p className="mb-6 text-sm text-muted-foreground">Our Core monthly AEO programme starts at {usd(corePrice)}/month, following a {usd(auditPrice)} audit. <Link href={RETAINER_PATH} className="text-primary underline underline-offset-4">Explore monthly plans</Link>.</p>
+        <p className={styles.heroReassurance}>Work directly with Ash Patel. Clear scope. No ranking or lead guarantees.</p>
         <div className={styles.audience}><span>Built around local expertise.</span><p>Home services<span aria-hidden="true">/</span>Contractors<span aria-hidden="true">/</span>Owner-led businesses</p></div>
       </div>
     </section>
@@ -154,12 +145,22 @@ export function EditorialHome({ guides }: { guides: Guide[] }) {
       </div>
     </section>
 
+
+
     <section id="services" className={styles.services} aria-labelledby="services-heading"><div className={styles.container}>
       <span id="pricing" className={styles.anchor} />
       <div className={styles.sectionHead}><div><p className={styles.eyebrow}>02 / What we do</p><h2 id="services-heading" className={styles.sectionTitle}>Get found.<br />Make it count.</h2></div><p className={styles.sideNote}>AI visibility is the starting point.<br />Design and useful tools support it.</p></div>
+
+      <div className={styles.offerGrid}>
+        <article className={styles.offerCard}><p className={styles.offerLabel}>Make a better first impression</p><h3>Website refresh</h3><p className={styles.offerPrice}>$1,000 <span>defined scope</span></p><p>Improve your existing website&apos;s presentation and route to enquiry. Larger Growth Sites start at $2,500.</p><Link href="/website-redesign" className={styles.textLink}>See website options <ArrowUpRight size={17} aria-hidden="true" /></Link></article>
+        <article className={styles.offerCard}><p className={styles.offerLabel}>Know what to fix first</p><h3>AI Visibility Audit</h3><p className={styles.offerPrice}>{usd(auditPrice)} <span>one location</span></p><p>A baseline of your visibility, the gaps worth fixing, and a prioritised plan. A separate paid service.</p><Link href="/ai-visibility-audit" className={styles.textLink}>See the audit scope <ArrowUpRight size={17} aria-hidden="true" /></Link></article>
+        <article className={styles.offerCard}><p className={styles.offerLabel}>Keep improving</p><h3>Monthly AI visibility</h3><p className={styles.offerPrice}>{usd(corePrice)} <span>/ month · Core</span></p><p>Ongoing improvements and measurement after your audit. Three-month minimum, then month to month.</p><Link href={RETAINER_PATH} className={styles.textLink}>Compare plans &amp; terms <ArrowUpRight size={17} aria-hidden="true" /></Link></article>
+      </div>
+      <p className={styles.pricingNote}>Prices in USD. Scope and any applicable taxes confirmed before paid work. AI receptionist is a separate founding pilot, scoped on enquiry.</p>
       <div className={styles.serviceList}>{services.map(service => <Link href={service.href} key={service.number} className={styles.serviceRow} aria-label={service.label}><span className={styles.serviceNumber}>{service.number}</span><div className={styles.serviceTitle}><h3>{service.title}</h3>{service.tag && <span className={styles.pilot}>{service.tag}</span>}</div><p>{service.description}</p><span className={styles.serviceArrow}><ArrowUpRight size={24} aria-hidden="true" /></span></Link>)}</div>
     </div></section>
 
+    <HomeEnquiry />
     <section id="work" className={styles.work} aria-labelledby="work-heading"><div className={styles.container}>
       <div className={styles.sectionHead}><div><p className={styles.eyebrow}>03 / Design directions</p><h2 id="work-heading" className={styles.sectionTitle}>Different businesses.<br /><em>Distinctive websites.</em></h2></div><p className={styles.sideNote}>A selection of illustrative concepts.<br />Design capability, not client results.</p></div>
       <div className={styles.workGrid}>{projects.map(project => <article key={project.title} className={styles.workCard}>
@@ -168,6 +169,7 @@ export function EditorialHome({ guides }: { guides: Guide[] }) {
       </article>)}</div>
     </div></section>
 
+    <PortalShowcase />
     <section id="process" className={styles.approach} aria-labelledby="approach-heading"><div className={`${styles.container} ${styles.approachGrid}`}>
       <div><p className={styles.eyebrow}>04 / A considered approach</p><h2 id="approach-heading" className={styles.sectionTitle}>Small studio.<br /><em>Direct connection.</em></h2><p className={styles.sectionIntro}>Work directly with Ash Patel on a clearer online presence for your business. Practical decisions, an agreed scope, and a next step you understand.</p><Link href="/about" className={styles.textLink}>Meet Ash<ArrowUpRight size={18} aria-hidden="true" /></Link></div>
       <div className={styles.method}><ol>{[['Audit', 'Understand where you are.'], ['Improve', 'Fix what gets in the way.'], ['Measure', 'Review the evidence. Choose what is next.']].map(([title, description], index) => <li key={title}><span>0{index + 1}</span><div><h3>{title}<span aria-hidden="true">↗</span></h3><p>{description}</p></div></li>)}</ol><Link href="/methodology" className={styles.textLink}>Our measurement methodology<ArrowUpRight size={17} aria-hidden="true" /></Link></div>
@@ -179,6 +181,6 @@ export function EditorialHome({ guides }: { guides: Guide[] }) {
     </div></section>}
 
     <section id="faq" className={styles.faq} aria-labelledby="faq-heading"><div className={`${styles.container} ${styles.faqGrid}`}><div><p className={styles.eyebrow}>A few good questions</p><h2 id="faq-heading" className={styles.sectionTitle}>Before we<br /><em>get started.</em></h2></div><div>{questions.map(item => <details className={styles.question} key={item.question}><summary>{item.question}<Plus size={19} aria-hidden="true" /></summary><p>{item.answer}</p></details>)}</div></div></section>
-    <HomeEnquiry />
+
   </div>
 }

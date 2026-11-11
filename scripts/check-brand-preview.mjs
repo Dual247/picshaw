@@ -22,17 +22,35 @@ try {
     const icon = await page.locator("link[rel='icon'][href*='icon.svg']").getAttribute("href")
     assert.ok(icon, "SVG favicon missing")
     assert.equal((await page.request.get(new URL(icon, baseURL).href)).status(), 200)
-    const venue = page.locator("#venue-concept")
-    const venueImage = venue.locator("img[src='/images/malibu-supper.webp']")
-    await venueImage.evaluate(img => img.decode())
-    assert.equal(await venueImage.getAttribute("alt"), "A candlelit wedding table with coral flowers above the Malibu coastline at sunset")
-    assert.match(await venue.innerText(), /Casa Luma/)
-    assert.match(await venue.innerText(), /Vows above/)
-    const fits = await venue.evaluate(figure => {
-      const photo = figure.querySelector("img").getBoundingClientRect()
-      return photo.right <= figure.getBoundingClientRect().right + 1
-    })
-    assert.ok(fits, `Venue card clipped at ${width}px`)
+
+    const journey = page.locator('aside[aria-labelledby="opportunity-heading"]')
+    assert.match(await page.locator('h1').innerText(), /Get found\./)
+    assert.match(await page.locator('h1').innerText(), /a reason to call\./)
+    assert.equal(await journey.locator('li').count(), 3)
+    for (const title of ['Can they find you?', 'Why should they choose you?', 'What happens next?']) {
+      assert.ok(await journey.getByRole('heading', { name: title, exact: true }).isVisible())
+    }
+    const enquiryLinks = page.getByRole('link', { name: 'Discuss my business', exact: true })
+    assert.ok(await enquiryLinks.count() > 0, 'Enquiry entry point is visible')
+    for (const link of await enquiryLinks.all()) {
+      const href = await link.getAttribute('href')
+      assert.ok(href, 'Enquiry CTA has a destination')
+      assert.equal(new URL(href, page.url()).href, new URL('/#contact', baseURL).href, 'Every enquiry CTA reaches the homepage contact form')
+    }
+    assert.equal(await page.locator('#contact form').count(), 1, 'Contact target contains the enquiry form')
+    const fits = await journey.evaluate(card => card.scrollWidth <= card.clientWidth + 1 && card.getBoundingClientRect().right <= innerWidth)
+    assert.ok(fits, 'Customer journey card clipped at ' + width)
+    const offers = page.locator('#services article')
+    assert.equal(await offers.count(), 3)
+    for (const price of ['$1,000', '$1,250', '$1,500']) assert.ok((await page.locator('#services').innerText()).includes(price))
+    assert.match(await page.locator('#services').innerText(), /Three-month minimum/)
+    const packagesHref = await page.locator('footer').getByRole('link', { name: 'Website packages', exact: true }).getAttribute('href')
+    assert.ok(packagesHref, 'Website packages has a destination')
+    assert.equal(new URL(packagesHref, page.url()).href, new URL('/#services', baseURL).href)
+    assert.equal(await page.locator('#services').count(), 1)
+    assert.ok(await page.evaluate(() => Boolean(document.querySelector('#contact').compareDocumentPosition(document.querySelector('#work')) & Node.DOCUMENT_POSITION_FOLLOWING)))
+    assert.equal(await page.locator('a[href*="app.picshaw.com"]').count(), 0, 'Unavailable portal must not be promoted')
+    assert.match(await page.locator('#portal').innerText(), /Portal coming soon/)
     await page.locator("#work h2").scrollIntoViewIfNeeded()
     await page.waitForTimeout(1000)
 
