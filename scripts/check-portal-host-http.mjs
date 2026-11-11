@@ -53,6 +53,7 @@ const capability = await request('picshaw.com', '/api/portal-access')
 assert.equal(capability.status, 200); assert.equal(JSON.parse(capability.body).ready, false); checks++
 const marketing = await request('picshaw.com', '/')
 assert.equal(marketing.status, 200)
-assert.match(marketing.body, /https:\/\/app\.picshaw\.com\/platform\/preview/)
+assert.doesNotMatch(marketing.body, /href="(?:https:\/\/app\.picshaw\.com|\/platform)(?:\/|"|\?)/)
+assert.match(marketing.body, /Portal coming soon/)
 assert.match(marketing.body, /Account creation and login are not enabled yet/); checks++
 console.log(`PASS ${checks} production-server HTTP boundary checks on port ${port}`)
