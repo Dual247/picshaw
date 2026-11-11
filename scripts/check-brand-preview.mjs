@@ -30,14 +30,23 @@ try {
     for (const title of ['Can they find you?', 'Why should they choose you?', 'What happens next?']) {
       assert.ok(await journey.getByRole('heading', { name: title, exact: true }).isVisible())
     }
-    assert.equal(await page.getByRole('link', { name: 'Discuss my business', exact: true }).first().getAttribute('href'), '/#contact')
+    const enquiryLinks = page.getByRole('link', { name: 'Discuss my business', exact: true })
+    assert.ok(await enquiryLinks.count() > 0, 'Enquiry entry point is visible')
+    for (const link of await enquiryLinks.all()) {
+      const href = await link.getAttribute('href')
+      assert.ok(href, 'Enquiry CTA has a destination')
+      assert.equal(new URL(href, page.url()).href, new URL('/#contact', baseURL).href, 'Every enquiry CTA reaches the homepage contact form')
+    }
+    assert.equal(await page.locator('#contact form').count(), 1, 'Contact target contains the enquiry form')
     const fits = await journey.evaluate(card => card.scrollWidth <= card.clientWidth + 1 && card.getBoundingClientRect().right <= innerWidth)
     assert.ok(fits, 'Customer journey card clipped at ' + width)
     const offers = page.locator('#services article')
     assert.equal(await offers.count(), 3)
     for (const price of ['$1,000', '$1,250', '$1,500']) assert.ok((await page.locator('#services').innerText()).includes(price))
     assert.match(await page.locator('#services').innerText(), /Three-month minimum/)
-    assert.equal(await page.locator('footer').getByRole('link', { name: 'Website packages', exact: true }).getAttribute('href'), '/#services')
+    const packagesHref = await page.locator('footer').getByRole('link', { name: 'Website packages', exact: true }).getAttribute('href')
+    assert.ok(packagesHref, 'Website packages has a destination')
+    assert.equal(new URL(packagesHref, page.url()).href, new URL('/#services', baseURL).href)
     assert.equal(await page.locator('#services').count(), 1)
     assert.ok(await page.evaluate(() => Boolean(document.querySelector('#contact').compareDocumentPosition(document.querySelector('#work')) & Node.DOCUMENT_POSITION_FOLLOWING)))
     assert.equal(await page.locator('a[href*="app.picshaw.com"]').count(), 0, 'Unavailable portal must not be promoted')
