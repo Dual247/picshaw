@@ -4,6 +4,7 @@ import { useRef, useState, type FormEvent } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowDown, ArrowRight, ArrowUpRight, Check, Plus, Search, Shell } from 'lucide-react'
+import { PortalShowcase } from '@/components/PortalShowcase'
 import { ProjectPreview } from '@/components/ProjectPreview'
 import { projects } from '@/lib/work-showcase'
 import { sendLeadConversion } from '@/lib/google-conversions'
@@ -153,6 +154,8 @@ export function EditorialHome({ guides }: { guides: Guide[] }) {
         </div><figcaption>Example format. These are not findings about your business.</figcaption></figure>
       </div>
     </section>
+
+    <PortalShowcase />
 
     <section id="services" className={styles.services} aria-labelledby="services-heading"><div className={styles.container}>
       <span id="pricing" className={styles.anchor} />
