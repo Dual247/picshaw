@@ -1,5 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Public navigation metadata only, derived from the server deployment type.
+  // Never infer preview privileges from a hostname or use this for auth.
+  env: { NEXT_PUBLIC_PICSHAW_PREVIEW_NAVIGATION: process.env.VERCEL_ENV === 'preview' ? 'true' : 'false' },
+  skipProxyUrlNormalize: true,
+  skipTrailingSlashRedirect: true,
   // Fail builds on type errors; CI also runs an independent full type check.
   typescript: { ignoreBuildErrors: false },
   images: { unoptimized: true },

@@ -22,7 +22,9 @@ export function createRequestSupabaseClient(
   }
   return createServerClient(url, publishableKey, {
     // No browser Supabase client: session and verifier cookies stay HttpOnly.
-    cookieOptions: { secure: true, httpOnly: true, sameSite: 'lax', path: '/' },
+    // Supabase appends chunk indexes and -code-verifier to this storage key;
+    // every resulting name retains __Host- and the required host-only options.
+    cookieOptions: { name: '__Host-picshaw-auth', secure: true, httpOnly: true, sameSite: 'lax', path: '/' },
     global: {
       // Do not cache upstream token or user responses in Next's data cache.
       fetch: (input, init) => fetch(input, { ...init, cache: 'no-store', redirect: 'error' }),

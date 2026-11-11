@@ -1,49 +1,15 @@
 # Picshaw authentication: prepared, not activated
 
 Google, Apple, email/password sign-in, signup, recovery, password update, session
-checks and logout have reviewable UI and server-side flow code. The dedicated
-`picshaw-pilot` Supabase project now exists. **No Google/Apple credentials were
-configured, and no live signup, login or email was tested.** All flags in `.env.example` are false.
-The workspace remains fictional and setup-locked, regardless of identity.
+checks and logout have reviewable UI and server-side flow code. All auth/session flags in `.env.example` are false. Local mocked tests do not establish live signup, login, email delivery or customer readiness. The sample workspace is fictional.
 
-## Verified project readiness (2026-11-10, read-only inspection)
+## Deployment readiness
 
-- Project `emlrtdffbfhainvvlvnl`, `picshaw-pilot`, Dual247 organization, `us-west-1`:
-  connector reports `ACTIVE_HEALTHY`.
-- API URL: `https://emlrtdffbfhainvvlvnl.supabase.co`.
-- Default Google/Apple provider callback:
-  `https://emlrtdffbfhainvvlvnl.supabase.co/auth/v1/callback`.
-  This is not the app's final callback; do not confuse the two.
-- GET `/auth/v1/settings`, using an existing active modern publishable key, reports
-  Google **disabled**, Apple **disabled**, email **enabled**, signup allowed
-  (`disable_signup=false`), and email confirmation required (`mailer_autoconfirm=false`).
-  These are public readiness fields, not a privileged provider configuration audit.
-- SMTP host/sender, provider credential presence, Site URL/redirect allowlist,
-  CAPTCHA, password policy, secure password change, session timeout and JWT expiry
-  were **not verified**. The connector exposes no management auth-config read tool,
-  and the public settings response does not include these fields. Inspect their
-  dashboard settings through an authorized session before activation; do not infer
-  that SMTP or redirects are ready from `email=true`.
-- Ignored/untracked `.env.local` now contains only this project URL and its public
-  publishable key, a blank `PIC_SHAW_AUTH_ORIGIN`, and all four auth flags `false`.
-  Git ignore was verified before writing. No secret/service-role key was retrieved
-  or stored. No provider keys, SMTP credentials, database password or tokens were
-  stored. The tracked `.env.example` retains blank project values.
-- The final production hostname is still unknown. The application callback must
-  become `https://FINAL-HOST/platform/auth/callback`; do not guess it or use a
-  wildcard. No deployment mapping or Vercel hostname is assumed here.
+Use a dedicated Supabase project and an exact approved HTTPS portal origin. Provider callbacks use `https://PROJECT-REF.supabase.co/auth/v1/callback` (or a verified custom Auth domain); the application callback uses `https://PORTAL-HOST/platform/auth/callback`.
 
-Read-only readiness inspection did not call signup, recovery, OAuth authorization,
-token exchange, user lookup or sign-out. It did not change any project settings.
-Database/RLS implementation is tracked separately in the tenant database docs;
-it does not connect the auth UI, implement admission controls or activate a provider.
+Before activation, verify provider enablement, confirmation requirements, SMTP/sender identity, Site URL/redirect allowlists, CAPTCHA/abuse controls, password protections, session timeout and JWT expiry. Public Auth settings are not a privileged configuration audit and `email=true` is not proof of deliverability.
 
-Anonymous PostgREST HTTP checks against all eight tenant tables returned 401 with
-permission code `42501`, using only the publishable key and bounded SELECT requests.
-`organization_memberships` uses `user_id` rather than `id`; the initial `id` probe
-returned 400/`42703`, and the corrected bounded probe returned 401/`42501`.
-No data or key values were printed. This verifies anonymous API denial, not issued
-user JWTs, authenticated tenant isolation or a working app session.
+Keep configuration in approved environment-specific secret storage. Do not publish account inventories, real project identifiers, credentials or local configuration contents. The tracked `.env.example` supplies blank project values and disabled flags. Verify anonymous and authenticated PostgREST behavior independently; SQL role/claim simulations are not issued JWT or browser-session tests.
 
 ## Routes and fail-closed configuration
 
@@ -171,11 +137,11 @@ client-controlled header or operator "verified" switch is acceptable enforcement
 No provider, paid service, backend or rule was created here. This remains a concrete
 activation blocker, not a working rate-limit integration.
 
-## Morning secure setup checklist
+## Secure setup checklist
 
 This is not a request to paste secrets into chat.
 
-1. The dedicated project and public configuration are known (see readiness snapshot).
+1. Confirm the intended dedicated project and environment-specific public configuration.
    No user needs to paste Supabase keys into chat. Still choose the final production
    HTTPS hostname and hosting/ingress, plus an approved sender identity and deployment
    abuse backend. Do not activate from local preview configuration.
@@ -228,7 +194,7 @@ expiry. Adding GSC read-only scope is outside that exception. Therefore a named-
 GSC pilot need not wait for full public-production verification, but must plan to
 reconnect weekly, respect account/admin restrictions and show test-status warnings.
 Broader public launch needs the applicable branding/data-access review. We have not
-inspected this user's Google consent app, its audience, scopes or verification status.
+verified a deployment-specific Google consent app, its audience, scopes or verification status.
 Do not present them as configured or verified. See also Google's
 [refresh-token expiry documentation](https://developers.google.com/identity/protocols/oauth2)
 and [Search Console authorization scopes](https://developers.google.com/webmaster-tools/v1/how-tos/authorizing).
@@ -263,9 +229,9 @@ Run `npm run check:supabase`, typecheck, lint, build and platform boundary check
 Additional readiness tooling:
 - `node scripts/check-supabase-readiness-tests.mjs`: mocked tests, no network.
 - `node scripts/check-supabase-readiness.mjs`: offline inspection of `.env.local`,
-  prints only safe configuration booleans; it does not activate anything.
-- `node scripts/check-supabase-readiness.mjs --read-public-settings`: explicit
-  read-only GET of this pilot's fixed public Auth settings endpoint. Sends only the
+  prints only safe configuration booleans; it does not activate anything. Pass `--expected-origin=https://PROJECT-REF.supabase.co` to verify a match even offline; without it, `dedicatedProjectMatches` is false.
+- `node scripts/check-supabase-readiness.mjs --live --expected-origin=https://PROJECT-REF.supabase.co`: explicit
+  read-only GET of the independently confirmed project public Auth settings endpoint. Replace `PROJECT-REF` with the approved 20-character project reference. The exact HTTPS origin must match the inspected configuration; paths, ports, credentials, custom domains and redirects are rejected. Sends only the
   existing publishable key to its own project, rejects redirects and prints selected
   booleans. Unknown management settings remain null. No account/email/token requests.
 
@@ -273,7 +239,7 @@ Tests transpile modules, mock SDK/Auth responses and forbid live SDK/network
 calls. They verify config gates, validation, origin policy, route outcomes, cookie
 propagation and response isolation, **not** actual OAuth, browser sessions or RLS.
 Dependencies stay exactly pinned: `@supabase/ssr` 0.12.7, `@supabase/supabase-js`
-2.119.0; both package lockfiles retained. Node 22+ is required (local runtime 24).
+2.119.0; both package lockfiles retained. Node 22+ is required.
 
 Current documentation reviewed 2026-11-10:
 - https://supabase.com/changelog.md (TLS cipher change and Node 20 deprecation relevant)
@@ -296,7 +262,3 @@ POST response handlers. Auth-js source was inspected for logout and recovery beh
 Installed SDK sources/types confirm PKCE defaults, optional flow ID exchange, and
 `setAll(cookies, headers)`. The wrapper enforces privacy headers on every write and
 every handler response, including when the SDK emits no cookie changes.
-
-## Latest dashboard verification (2026-11-11 UTC)
-
-Read-only dashboard verification: Micro compute in us-west-1; organization Spend Cap enabled (does not cap compute). Built-in test email service only, no custom SMTP. Site URL is http://localhost:3000 with no redirect URLs. Google/Apple are disabled; email confirmation is enabled. Secure password change, require current password and leaked-password protection are off. The minimum password length was not readable and is not inferred. No settings were changed; all app auth/session flags remain false. Dashboard: https://supabase.com/dashboard/project/emlrtdffbfhainvvlvnl .

@@ -67,7 +67,7 @@ export async function handleAuthPost(request: NextRequest, action: string, depen
   let config: ReturnType<typeof readPortalConfig>
   try { config = readPortalConfig(dependencies.env) } catch { return context.finish({ error: unavailable }, 503) }
   // Do not trust Host/X-Forwarded-Host to choose redirects or accept cross-origin login POSTs.
-  if (request.method !== 'POST' || new URL(request.url).origin !== config.origin ||
+  if (request.method !== 'POST' || request.headers.get('host') !== new URL(config.origin).host || new URL(request.url).origin !== config.origin ||
       request.headers.get('origin') !== config.origin ||
       (request.headers.has('sec-fetch-site') && request.headers.get('sec-fetch-site') !== 'same-origin')) {
     return context.finish({ error: 'Please start sign-in from this website.' }, 403)
@@ -170,7 +170,7 @@ export async function handleAuthCallback(request: NextRequest, dependencies: Dep
   const context = responseContext(request, dependencies)
   let config: ReturnType<typeof readPortalConfig>
   try { config = readPortalConfig(dependencies.env) } catch { return context.finish({ error: unavailable }, 503) }
-  if (new URL(request.url).origin !== config.origin || !Object.values(config.enabled).some(Boolean)) return context.finish({ error: unavailable }, 403)
+  if (request.headers.get('host') !== new URL(config.origin).host || new URL(request.url).origin !== config.origin || !Object.values(config.enabled).some(Boolean)) return context.finish({ error: unavailable }, 403)
   const url = new URL(request.url)
   const code = url.searchParams.get('code')
   const flowId = url.searchParams.get('sb_flow_id')
@@ -178,6 +178,13 @@ export async function handleAuthCallback(request: NextRequest, dependencies: Dep
   if (url.searchParams.has('error') || url.searchParams.getAll('code').length !== 1 ||
       !code || code.length > 2048 || !/^[A-Za-z0-9_-]+$/.test(code) ||
       (flowId !== null && (!/^[A-Za-z0-9_-]{8,64}$/.test(flowId) || url.searchParams.getAll('sb_flow_id').length !== 1))) return failure()
+  // OAuth navigations need no Origin header. The same canonical ingress guard
+  // still admits every exchange before SDK creation, including during outages.
+  try {
+    const admission = await (dependencies.admit ?? checkDeploymentAuthAdmission)({ action: 'callback', request })
+    if (admission.status === 'limited') return context.finish({ error: 'Too many attempts. Please wait and try again.' }, 429)
+    if (admission.status !== 'allow') return context.finish({ error: 'Account requests are temporarily unavailable. Please try again later.' }, 503)
+  } catch { return context.finish({ error: 'Account requests are temporarily unavailable. Please try again later.' }, 503) }
   try {
     const client = context.client()
     // SDK owns PKCE verifier creation/storage and one-time exchange; Supabase owns

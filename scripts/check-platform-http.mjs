@@ -15,7 +15,7 @@ for (const path of [...privatePages, '/platform/missing/example', '/api/platform
   assert.ok(!body.includes('data-picshaw-chat'))
   assert.ok(!body.includes('googletagmanager.com'))
   assert.ok(!body.includes('/_vercel/insights'))
-  if (path.startsWith('/api/')) assert.ok(response.headers.get('content-type')?.includes('application/json'))
+  if (path.startsWith('/api/')) assert.equal(body, 'Not found')
 }
 // Intentionally invalid payloads: these checks must be run with auth unconfigured.
 // No personal data or valid credentials are submitted, and no live SDK call is expected.
@@ -23,12 +23,12 @@ for (const action of ['google', 'apple', 'sign-in', 'sign-up', 'recover', 'reset
   const response = await fetch(new URL(`/api/platform/auth/${action}`, base), {
     method: 'POST', redirect: 'error', headers: { 'Content-Type': 'application/json', Origin: base.origin }, body: '{}',
   })
-  assert.equal(response.status, 503, `${action}: run this test only with providers unconfigured`)
+  assert.equal(response.status, 404, `${action}: local auth must be rejected at the host boundary`)
   privacy(response)
-  assert.match((await response.json()).error, /awaiting secure setup/)
+  assert.equal(await response.text(), 'Not found')
 }
 const callback = await fetch(new URL('/platform/auth/callback?code=synthetic-invalid-code', base), { redirect: 'error' })
-assert.equal(callback.status, 503)
+assert.equal(callback.status, 404)
 privacy(callback)
 const sitemap = await (await fetch(new URL('/sitemap.xml', base))).text()
 assert.ok(!sitemap.includes('/platform'))

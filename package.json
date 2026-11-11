@@ -8,10 +8,10 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit --pretty false",
-    "check:platform": "node scripts/check-platform-core.mjs && node scripts/check-platform-journey.mjs && node scripts/check-platform-boundary.mjs",
+    "check:platform": "node scripts/check-platform-core.mjs && node scripts/check-platform-journey.mjs && node scripts/check-platform-boundary.mjs && node scripts/check-portal-host-boundary.mjs && node scripts/check-marketing-portal.mjs",
     "check:ui": "node scripts/check-ui-state.mjs",
-    "check:supabase": "node scripts/check-supabase-auth.mjs && node scripts/check-supabase-flows.mjs && node scripts/check-supabase-readiness-tests.mjs",
-    "check:database": "node supabase/tests/check-schema.mjs && node supabase/tests/run-isolated.mjs && node scripts/check-platform-persistence.mjs"
+    "check:supabase": "node scripts/check-supabase-auth.mjs && node scripts/check-supabase-flows.mjs && node scripts/check-supabase-readiness-tests.mjs && node scripts/check-auth-admission.mjs",
+    "check:database": "node supabase/tests/check-schema.mjs && node supabase/tests/run-isolated.mjs && node scripts/check-platform-persistence.mjs && node scripts/check-auth-admission-database.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
@@ -45,6 +45,7 @@
     "@supabase/ssr": "0.12.7",
     "@supabase/supabase-js": "2.119.0",
     "@vercel/analytics": "1.6.1",
+    "@vercel/functions": "3.11.1",
     "autoprefixer": "^10.4.20",
     "babylovegrowth-next-js-blog": "0.2.4",
     "class-variance-authority": "^0.7.1",
@@ -58,6 +59,7 @@
     "lucide-react": "^0.564.0",
     "next": "16.4.6",
     "next-themes": "^0.4.6",
+    "postgres": "4.1.0",
     "react": "19.2.4",
     "react-day-picker": "9.13.2",
     "react-dom": "19.2.4",

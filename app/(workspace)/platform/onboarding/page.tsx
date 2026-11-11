@@ -1,8 +1,15 @@
 import Link from 'next/link'
-import { ArrowLeft, ArrowUpRight, ShieldCheck } from 'lucide-react'
 import { PortalHeader } from '@/components/platform/portal-header'
+import { WorkspaceSetup } from '@/components/platform/workspace-setup'
+import { readWorkspaceConfig } from '@/lib/supabase/workspace-runtime'
+import { authAdmissionConfigured } from '@/lib/supabase/auth-admission'
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 export default function OnboardingPage() {
- return <><PortalHeader/><main id="main-content" className="portal-container portal-onboarding"><Link href="/platform" className="portal-text-link"><ArrowLeft size={16}/> Portal overview</Link><p className="portal-eyebrow">GETTING STARTED</p><h1>A useful baseline starts<br/>with the right connections.</h1><p className="portal-intro">This is a setup guide, not an active connection flow. Nothing is collected or saved here. All three steps are waiting for the pilot infrastructure.</p>
- <div className="portal-setup-list">{[['01','Create your secure workspace','Sign in using email, Google or Apple once the providers are configured. Workspace membership and access controls must be verified before customer data is shown.','Account setup pending'],['02','Choose your search property','Connect an authorized Google Search Console property with read-only access. Confirm the exact domain, reporting time zone and available history before importing a baseline.','Connection unavailable'],['03','Agree on what success means','Choose the locations, services and questions that matter to your business. Keep search performance, sampled AI answers and verified business outcomes distinct.','Baseline not available']].map(([n,title,copy,status])=><section className="portal-card portal-setup-step" key={n}><span className="portal-step-number">{n}</span><div><span className="portal-badge">{status}</span><h2>{title}</h2><p className="portal-muted">{copy}</p></div></section>)}</div>
- <div className="portal-note"><ShieldCheck size={22}/><p>No passwords, API keys or business details are needed here. Connecting a source will require explicit authorization when the integration is ready.</p></div><div className="portal-actions"><Link href="/platform/sign-up" className="portal-button">View account setup <ArrowUpRight size={17}/></Link><Link href="/platform/preview" className="portal-button secondary">Explore the fictional sample</Link></div></main></>
+  return <><PortalHeader/><main id="main-content" className="portal-container portal-onboarding">
+    <Link href="/platform" className="portal-text-link">Back to portal overview</Link>
+    <p className="portal-eyebrow">GETTING STARTED</p><h1>A private place<br/>for your business.</h1>
+    <p className="portal-intro">Sign in, create your own workspace, then connect evidence when integrations become available. Existing client workspaces are never assigned automatically.</p>
+    <WorkspaceSetup available={readWorkspaceConfig() !== null && authAdmissionConfigured}/>
+  </main></>
 }

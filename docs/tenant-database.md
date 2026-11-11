@@ -1,10 +1,10 @@
 # Tenant database foundation
 
-Updated 2026-11-10. **Tenant foundation applied and SQL-tested on the dedicated Picshaw pilot.** Target: picshaw-pilot (emlrtdffbfhainvvlvnl), Dual247 organization, us-west-1, PostgreSQL 17.11. The project was independently verified healthy and empty before application. No credentials or real client data were used. No app runtime, sign-in provider, Google access, invitations or report sharing was activated.
+Updated 2026-11-11. Tenant foundation and isolated SQL verification contract. This document describes portable schema behavior, not the configuration or inventory of a live account. No customer launch is established here.
 
 ## Schema and application contract
 
-The CLI-generated migration is `supabase/migrations/20261110210013_tenant_foundation.sql`. It targets a new dedicated Supabase PostgreSQL database with existing `auth.users`, `auth.uid()`, `auth.jwt()` and `anon`/`authenticated`/`service_role` roles. It was applied through the Supabase migration connector as tenant_foundation, hosted version 20261110210013. The local CLI-generated file was renamed from its original 20261110074941 timestamp to match that verified hosted history; SQL content is unchanged. Do not apply it again to this pilot or blindly to another project with identically named objects.
+The migration `supabase/migrations/20261110210013_tenant_foundation.sql` targets a dedicated Supabase PostgreSQL database with existing `auth.users`, `auth.uid()`, `auth.jwt()` and `anon`/`authenticated`/`service_role` roles. Verify target migration history before applying it; never reapply it or blindly target a project with identically named objects.
 
 - `organizations`: tenant identity and display name.
 - `organization_memberships`: current authority, with owner/admin/member/viewer role and a revocation timestamp. Historical actor references remain valid after revocation. Browsers can see only their own active memberships, not a member directory.
@@ -33,13 +33,13 @@ Normal authenticated reads should use the caller's Supabase session and include 
 
 ## Future-object permission defaults
 
-A second migration, `supabase/migrations/20261110211020_public_table_sequence_defaults.sql`, was applied as hosted version 20261110211020. It contains only two changes: remove automatic PUBLIC/anon/authenticated privileges on future **public tables and sequences created by postgres**, the verified application migration creator. The original CLI filename timestamp 20261110210516 was aligned to the hosted version without changing SQL.
+The migration `supabase/migrations/20261110211020_public_table_sequence_defaults.sql` removes automatic PUBLIC/anon/authenticated privileges on future **public tables and sequences created by postgres**. Check that this matches the target migration role and history before application.
 
 Current object grants, service-role defaults, schema CREATE/USAGE, global defaults, function defaults and the platform-managed supabase_admin defaults are unchanged. Before/after catalog fingerprints for those unaffected ACLs matched. Creating or invoking internal/public functions as their owner is not blocked.
 
 **New functions still need explicit revokes.** PostgreSQL gives new functions EXECUTE through global PUBLIC by default; per-schema default-privilege revokes cannot subtract that grant. In every function/RPC migration, explicitly revoke EXECUTE from PUBLIC, anon and authenticated on the new function in the same transaction, then grant only required access after reviewing authorization. The current private validators already do this. Do not treat the table/sequence hardening as a guarantee that a future RPC is private, and do not widen global or managed-role defaults silently. See [PostgreSQL default-privilege semantics](https://www.postgresql.org/docs/17/sql-alterdefaultprivileges.html).
 
-The separate `default-privileges.test.sql` suite passed **14 assertions both locally and on hosted PostgreSQL**: effective future-table/sequence browser denial, preserved service/current Auth/current table rights, unchanged global defaults, owner function creation, reproduction of the inherited function permission, and explicit per-function revocation. Its probe tables, sequence, function and test-support schema all rolled back. The 110 tenant assertions passed again after this hardening, giving **124 distinct SQL assertions** overall. Final independent reads confirmed zero application/Auth rows and no probe objects or test schema.
+The separate `default-privileges.test.sql` suite passed **14 assertions both locally and on hosted PostgreSQL**: effective future-table/sequence browser denial, preserved service/current Auth/current table rights, unchanged global defaults, owner function creation, reproduction of the inherited function permission, and explicit per-function revocation. Its probe tables, sequence, function and test-support schema all rolled back. The 110 tenant assertions passed again after this hardening, giving **124 distinct SQL assertions** overall. Fixtures were rolled back; test teardown is required independently of assertion success.
 
 Second migration SHA-256: 49f1e6cd3d7fb6b4162199c9d6e56f3da062c522a78da1bc6dcf73885b95791e.
 
@@ -51,10 +51,10 @@ On 2026-11-10:
 - The schema and policy SQL executed successfully in a fresh **PGlite 0.5.16 in-memory PostgreSQL WASM instance**, with synthetic Auth functions/users/roles and no network listener.
 - **110 SQL assertions** passed: all-table tenant reads, anonymous/unaffiliated/revoked identity denial, user-metadata spoofing, immediate membership revocation, browser mutation privileges, owner/viewer escalation denial, cross-tenant connection/run/action/report/work references, mixed-run reports, bounded evidence suppression, evidence tampering, source immutability and observation-shape checks.
 - `node supabase/tests/check-schema.mjs` provides separate static guardrails. It is not a substitute for SQL execution.
-- No native PostgreSQL/psql, Docker or installed Supabase CLI was available initially. A pinned temporary official Supabase CLI 3.0.0 generated the migration filename only; it never linked or applied a database. Temporary PGlite files are isolated under ignored `validation/tenant-database-tooling/`. Application dependencies and lockfiles were not changed by this work.
-- The same **110 SQL assertions passed on the hosted PostgreSQL database** using the existing Supabase Auth functions and roles, with request claims set explicitly for each simulated actor. All fixtures, four synthetic Auth user rows, and test-support objects were inside a transaction that rolled back. A separate post-test read confirmed zero rows in all eight application tables, zero Auth users/sessions/identities and no test_support schema.
-- The hosted schema has eight enabled-and-forced RLS tables and eight SELECT policies. No SECURITY DEFINER validators exist. Both exact applied migrations appear once each in hosted history.
-- Post-test **security and health advisors returned no findings**. Performance advisors returned only informational notices: eight not-yet-used indexes on this empty pilot and Auth's default fixed allocation of 10 database connections. Indexes were retained for foreign-key and query support; no Auth/compute configuration was changed. References: [unused-index notice](https://supabase.com/docs/guides/database/database-linter?lint=0005_unused_index), [production configuration guidance](https://supabase.com/docs/guides/deployment/going-into-prod).
+- Isolated PGlite tooling belongs under ignored `validation/tenant-database-tooling/`, separate from application dependencies. Do not link a local CLI or target a hosted database as a side effect of running isolated tests.
+- The same **110 SQL assertions were also exercised on hosted PostgreSQL** with Supabase Auth functions/roles and explicitly simulated claims. Fixtures were inside a rolled-back transaction. This is database-level evidence, not a live authentication or deployment configuration claim.
+- The foundation defines eight enabled-and-forced RLS tables and eight SELECT policies. Private validators use SECURITY INVOKER. Verify target migration history and privileges independently before launch.
+- Run current security, health and performance advisors on the intended target before launch. Review index and connection allocation advice against actual workload rather than treating an empty database as production evidence. References: [unused-index notice](https://supabase.com/docs/guides/database/database-linter?lint=0005_unused_index), [production configuration guidance](https://supabase.com/docs/guides/deployment/going-into-prod).
 - **Real sign-in, issued JWTs, authenticated PostgREST HTTP access, session lifecycle and application end-to-end behavior remain untested.** Hosted SQL role/claim simulation verifies database behavior, not authentication or production readiness.
 
 ## Repeatable tests
@@ -86,14 +86,14 @@ Migration SHA-256 (unchanged before/after hosted application): 4c283667d7fa2e29c
 
 ## Before any pilot activation
 
-1. The dedicated project and schema application are confirmed. Agree backup/retention policy before retaining any client data; do not reuse another product's schema or reapply this migration.
+1. Confirm the target project and migration history. Agree backup/retention policy before retaining client data; do not reuse another product's schema or reapply an existing migration.
 2. Run actual Supabase Auth/PostgREST session tests, including anonymous users, revoked memberships, two independent tenants, owner/member management and exact report URLs. SQL simulation and clean advisors do not replace these end-to-end checks. Recheck advisors after future changes.
 3. Implement invitation redemption and tenant bootstrap as tightly authorized server operations, with idempotency and last-owner protections. These management operations are not included.
 4. The local atomic persistence contract and 22 isolated SQL tests are implemented. Still supply a production pinned-session driver, real current-session authority, durable operation/retry recovery and native/hosted concurrency tests. Implement distributed abuse controls, Google consent/encrypted token lifecycle and exact property verification. See `lib/platform/README.md`.
 5. Approve retention and implement a separately authorized maintenance/deletion path. Restrictive foreign keys and immutability intentionally block ordinary deletion, including automatic deletion on `auth.users` removal. Disabling triggers or using a database administrator can bypass this foundation; privileged access must be restricted and audited.
 6. Add production monitoring, tested backup recovery and performance/size limits for real workloads. This version has no ingestion job queue, public shares, arbitrary HTML report store, or live write UI.
 
-References checked: [Supabase RLS](https://supabase.com/docs/guides/database/postgres/row-level-security), [Data API security](https://supabase.com/docs/guides/api/securing-your-api), [Supabase changelog](https://supabase.com/changelog). The CLI v3 local/remote target change was reviewed. Hosted operations used the project-scoped Supabase connector; the local CLI was not linked to a hosted database.
+References checked: [Supabase RLS](https://supabase.com/docs/guides/database/postgres/row-level-security), [Data API security](https://supabase.com/docs/guides/api/securing-your-api), [Supabase changelog](https://supabase.com/changelog). Verify CLI local/remote target semantics before use; isolated tests never require a hosted link.
 
 
 

@@ -3,7 +3,7 @@ import { readFileSync, readdirSync } from 'node:fs'
 
 const directory = new URL('../migrations/', import.meta.url)
 const migrations = readdirSync(directory).filter(name => name.endsWith('.sql'))
-assert.equal(migrations.length, 2)
+assert.equal(migrations.length, 5)
 const foundation = migrations.find(name => name.endsWith('_tenant_foundation.sql'))
 assert.match(foundation, /^\d{14}_tenant_foundation\.sql$/)
 const sql = readFileSync(new URL(foundation, directory), 'utf8')

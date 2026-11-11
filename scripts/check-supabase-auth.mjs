@@ -70,6 +70,9 @@ await test('client factory is request scoped with secure cookie options', () => 
   assert.equal(calls[0][2].cookieOptions.secure, true)
   assert.equal(calls[0][2].cookieOptions.httpOnly, true)
   assert.equal(calls[0][2].cookieOptions.sameSite, 'lax')
+  assert.equal(calls[0][2].cookieOptions.name, '__Host-picshaw-auth')
+  assert.equal(calls[0][2].cookieOptions.path, '/')
+  assert.equal(calls[0][2].cookieOptions.domain, undefined)
   assert.equal(calls[0][2].cookies.getAll()[0].value, 'mock-only')
 })
 await test('all cookie options and cache headers forwarded on every write', async () => {

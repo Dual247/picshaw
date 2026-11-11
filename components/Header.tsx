@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { Menu, X, ArrowUpRight } from 'lucide-react'
-import { usePortalAccess } from '@/hooks/use-portal-access'
+import { usePortalAccess, usePortalOrigin } from '@/hooks/use-portal-access'
 import { BrandLogo } from './BrandLogo'
 
 const navItems = [
@@ -18,7 +18,8 @@ const navItems = [
 ]
 export function Header() {
   const portalReady = usePortalAccess()
-  const navigation = [...navItems, { label: portalReady ? 'Log in' : 'Portal / Preview', href: portalReady ? '/platform/sign-in' : '/#portal' }]
+  const portalOrigin = usePortalOrigin()
+  const navigation = [...navItems, { label: portalReady ? 'Log in' : 'Portal / Preview', href: portalReady ? `${portalOrigin}/platform/sign-in` : '/#portal' }]
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const pathname = usePathname()

@@ -1,8 +1,10 @@
 import 'server-only'
 import { readSupabaseConfig, type SupabaseEnvironment } from './config'
 import { authAdmissionConfigured } from './auth-admission'
+import { PORTAL_ORIGIN } from '../portal-origin'
 
 export type PortalEnvironment = SupabaseEnvironment & {
+  VERCEL_ENV?: string
   PIC_SHAW_AUTH_ORIGIN?: string
   PIC_SHAW_AUTH_GOOGLE_ENABLED?: string
   PIC_SHAW_AUTH_APPLE_ENABLED?: string
@@ -12,6 +14,7 @@ export type PortalEnvironment = SupabaseEnvironment & {
 export type AuthAvailability = { google: boolean; apple: boolean; email: boolean }
 
 export function readPortalConfig(env: PortalEnvironment = {
+  VERCEL_ENV: process.env.VERCEL_ENV,
   NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
   NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
   PIC_SHAW_AUTH_ORIGIN: process.env.PIC_SHAW_AUTH_ORIGIN,
@@ -20,6 +23,9 @@ export function readPortalConfig(env: PortalEnvironment = {
   PIC_SHAW_AUTH_EMAIL_ENABLED: process.env.PIC_SHAW_AUTH_EMAIL_ENABLED,
   PIC_SHAW_AUTH_SESSION_ENABLED: process.env.PIC_SHAW_AUTH_SESSION_ENABLED,
 }) {
+  if (env.VERCEL_ENV !== 'production' || env.PIC_SHAW_AUTH_ORIGIN !== PORTAL_ORIGIN) {
+    throw new Error('Authentication is disabled on this deployment.')
+  }
   const supabase = readSupabaseConfig(env)
   const origin = new URL(env.PIC_SHAW_AUTH_ORIGIN || '')
   if (origin.protocol !== 'https:' || origin.username || origin.password || origin.port ||

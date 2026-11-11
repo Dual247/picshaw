@@ -89,7 +89,7 @@ reset role;
 
 select test_support.assert((select count(*)=8 from pg_class c join pg_namespace n on n.oid=c.relnamespace
  where n.nspname='public' and c.relkind='r' and c.relrowsecurity and c.relforcerowsecurity),'all eight tables enable and force RLS');
-select test_support.assert(not exists (select 1 from pg_policies where schemaname='public' and cmd<>'SELECT'),'no browser write policies');
+select test_support.assert(not exists (select 1 from pg_policies where schemaname='public' and cmd<>'SELECT' and roles && array['public','anon','authenticated']::name[]),'no browser write policies');
 select test_support.assert(not exists (select 1 from pg_proc p join pg_namespace n on n.oid=p.pronamespace
  where n.nspname='picshaw_private' and p.prosecdef),'no SECURITY DEFINER functions');
 select test_support.assert(not has_schema_privilege('authenticated','picshaw_private','USAGE'),'private validator schema unavailable to browsers');

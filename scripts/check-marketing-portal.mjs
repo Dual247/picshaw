@@ -14,7 +14,7 @@ function load(path, deps) {
 }
 for (const ready of [false, true]) {
   const { PortalShowcase } = load('components/PortalShowcase.tsx', {
-    '@/hooks/use-portal-access': { usePortalAccess: () => ready },
+    '@/hooks/use-portal-access': { usePortalAccess: () => ready, usePortalOrigin: () => '' },
     './PortalShowcase.module.css': {},
   })
   const html = renderToStaticMarkup(React.createElement(PortalShowcase))
@@ -28,7 +28,7 @@ for (const ready of [false, true]) {
   assert.doesNotMatch(html, /<form|<iframe|https:\/\/willow/)
 }
 for (const session of [false, true]) for (const provider of [false, true]) {
-  const { GET } = load('app/api/platform/access/route.ts', {
+  const { GET } = load('app/api/portal-access/route.ts', {
     '@/lib/supabase/portal-config': {
       authAvailability: () => ({ email: provider, google: false, apple: false }),
       lifecycleAvailability: () => ({ session }),

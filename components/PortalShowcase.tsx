@@ -1,11 +1,12 @@
 'use client'
 import Link from 'next/link'
 import { ArrowUpRight, Search, ClipboardList } from 'lucide-react'
-import { usePortalAccess } from '@/hooks/use-portal-access'
+import { usePortalAccess, usePortalOrigin } from '@/hooks/use-portal-access'
 import styles from './PortalShowcase.module.css'
 
 export function PortalShowcase() {
   const ready = usePortalAccess()
+  const portalOrigin = usePortalOrigin()
   return <section id="portal" className={styles.section} aria-labelledby="portal-heading">
     <div className={styles.layout}>
       <div className={styles.copy}>
@@ -13,8 +14,8 @@ export function PortalShowcase() {
         <h2 id="portal-heading">The evidence.<br /><em>The next step.</em></h2>
         <p>Explore a sample workspace: search visibility, the detail behind the numbers, and a focused list of priorities.</p>
         <div className={styles.actions}>
-          <Link href={ready ? '/platform/sign-up' : '/platform/preview'} prefetch={false} className={styles.button}>{ready ? 'Create your account' : 'Explore the sample portal'}<ArrowUpRight size={17} aria-hidden="true" /></Link>
-          <Link href="/platform/sign-in" prefetch={false} className={styles.link}>{ready ? 'Log in' : 'Portal login & access'}<ArrowUpRight size={15} aria-hidden="true" /></Link>
+          <Link href={`${portalOrigin}${ready ? '/platform/sign-up' : '/platform/preview'}`} prefetch={false} className={styles.button}>{ready ? 'Create your account' : 'Explore the sample portal'}<ArrowUpRight size={17} aria-hidden="true" /></Link>
+          <Link href={`${portalOrigin}/platform/sign-in`} prefetch={false} className={styles.link}>{ready ? 'Log in' : 'Portal login & access'}<ArrowUpRight size={15} aria-hidden="true" /></Link>
         </div>
         <p className={styles.readiness}>{ready ? 'The sample is fictional and separate from your account.' : 'Preview available. Account creation and login are not enabled yet.'}</p>
       </div>
@@ -33,7 +34,7 @@ export function PortalShowcase() {
             <p className={styles.note}>No accounts connected. No real customer results.</p>
           </div>
         </div>
-        <figcaption>A condensed view of the fictional portal preview, rendered as text, not a screenshot. <Link href="/platform/preview" prefetch={false}>Open the full sample <ArrowUpRight size={12} aria-hidden="true" /></Link></figcaption>
+        <figcaption>A condensed view of the fictional portal preview, rendered as text, not a screenshot. <Link href={`${portalOrigin}/platform/preview`} prefetch={false}>Open the full sample <ArrowUpRight size={12} aria-hidden="true" /></Link></figcaption>
       </figure>
     </div>
   </section>

@@ -3,6 +3,8 @@ import vm from 'node:vm'
 import { readFileSync } from 'node:fs'
 import ts from 'typescript'
 import { NextRequest, NextResponse } from 'next/server.js'
+import { NextRequestAdapter } from 'next/dist/server/web/spec-extension/adapters/next-request.js'
+import { addRequestMeta } from 'next/dist/server/request-meta.js'
 
 function load(name, dependencies = {}) {
   const exports = {}
@@ -17,13 +19,14 @@ function load(name, dependencies = {}) {
 }
 const config = load('config')
 const auth = load('auth')
-const admission = load('auth-admission')
-const portal = load('portal-config', { './config': config, './auth-admission': admission })
+const admission = load('auth-admission', { './auth-admission-runtime': { readAdmissionConfig: () => null, createRuntimeAdmission: () => null } })
+const portal = load('portal-config', { './config': config, './auth-admission': admission, '../portal-origin': { PORTAL_ORIGIN: 'https://app.picshaw.com' } })
 const server = load('server', { './config': config, '@supabase/ssr': { createServerClient: () => { throw Error('REAL SDK FORBIDDEN') } } })
 const handlers = load('portal-handlers', { './server': server, './portal-config': portal, './auth': auth, './auth-admission': admission, 'next/server': { NextRequest, NextResponse } })
 const env = {
+  VERCEL_ENV: 'production',
   NEXT_PUBLIC_SUPABASE_URL: 'https://auth.example.com', NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: 'sb_publishable_mock',
-  PIC_SHAW_AUTH_ORIGIN: 'https://portal.example.com', PIC_SHAW_AUTH_GOOGLE_ENABLED: 'true',
+  PIC_SHAW_AUTH_ORIGIN: 'https://app.picshaw.com', PIC_SHAW_AUTH_GOOGLE_ENABLED: 'true',
   PIC_SHAW_AUTH_APPLE_ENABLED: 'true', PIC_SHAW_AUTH_EMAIL_ENABLED: 'true',
   PIC_SHAW_AUTH_SESSION_ENABLED: 'true',
 }
@@ -42,12 +45,12 @@ function createClient(adapter) {
 }
 function request(body = {}, overrides = {}) {
   return new NextRequest(overrides.url || `${env.PIC_SHAW_AUTH_ORIGIN}/api/platform/auth/sign-in`, {
-    method: 'POST', headers: { origin: env.PIC_SHAW_AUTH_ORIGIN, 'content-type': 'application/json', 'sec-fetch-site': 'same-origin', ...overrides.headers },
+    method: 'POST', headers: { host: 'app.picshaw.com', origin: env.PIC_SHAW_AUTH_ORIGIN, 'content-type': 'application/json', 'sec-fetch-site': 'same-origin', ...overrides.headers },
     body: overrides.raw ?? JSON.stringify(body),
   })
 }
 const post = (action, body, overrides, environment = env) => handlers.handleAuthPost(request(body, overrides), action, { env: environment, createClient, admit: allow })
-const callback = (query, environment = env, origin = env.PIC_SHAW_AUTH_ORIGIN) => handlers.handleAuthCallback(new NextRequest(`${origin}/platform/auth/callback${query}`), { env: environment, createClient })
+const callback = (query, environment = env, origin = env.PIC_SHAW_AUTH_ORIGIN) => handlers.handleAuthCallback(new NextRequest(`${origin}/platform/auth/callback${query}`, { headers: { host: new URL(origin).host } }), { env: environment, createClient, admit: allow })
 function privateResponse(response) {
   assert.match(response.headers.get('cache-control'), /private.*no-store/)
   assert.equal(response.headers.get('referrer-policy'), 'no-referrer')
@@ -57,6 +60,15 @@ let passed = 0
 async function test(name, fn) { calls = []; created = 0; result = { data: {}, error: null }; throws = false; cookieBatches = []; methodResults = {}; methodCookies = {}; throwMethods = []; cookieReads = []; await fn(); passed++; console.log(`PASS ${name}`) }
 const credentials = { email: 'person@example.com', password: 'a-long-mock-passphrase' }
 
+await test('preview, local and aliases fail closed even with all auth flags enabled', async () => {
+  for (const VERCEL_ENV of [undefined, 'preview', 'development']) {
+    assert.equal((await post('session', {}, {}, { ...env, VERCEL_ENV })).status, 503)
+    assert.equal((await callback('?code=mock', { ...env, VERCEL_ENV })).status, 503)
+  }
+  assert.equal((await post('session', {}, { headers: { host: 'alias.vercel.app', 'x-forwarded-host': 'app.picshaw.com' } })).status, 403)
+  assert.equal(created, 0)
+})
+
 await test('missing project, origin or provider flags deny before SDK creation', async () => {
   for (const setup of [{}, { ...env, PIC_SHAW_AUTH_ORIGIN: '' }, { ...env, PIC_SHAW_AUTH_GOOGLE_ENABLED: 'false' }]) {
     const r = await post('google', {}, {}, setup); assert.equal(r.status, 503); privateResponse(r)
@@ -64,7 +76,7 @@ await test('missing project, origin or provider flags deny before SDK creation',
   const r = await callback('?code=mock', {}); assert.equal(r.status, 503); privateResponse(r); assert.equal(created, 0)
 })
 await test('origin config rejects HTTP, credentials, paths, wildcard and query forms', () => {
-  for (const value of ['http://portal.example.com', 'https://*.example.com', 'https://user:secret@portal.example.com', 'https://portal.example.com/path', 'https://portal.example.com?x=1', 'https://portal.example.com:8443']) {
+  for (const value of ['http://portal.example.com', 'https://*.example.com', 'https://user:secret@portal.example.com', 'https://app.picshaw.com/path', 'https://app.picshaw.com?x=1', 'https://app.picshaw.com:8443']) {
     assert.throws(() => portal.readPortalConfig({ ...env, PIC_SHAW_AUTH_ORIGIN: value }))
   }
   assert.equal(portal.authAvailability({ ...env, PIC_SHAW_AUTH_EMAIL_ENABLED: 'TRUE' }).email, false)
@@ -74,6 +86,31 @@ await test('cross-site, missing-origin and forwarded-host tricks cannot initiate
   for (const headers of [{ origin: 'https://evil.example.com' }, { origin: '' }, { 'sec-fetch-site': 'cross-site' }]) assert.equal((await post('google', {}, { headers })).status, 403)
   assert.equal((await post('google', {}, { url: 'https://evil.example.com/api/platform/auth/google', headers: { 'x-forwarded-host': 'portal.example.com' } })).status, 403)
   assert.equal(created, 0)
+})
+await test('inverse forwarding spoof cannot replace the actual request URL origin', async () => {
+  const headers = { 'x-forwarded-host': 'hostile.example.com', 'x-forwarded-proto': 'http' }
+  result = { data: { user: verifiedUser }, error: null }
+  assert.equal((await post('session', {}, { headers })).status, 200)
+  assert.equal(created, 1)
+  for (const origin of ['http://app.picshaw.com', 'https://hostile.example.com']) {
+    assert.equal((await post('session', {}, { headers, url: `${origin}/api/platform/auth/session` })).status, 403)
+  }
+  assert.equal(created, 1, 'wrong request URL origins must not instantiate an SDK client')
+})
+await test('installed Next request adapter retains ingress URL metadata rather than forwarded host', async () => {
+  for (const origin of ['https://app.picshaw.com', 'http://localhost:4175', 'https://hostile.example.com']) {
+    const nodeRequest = { url: '/api/platform/auth/session', method: 'POST', body: '{}', headers: {
+      host: 'app.picshaw.com', origin: 'https://app.picshaw.com', 'content-type': 'application/json',
+      'x-forwarded-host': 'hostile.example.com', 'x-forwarded-proto': 'http',
+    } }
+    addRequestMeta(nodeRequest, 'initURL', `${origin}/api/platform/auth/session`)
+    const adapted = NextRequestAdapter.fromNodeNextRequest(nodeRequest, new AbortController().signal)
+    assert.equal(new URL(adapted.url).origin, origin)
+    result = { data: { user: verifiedUser }, error: null }
+    const r = await handlers.handleAuthPost(adapted, 'session', { env, createClient, admit: allow })
+    assert.equal(r.status, origin === env.PIC_SHAW_AUTH_ORIGIN ? 200 : 403)
+  }
+  assert.equal(created, 1)
 })
 await test('unsupported actions and malformed, oversized or non-JSON bodies do not create clients', async () => {
   assert.equal((await post('arbitrary-provider')).status, 404)
@@ -94,7 +131,7 @@ await test('Google and Apple use exact callback and only trusted authorize URLs'
     result = { data: { url }, error: null }
     const r = await post(provider); assert.equal(r.status, 200); privateResponse(r)
     assert.equal((await r.json()).url, url)
-    const args = calls.at(-1)[1]; assert.equal(args.provider, provider); assert.equal(args.options.redirectTo, 'https://portal.example.com/platform/auth/callback'); assert.equal(args.options.skipBrowserRedirect, true)
+    const args = calls.at(-1)[1]; assert.equal(args.provider, provider); assert.equal(args.options.redirectTo, 'https://app.picshaw.com/platform/auth/callback'); assert.equal(args.options.skipBrowserRedirect, true)
   }
   for (const url of ['https://evil.example.com/auth/v1/authorize?provider=google', 'https://auth.example.com/other?provider=google', 'https://auth.example.com/auth/v1/authorize?provider=apple', 'https://secret@auth.example.com/auth/v1/authorize?provider=google']) {
     result = { data: { url }, error: null }; assert.equal((await post('google')).status, 400)
@@ -106,7 +143,7 @@ await test('password login and signup return no sessions/tokens or account-exist
   assert.doesNotMatch(await r.text(), /SECRET_TOKEN|access_token/)
   result = { data: { session: null, user: { id: 'obscured' } }, error: null }
   const signup = await post('sign-up', credentials); assert.match((await signup.json()).message, /If this address is eligible/)
-  assert.equal(calls.at(-1)[1].options.emailRedirectTo, 'https://portal.example.com/platform/auth/callback')
+  assert.equal(calls.at(-1)[1].options.emailRedirectTo, 'https://app.picshaw.com/platform/auth/callback')
 })
 await test('SDK errors and thrown exceptions are generic and private', async () => {
   result = { data: {}, error: { message: 'SECRET_TOKEN_MUST_NOT_LEAK' } }
@@ -115,7 +152,7 @@ await test('SDK errors and thrown exceptions are generic and private', async () 
 })
 await test('callback rejects missing, repeated, errored and malformed codes before exchange', async () => {
   for (const query of ['', '?error=secret&code=mock', '?code=one&code=two', '?code=%0d%0a', '?code=ok&sb_flow_id=bad', '?code=ok&sb_flow_id=abcdefgh&sb_flow_id=ijklmnop']) {
-    const r = await callback(query); assert.equal(r.status, 303); privateResponse(r); assert.equal(r.headers.get('location'), 'https://portal.example.com/platform/sign-in?error=callback')
+    const r = await callback(query); assert.equal(r.status, 303); privateResponse(r); assert.equal(r.headers.get('location'), 'https://app.picshaw.com/platform/sign-in?error=callback')
   }
   assert.equal(created, 0)
 })
@@ -123,7 +160,7 @@ await test('callback honors PKCE flow ID, ignores next/forwarded destinations an
   result = { data: { session: { access_token: 'SECRET_TOKEN_MUST_NOT_LEAK' } }, error: null }
   cookieBatches = [[{ name: 'verifier', value: '', options: { maxAge: 0, path: '/', secure: true, httpOnly: true, sameSite: 'lax' } }], [{ name: 'session', value: 'mock-cookie', options: { path: '/', secure: true, httpOnly: true, sameSite: 'lax' } }]]
   const r = await callback('?code=mock-code&sb_flow_id=abcdefgh&next=https://evil.example.com')
-  assert.equal(r.status, 303); privateResponse(r); assert.equal(r.headers.get('location'), 'https://portal.example.com/platform')
+  assert.equal(r.status, 303); privateResponse(r); assert.equal(r.headers.get('location'), 'https://app.picshaw.com/platform')
   assert.equal(calls[0][1], 'mock-code'); assert.equal(calls[0][2].flowId, 'abcdefgh')
   assert.equal(r.cookies.get('session').value, 'mock-cookie'); assert.equal(r.cookies.get('verifier').value, '')
   assert.match(r.headers.get('set-cookie'), /HttpOnly/); assert.match(r.headers.get('set-cookie'), /Secure/)
@@ -180,6 +217,22 @@ await test('limited, unavailable and thrown abuse checks cannot create a client'
   }
   assert.equal(created, 0)
 })
+await test('callback admission fails closed before SDK creation and allows OAuth GET without Origin', async () => {
+  const callbackRequest = () => new NextRequest(`${env.PIC_SHAW_AUTH_ORIGIN}/platform/auth/callback?code=mock`, { headers: { host: 'app.picshaw.com' } })
+  for (const [admit, status] of [[undefined, 503], [async () => ({ status: 'limited' }), 429], [async () => ({ status: 'unavailable' }), 503], [async () => { throw Error('secret') }, 503]]) {
+    const r = await handlers.handleAuthCallback(callbackRequest(), { env, createClient, admit })
+    assert.equal(r.status, status); privateResponse(r); assert.doesNotMatch(await r.text(), /secret/)
+  }
+  assert.equal(created, 0); assert.equal(calls.length, 0)
+  result = { data: { session: {} }, error: null }
+  let admitted = false
+  const r = await handlers.handleAuthCallback(callbackRequest(), { env, createClient, admit: async ({ action, request }) => {
+    assert.equal(action, 'callback'); assert.equal(request.headers.has('origin'), false); assert.equal(created, 0)
+    admitted = true; return { status: 'allow' }
+  } })
+  assert.equal(admitted, true); assert.equal(created, 1); assert.equal(calls[0][0], 'exchangeCodeForSession')
+  assert.equal(r.status, 303); assert.equal(r.headers.get('location'), 'https://app.picshaw.com/platform'); privateResponse(r)
+})
 await test('all lifecycle operations are separately gated and origin checked before SDK calls', async () => {
   for (const action of ['session', 'sign-out', 'sign-out-all', 'reset-password']) {
     assert.equal((await post(action, credentials, {}, { ...env, PIC_SHAW_AUTH_SESSION_ENABLED: 'false' })).status, 503)
@@ -195,17 +248,17 @@ await test('recovery validates email and preserves PKCE cookie with a neutral re
   result = { data: {}, error: null }
   const r = await post('recover', { email: credentials.email }); const first = await r.json()
   assert.equal(r.status, 200); privateResponse(r); assert.match(first.message, /If this address is eligible/)
-  assert.equal(calls[0][1], credentials.email); assert.equal(calls[0][2].redirectTo, 'https://portal.example.com/platform/auth/callback')
+  assert.equal(calls[0][1], credentials.email); assert.equal(calls[0][2].redirectTo, 'https://app.picshaw.com/platform/auth/callback')
   assert.equal(r.cookies.get('recovery-verifier').value, 'mock-only')
   result = { data: null, error: { code: 'account-specific-error', message: 'secret' } }
   const second = await post('recover', { email: credentials.email }); assert.deepEqual(await second.json(), first)
 })
 await test('only SDK recovery type selects fixed reset-password destination', async () => {
   result = { data: { session: {}, redirectType: null }, error: null }
-  assert.equal((await callback('?code=mock&type=recovery&next=/platform/reset-password')).headers.get('location'), 'https://portal.example.com/platform')
+  assert.equal((await callback('?code=mock&type=recovery&next=/platform/reset-password')).headers.get('location'), 'https://app.picshaw.com/platform')
   result = { data: { session: {}, redirectType: 'recovery' }, error: null }
-  const r = await callback('?code=mock&next=https://evil.example.com'); assert.equal(r.headers.get('location'), 'https://portal.example.com/platform/reset-password'); privateResponse(r)
-  assert.equal((await callback('?code=mock', { ...env, PIC_SHAW_AUTH_SESSION_ENABLED: 'false' })).headers.get('location'), 'https://portal.example.com/platform')
+  const r = await callback('?code=mock&next=https://evil.example.com'); assert.equal(r.headers.get('location'), 'https://app.picshaw.com/platform/reset-password'); privateResponse(r)
+  assert.equal((await callback('?code=mock', { ...env, PIC_SHAW_AUTH_SESSION_ENABLED: 'false' })).headers.get('location'), 'https://app.picshaw.com/platform')
 })
 await test('session check refreshes via verified getUser and returns no identity or tokens', async () => {
   methodResults.getUser = { data: { user: verifiedUser }, error: null }

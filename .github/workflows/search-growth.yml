@@ -63,6 +63,8 @@ jobs:
         run: node components/platform/portal-render.test.cjs
       - name: Validate Supabase auth and offline readiness contracts
         run: npm run check:supabase
+      - name: Validate SDK host-only cookie storage
+        run: node scripts/check-portal-cookie-storage.mjs
       - name: Validate shared UI stores
         run: npm run check:ui
       - name: Lint implementation files
@@ -92,6 +94,7 @@ jobs:
           node scripts/check-receptionist-preview.mjs
           node scripts/check-privacy.mjs
           node scripts/check-platform-http.mjs
+          PORTAL_TEST_PORT=3000 node scripts/check-portal-host-http.mjs
           node scripts/check-seo-audit.mjs
       - name: Verify SEO fixes on the published site
         if: github.ref == 'refs/heads/main'
