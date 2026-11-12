@@ -71,6 +71,16 @@
 .serviceRow:hover .serviceArrow { background: var(--paper); color: var(--ink); }
 .pilot { display: inline-block; margin-top: 12px; padding: 3px 8px; font-size: 9px; line-height: 1.5; color: #d0d6c8; border: 1px solid #454d3e; border-radius: 20px; }
 .work { padding-top: 24px; }
+.serviceDiscovery { display: flex; flex-wrap: wrap; gap: 12px 26px; padding-top: 28px; font-size: 13px; }
+.serviceDiscovery a { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; color: #b9bdb4; text-decoration: underline; text-underline-offset: 5px; }
+.serviceDiscovery a:hover { color: var(--primary); }
+.industrySection { padding-block: 72px; border-top: 1px solid var(--line); }
+.industryGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 32px; margin-bottom: 25px; }
+.industryGrid a { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 76px; padding-block: 18px; border-top: 1px solid var(--line); font-size: 15px; line-height: 1.5; text-decoration: none; }
+.industryGrid a:hover { color: var(--primary); }
+.industryGrid svg { flex-shrink: 0; color: var(--primary); }
+@media (max-width: 900px) { .industryGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 540px) { .industrySection { padding-block: 54px; } .industryGrid { grid-template-columns: 1fr; } .industryGrid a { min-height: 62px; } }
 .workGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px 30px; }
 .workCard { min-width: 0; }
 .workCard figure { margin: 0; min-width: 0; }

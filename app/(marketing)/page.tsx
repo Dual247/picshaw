@@ -1,11 +1,11 @@
-import type { Metadata } from 'next'
 import { Header } from '@/components/Header'
 import { EditorialHome } from '@/components/EditorialHome'
 import { Footer } from '@/components/Footer'
-import { absoluteUrl } from '@/lib/site'
+import { pageMetadata } from '@/lib/site'
 import { getPublishedArticles } from '@/lib/content'
+import { industries } from '@/lib/industries'
 
-export const metadata: Metadata = { alternates: { canonical: absoluteUrl('/') } }
+export const metadata = pageMetadata('SEO, AEO & Web Design in Los Angeles', 'Picshaw helps service businesses get found with local SEO, AI-search optimization, website design and AI receptionist services in Los Angeles and Orange County.', '/')
 
 export default function Home() {
   const articles = getPublishedArticles()
@@ -16,7 +16,7 @@ export default function Home() {
   })
   return <>
     <Header />
-    <main id="main-content"><EditorialHome guides={guides} /></main>
+    <main id="main-content"><EditorialHome guides={guides} industryLinks={industries.map(({ slug, name }) => ({ slug, name }))} /></main>
     <Footer />
   </>
 }

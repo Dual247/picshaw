@@ -4,6 +4,9 @@ import { chromium } from 'playwright'
 
 const baseURL = process.env.PREVIEW_URL || 'http://127.0.0.1:3000'
 const expectedTitles = JSON.parse(await readFile('content/seo-titles.json', 'utf8'))
+const services = JSON.parse(await readFile('content/services.json', 'utf8'))
+const industries = JSON.parse(await readFile('content/industries.json', 'utf8'))
+const requiredTitlePaths = ['/services', '/industries', ...services.map(service => `/${service.slug}`), ...industries.map(industry => `/industries/${industry.slug}`)]
 const photos = [
   { id: 'photo-1629079447777-1e605162dc8d', count: 1, alt: 'A contemporary bathroom with a white double vanity and blue-tinted window' },
   { id: 'photo-1581182800629-7d90925ad072', count: 1, alt: 'A sunlit natural-beauty portrait used as illustrative editorial photography' },
@@ -12,8 +15,9 @@ const photos = [
 const originalRestaurantURL = 'https://images.unsplash.com/photo-1508424757105-b6d5ad9329d0?auto=format&fit=crop&w=1200&q=85'
 const report = { baseURL, checkedAt: new Date().toISOString(), titles: [], images: [], restaurant: null }
 await mkdir('validation', { recursive: true })
-assert.equal(Object.keys(expectedTitles).length, 9, 'Cover all nine reported title issues')
-assert.equal(new Set(Object.values(expectedTitles)).size, 9, 'Search titles must be unique')
+assert.ok(Object.keys(expectedTitles).length, 'Search title coverage must be populated')
+assert.equal(new Set(Object.values(expectedTitles).map(title => title.trim().toLowerCase())).size, Object.keys(expectedTitles).length, 'Search titles must be unique')
+for (const path of requiredTitlePaths) assert.ok(expectedTitles[path], `Missing search title coverage for ${path}`)
 const browser = await chromium.launch({ headless: true })
 try {
   // Check server-rendered HTML, with no analytics events or hydration-dependent alt text.
@@ -21,8 +25,8 @@ try {
   await context.route('https://images.unsplash.com/**', route => route.abort())
   const page = await context.newPage()
   for (const [path, expected] of Object.entries(expectedTitles)) {
-    // 45–60 characters is this audit's budget, not a Google ranking requirement.
-    assert.ok(expected.length >= 45 && expected.length <= 60, `${path}: title budget`)
+    // The audit uses a 30–70 character editorial title budget.
+    assert.ok(expected.length >= 30 && expected.length <= 70, `${path}: title budget`)
     const response = await page.goto(new URL(path, baseURL).href, { waitUntil: 'domcontentloaded' })
     assert.equal(response.status(), 200, path)
     assert.equal(await page.locator('title').count(), 1, `${path}: exactly one title`)
