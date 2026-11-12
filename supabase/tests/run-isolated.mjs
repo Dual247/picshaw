@@ -10,7 +10,7 @@ const { PGlite } = await import(pathToFileURL(packageEntry).href)
 const db = new PGlite()
 const read = path => readFileSync(new URL(path, import.meta.url), 'utf8')
 const migrations = readdirSync(new URL('../migrations/', import.meta.url)).filter(name => name.endsWith('.sql')).sort()
-assert.equal(migrations.length, 6, 'Review the runner when another migration is added')
+assert.equal(migrations.length, 8, 'Review the runner when another migration is added')
 try {
   await db.exec(read('./bootstrap.sql'))
   for (const name of migrations) await db.exec(read('../migrations/' + name))
@@ -21,6 +21,4 @@ try {
 } finally {
   await db.close()
 }
-
-
 

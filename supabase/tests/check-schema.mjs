@@ -3,7 +3,7 @@ import { readFileSync, readdirSync } from 'node:fs'
 
 const directory = new URL('../migrations/', import.meta.url)
 const migrations = readdirSync(directory).filter(name => name.endsWith('.sql'))
-assert.equal(migrations.length, 6)
+assert.equal(migrations.length, 8)
 const foundation = migrations.find(name => name.endsWith('_tenant_foundation.sql'))
 assert.match(foundation, /^\d{14}_tenant_foundation\.sql$/)
 const sql = readFileSync(new URL(foundation, directory), 'utf8')
@@ -34,5 +34,4 @@ assert.deepEqual(statements, [
   'commit',
 ])
 console.log('PASS static tenant/default-privilege migration guardrails (not a SQL execution or RLS test).')
-
 
