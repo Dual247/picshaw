@@ -242,7 +242,7 @@
     "eyebrow": "Roofing companies",
     "intro": "A leaking roof and a planned replacement create very different enquiries. Picshaw helps roofing companies explain the jobs they take on, show their real work and give each customer an appropriate route to contact the team.",
     "summary": "Bring repair, replacement and commercial roofing enquiries into clear service pages and practical estimate requests.",
-    "services": ["/local-seo", "/website-redesign", "/google-business-profile-optimization", "/ai-receptionist"],
+    "services": ["/local-seo", "/website-redesign", "/google-business-profile-optimization", "/ai-receptionist", "/web-design-for-contractors"],
     "sections": [
       {
         "id": "job-type",
@@ -289,7 +289,7 @@
     "eyebrow": "Plumbing · HVAC",
     "intro": "Some customers need help with a problem today. Others are comparing a new installation or ongoing maintenance. Picshaw helps plumbing and HVAC businesses make the service, coverage and next contact step immediately clear.",
     "summary": "Build practical routes for urgent service calls, planned installations and recurring maintenance enquiries.",
-    "services": ["/local-seo", "/google-business-profile-optimization", "/website-redesign", "/ai-receptionist"],
+    "services": ["/local-seo", "/google-business-profile-optimization", "/website-redesign", "/ai-receptionist", "/web-design-for-contractors"],
     "sections": [
       {
         "id": "service-intent",
@@ -336,7 +336,7 @@
     "eyebrow": "Landscaping companies",
     "intro": "Landscape customers need to picture the result and understand the work involved. Picshaw helps firms turn their real projects, service specialisms and coverage into a useful website that supports better-informed enquiries.",
     "summary": "Pair a distinctive project portfolio with clear paths for design, installation and ongoing landscape maintenance.",
-    "services": ["/website-redesign", "/local-seo", "/ai-search-optimization", "/landing-page-design"],
+    "services": ["/website-redesign", "/local-seo", "/ai-search-optimization", "/landing-page-design", "/web-design-for-contractors"],
     "sections": [
       {
         "id": "project-or-maintenance",
