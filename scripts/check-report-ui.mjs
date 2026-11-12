@@ -132,3 +132,29 @@ const route = readFileSync('app/(workspace)/platform/reports/page.tsx', 'utf8')
 assert.match(route, /force-dynamic/); assert.match(route, /index: false/)
 console.log('PASS real React report rendering, top-ten cap, missing metrics, comparison/action suppression and static private route contract')
 console.log('These are local mocked interaction and render tests, not browser or live Google integration tests.')
+
+// AI evidence navigation remains discoverable without claiming the provider is enabled.
+for (const file of ['app/(workspace)/platform/page.tsx', 'components/platform/search-report-dashboard.tsx']) {
+  const navigation = readFileSync(file, 'utf8')
+  assert.match(navigation, /href="\/platform\/ai-visibility" prefetch=\{false\}/)
+  assert.match(navigation, /Check availability; AI lookups require separate consent/)
+}
+const icons = await import('lucide-react')
+const { default: WorkspaceHome } = load('app/(workspace)/platform/page.tsx', {
+  'react/jsx-runtime': await import('react/jsx-runtime'),
+  'next/link': ({ prefetch, ...props }) => React.createElement('a', props),
+  'lucide-react': icons,
+  '@/components/platform/portal-header': { PortalHeader: () => null },
+})
+assert.match(renderToStaticMarkup(React.createElement(WorkspaceHome)), /href="\/platform\/ai-visibility"[^>]*>AI visibility evidence<\/a>/)
+for (const enabled of [false, true]) {
+  const { default: AiVisibilityPage } = load('app/(workspace)/platform/ai-visibility/page.tsx', {
+    'react/jsx-runtime': await import('react/jsx-runtime'),
+    '@/components/platform/portal-header': { PortalHeader: () => null },
+    '@/components/platform/dataforseo-dashboard': { DataForSeoDashboard: () => React.createElement('p', null, 'DASHBOARD_ENABLED') },
+  }, { process: { env: { PIC_SHAW_DATAFORSEO_ENABLED: enabled ? 'true' : 'false' } } })
+  const page = renderToStaticMarkup(React.createElement(AiVisibilityPage))
+  assert.equal(page.includes('DASHBOARD_ENABLED'), enabled)
+  if (!enabled) assert.match(page, /not connected for this deployment yet. No provider request has been made/)
+}
+console.log('PASS workspace/report AI evidence links, disabled prefetch, separate-consent labeling and disabled/enabled destination rendering')
