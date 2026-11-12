@@ -1,3 +1,7 @@
+## Verified rollout update
+
+Both reviewed DataForSEO migrations are now applied to the verified Picshaw pilot after explicit owner approval. Postchecks: both roles remain NOLOGIN/NOINHERIT, all four private tables force RLS, browser/runtime direct reads are denied, account cap is zero/disabled, and jobs/claims are empty. Real PostgreSQL 17.11 concurrency tests passed all six independent-backend lock-contention scenarios in a disposable loopback cluster, then the server stopped. No credentials or paid calls have been configured. The historical sections below describe the local implementation and earlier validation gates; hosted pooler/login, exact-head release and provider billing checks remain pending.
+
 # Picshaw DataForSEO integration foundation
 
 Status: local, unconnected provider adapter. Not deployed, not an end-to-end integration. No provider account, credential, payment, or paid request was created or used. Existing HTML analysis is unchanged.

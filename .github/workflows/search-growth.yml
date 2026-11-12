@@ -32,6 +32,10 @@ jobs:
         run: npm install --prefix validation/tenant-database-tooling --no-save --package-lock=false --ignore-scripts --no-fund --no-audit @electric-sql/pglite@0.5.16
       - name: Test tenant policies and evidence constraints in isolation
         run: npm run check:database
+      - name: Test disabled DataForSEO provider jobs and accounting without network
+        run: npm run check:dataforseo
+      - name: Check disposable PostgreSQL harness guardrails without connecting
+        run: node supabase/tests/check-dataforseo-contention-guards.mjs
   validate:
     # Pin the supported runner for the existing Playwright version.
     runs-on: ubuntu-24.04

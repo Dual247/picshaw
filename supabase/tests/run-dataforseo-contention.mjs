@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict'
 import {readFileSync,readdirSync} from 'node:fs'
 import postgres from 'postgres'
+import {isBuiltinRole,isBuiltinSchema} from './dataforseo-contention-guards.mjs'
 
 // REAL PostgreSQL contention proof, never hosted. This initializes cluster-wide test roles.
 // Use a dedicated EMPTY disposable cluster, not an empty database on a shared server.
@@ -62,15 +63,15 @@ async function contend(label,first,second,check){
  }
 }
 try{
- const identity=await admin`select current_database() as database,current_user as user,inet_server_addr()::text as host,pg_is_in_recovery() as standby`
+ const identity=await admin`select current_database() as database,current_user as user,host(inet_server_addr()) as host,pg_is_in_recovery() as standby`
  assert.equal(identity[0].database,database);assert.equal(identity[0].user,'postgres');assert.equal(identity[0].host,'127.0.0.1');assert.equal(identity[0].standby,false)
  assert.equal((await admin`select datname from pg_database where not datistemplate and datname not in(${database},'postgres')`).length,0,'Cluster has other databases; refusing shared cluster')
- assert.equal((await admin`select rolname from pg_roles where rolname<>'postgres' and rolname not like 'pg_%'`).length,0,'Cluster has custom roles; refusing non-pristine/shared cluster')
- assert.equal((await admin`select nspname from pg_namespace where nspname not in('public','pg_catalog','information_schema') and nspname not like 'pg_toast%' and nspname not like 'pg_temp_%'`).length,0,'Database has nonstandard schemas')
+ assert.equal((await admin`select rolname from pg_roles`).filter(row=>!isBuiltinRole(row.rolname)).length,0,'Cluster has custom roles; refusing non-pristine/shared cluster')
+ assert.equal((await admin`select nspname from pg_namespace`).filter(row=>!isBuiltinSchema(row.nspname)).length,0,'Database has nonstandard schemas')
  assert.equal((await admin`select c.oid from pg_class c join pg_namespace n on n.oid=c.relnamespace where n.nspname='public'`).length,0,'Database is not empty')
  assert.equal((await admin`select p.oid from pg_proc p join pg_namespace n on n.oid=p.pronamespace where n.nspname='public'`).length,0,'Database has public functions')
  // The default postgres database must also be empty: roles are cluster-wide.
- assert.equal((await control`select nspname from pg_namespace where nspname not in('public','pg_catalog','information_schema') and nspname not like 'pg_toast%' and nspname not like 'pg_temp_%'`).length,0,'Default postgres database has application schemas')
+ assert.equal((await control`select nspname from pg_namespace`).filter(row=>!isBuiltinSchema(row.nspname)).length,0,'Default postgres database has application schemas')
  assert.equal((await control`select c.oid from pg_class c join pg_namespace n on n.oid=c.relnamespace where n.nspname='public'`).length,0,'Default postgres database has application objects')
  assert.equal((await control`select p.oid from pg_proc p join pg_namespace n on n.oid=p.pronamespace where n.nspname='public'`).length,0,'Default postgres database has application functions')
  await admin.unsafe(read('./bootstrap.sql')).simple()
@@ -102,5 +103,6 @@ try{
  console.error(`Contention harness failed (${error?.code??error?.name??'error'}): ${error instanceof assert.AssertionError?error.message:'Local PostgreSQL setup or scenario failed; inspect only local server diagnostics.'}`)
  process.exitCode=1
 }finally{await Promise.allSettled([admin.end({timeout:2}),control.end({timeout:2}),a.end({timeout:2}),b.end({timeout:2})])}
+
 
 
