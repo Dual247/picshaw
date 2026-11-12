@@ -7,14 +7,14 @@ import type { AuthAvailability } from '@/lib/supabase/portal-config'
 import { ProviderIcon } from './provider-icon'
 import { ThemeToggle } from '@/components/platform/theme-toggle'
 
-export function AuthForm({ mode, available, callbackError = false }: {
-  mode: 'sign-in' | 'sign-up'; available: AuthAvailability; callbackError?: boolean
+export function AuthForm({ mode, available, callbackError = false, accessPending = false }: {
+  mode: 'sign-in' | 'sign-up'; available: AuthAvailability; callbackError?: boolean; accessPending?: boolean
 }) {
   const signup = mode === 'sign-up'
   const [busy, setBusy] = useState(false)
   const inFlight = useRef(false)
   const [showPassword, setShowPassword] = useState(false)
-  const [message, setMessage] = useState(callbackError ? 'That sign-in link could not be verified. Start again in the same browser.' : '')
+  const [message, setMessage] = useState(callbackError ? 'That sign-in link could not be verified. Start again in the same browser.' : accessPending ? 'Your invitation is still being set up. Email confirmation does not grant workspace access. Sign in after your access has been confirmed.' : '')
   const [error, setError] = useState(callbackError)
   const anyAvailable = available.email || available.google || available.apple
 
