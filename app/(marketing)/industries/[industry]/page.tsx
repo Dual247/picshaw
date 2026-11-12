@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ArrowUpRight } from 'lucide-react'
 import { ContentPage, ContentSections } from '@/components/ContentPage'
+import { IndustrySpotlight } from '@/components/IndustrySpotlight'
 import { getIndustry, industries } from '@/lib/industries'
 import { absoluteUrl, jsonLd, ORGANIZATION_ID, pageMetadata, serviceLinks } from '@/lib/site'
 
@@ -64,7 +65,8 @@ export default async function IndustryPage({ params }: Props) {
       path={path}
     >
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(schema) }} />
-      <div className="grid items-start gap-12 lg:grid-cols-[minmax(0,1fr)_260px]">
+      <IndustrySpotlight industry={industry} />
+      <div id="how-we-help" className="grid scroll-mt-28 items-start gap-12 lg:grid-cols-[minmax(0,1fr)_260px]">
         <ContentSections sections={industry.sections} />
         <aside
           className="rounded-xl border border-border bg-card p-6 lg:sticky lg:top-28"
