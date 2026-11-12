@@ -86,7 +86,12 @@ try {
       assert.ok(await mobile.evaluate(() => document.documentElement.scrollWidth - innerWidth <= 1), `${path}: overflow ${width}`)
       if (path === '/') await mobile.screenshot({ path: `validation/reposition-header-${width}.png` })
     }
-    if (width < 1024) { await mobile.getByRole('button', { name: 'Open menu', exact: true }).click(); await mobile.locator('#mobile-navigation').getByRole('link', { name: 'Our approach', exact: true }).click(); await mobile.waitForURL(baseURL + '/methodology'); await mobile.locator('#mobile-navigation').waitFor({ state: 'detached' }) }
+    if (width < 1280) {
+      await mobile.getByRole('button', { name: 'Open menu', exact: true }).click()
+      await mobile.locator('#mobile-navigation').getByRole('link', { name: 'Industries', exact: true }).click()
+      await mobile.waitForURL(baseURL + '/industries')
+      await mobile.locator('#mobile-navigation').waitFor({ state: 'detached' })
+    }
     report.push({ viewportWidth: width, overflow: false, navigation: 'passed' }); await mobile.close()
   }
   const nojs = await browser.newPage({ javaScriptEnabled: false, viewport: { width: 1440, height: 1000 } })
