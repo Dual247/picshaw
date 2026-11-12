@@ -8,7 +8,10 @@ create table auth.users (id uuid primary key, is_anonymous boolean default false
   email_confirmed_at timestamptz, phone_confirmed_at timestamptz, banned_until timestamptz, deleted_at timestamptz);
 create table auth.sessions (id uuid primary key, user_id uuid references auth.users(id), not_after timestamptz);
 create function auth.uid() returns uuid language sql stable as $$
-  select (nullif(current_setting('request.jwt.claims', true), '')::jsonb ->> 'sub')::uuid
+  -- Match Supabase Auth's legacy individual-claim precedence, not only JSON JWTs.
+  -- https://github.com/supabase/auth/blob/master/migrations/20220224000811_update_auth_functions.up.sql
+  select coalesce(nullif(current_setting('request.jwt.claim.sub', true), ''),
+    (nullif(current_setting('request.jwt.claims', true), '')::jsonb ->> 'sub'))::uuid
 $$;
 create function auth.jwt() returns jsonb language sql stable as $$
   select coalesce(nullif(current_setting('request.jwt.claims', true), '')::jsonb, '{}'::jsonb)

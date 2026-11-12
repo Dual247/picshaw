@@ -50,7 +50,8 @@ for (const route of ['', '/preview', '/onboarding']) {
     assert.ok(!html.includes('href="https://willow'), 'Fictional domain must not be navigable')
     assert.ok((html.match(/<details/g) || []).length >= 7)
   } else if (route === '') {
-    assert.ok(html.includes('Authentication and live data connections are not configured'))
+    assert.ok(html.includes('Private data appears only after access is verified'))
+    assert.ok(html.includes('href="/platform/reports"'))
     assert.ok(html.includes('href="/platform/preview"'))
   } else {
 

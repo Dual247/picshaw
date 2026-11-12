@@ -18,6 +18,16 @@ export function AccountLifecycle({ mode, available }: { mode: Mode; available: b
 
   async function submit(action: string, body: Record<string, string> = {}) {
     if (!available || inFlight.current) return
+    const clearPrivateViews = () => {
+      if (action !== 'sign-out' && action !== 'sign-out-all') return
+      try {
+        if (typeof BroadcastChannel !== 'undefined') {
+          const channel = new BroadcastChannel('picshaw-portal-auth')
+          channel.postMessage('signed-out'); channel.close()
+        }
+      } catch { /* Best-effort local view clearing must not block sign-out. */ }
+    }
+    clearPrivateViews()
     inFlight.current = true; setBusy(true); setError(false); setMessage('')
     try {
       const response = await fetch(`/api/platform/auth/${action}`, {
@@ -25,6 +35,7 @@ export function AccountLifecycle({ mode, available }: { mode: Mode; available: b
         headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body),
       })
       const result = await response.json()
+      if (response.ok) clearPrivateViews()
       setError(!response.ok)
       setMessage(result.error || result.message || 'The request could not be completed. Please retry.')
       if (response.ok && action === 'reset-password') setCompleted(true)

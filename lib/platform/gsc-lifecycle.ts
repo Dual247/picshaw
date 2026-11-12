@@ -85,6 +85,18 @@ export function createGscLifecycle(deps: { store: GscStore; cipher: ReturnType<t
       if (revoked) await call(identity, 'revoked', { connection, generation: value.generation })
       return { revocationPending: !revoked }
     },
+    // One short-lived access token per bounded report, never serialized. Recheck
+    // persisted generation and selection before every provider snapshot read.
+    async snapshotReader(identity: GscIdentity, connection: string) {
+      const credential = await access(identity, connection)
+      const adapter = createGscAdapter({ resolve: async (actor, org, id) => actor === identity.actor.id && org === identity.organizationId && id === connection ? { organizationId: org, connectionId: id, accessToken: credential.token } : null }, deps.transport)
+      return { async readSnapshot(input: Parameters<typeof adapter.readSnapshot>[0]) {
+        if (input.actorId !== identity.actor.id || input.organizationId !== identity.organizationId || input.connectionId !== connection) throw new PlatformError('UNAUTHORIZED', 'Workspace authorization is required.')
+        const checked = await call(identity, 'check', { connection, generation: credential.generation })
+        if (checked.selectedProperty !== input.propertyId) throw new PlatformError('UNAUTHORIZED', 'The selected property changed.')
+        return adapter.readSnapshot(input)
+      } }
+    },
     resolver,
     journeyResolver(identity: GscIdentity): JourneyResolver {
       return { async resolve(selection) {

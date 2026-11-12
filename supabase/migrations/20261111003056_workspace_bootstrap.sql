@@ -2,14 +2,15 @@
 begin;
 create role picshaw_workspace nologin noinherit;
 create role picshaw_workspace_owner nologin noinherit;
+-- Managed postgres is not necessarily superuser; ownership transfer needs SET ROLE.
+grant picshaw_workspace_owner to postgres;
 create schema picshaw_workspace_private;
 revoke all on schema picshaw_workspace_private from public, anon, authenticated, service_role;
 grant usage on schema picshaw_workspace_private to picshaw_workspace;
 grant usage, create on schema picshaw_workspace_private to picshaw_workspace_owner;
 grant usage on schema auth, public to picshaw_workspace_owner;
 grant select (id, is_anonymous, email_confirmed_at, phone_confirmed_at, banned_until, deleted_at) on auth.users to picshaw_workspace_owner;
-grant select (id, user_id, not_after), update (id) on auth.sessions to picshaw_workspace_owner;
--- UPDATE(id) exists solely because PostgreSQL requires it for a session row lock.
+grant select (id, user_id, not_after) on auth.sessions to picshaw_workspace_owner;
 -- This NOLOGIN role is never granted to the application login or browser roles.
 grant execute on function auth.uid() to picshaw_workspace_owner;
 
@@ -37,17 +38,17 @@ create policy workspace_membership_read on public.organization_memberships for s
   using (user_id = (select auth.uid()));
 
 create function picshaw_workspace_private.workspace(p_user uuid, p_session uuid, p_exp bigint, p_create boolean, p_name text, p_site text)
-returns jsonb language plpgsql security definer set search_path = '' set statement_timeout = '3s' as $$
-declare v_record picshaw_workspace_private.bootstraps%rowtype; v_org uuid;
+returns jsonb language plpgsql volatile security definer set search_path = '' set statement_timeout = '3s' as $$
+declare v_record picshaw_workspace_private.bootstraps%rowtype; v_org uuid; v_deadline timestamptz:=clock_timestamp()+interval '3 seconds';
 begin
+  if current_setting('transaction_isolation')<>'read committed' then raise exception 'Read committed required' using errcode='25001'; end if;
   if p_user is null or p_session is null or p_exp is null or p_create is null or p_exp <= extract(epoch from clock_timestamp()) then
     raise exception 'Session required' using errcode = '28000';
   end if;
   -- Only the server's cryptographically verified token supplies these identities.
-  -- Lock conflicts with DELETE on logout: an earlier revocation denies this call;
-  -- an operation already holding the lock completes before that revocation.
+  -- No auth-table lock: revalidate current session/account before every return.
   perform 1 from auth.sessions s where s.id = p_session and s.user_id = p_user
-    and (s.not_after is null or s.not_after > clock_timestamp()) for share;
+    and (s.not_after is null or s.not_after > clock_timestamp());
   if not found then raise exception 'Session required' using errcode = '28000'; end if;
   if p_exp <= extract(epoch from clock_timestamp()) then raise exception 'Session required' using errcode = '28000'; end if;
   perform 1 from auth.users u where u.id = p_user and u.is_anonymous = false and u.deleted_at is null
@@ -59,9 +60,10 @@ begin
   -- do not inherit stale transaction/session claims from a pooled connection.
   perform pg_catalog.set_config('request.jwt.claim.sub', p_user::text, true);
   perform pg_catalog.pg_advisory_xact_lock(pg_catalog.hashtextextended('picshaw-workspace:' || p_user::text, 0));
-  if p_exp <= extract(epoch from clock_timestamp()) or exists (
-    select 1 from auth.sessions s where s.id = p_session and s.not_after <= clock_timestamp()
-  ) then raise exception 'Session required' using errcode = '28000'; end if;
+  if clock_timestamp()>=v_deadline or p_exp<=extract(epoch from clock_timestamp())
+    or not exists(select 1 from auth.sessions where id=p_session and user_id=p_user and (not_after is null or not_after>clock_timestamp()))
+    or not exists(select 1 from auth.users where id=p_user and is_anonymous=false and deleted_at is null and (banned_until is null or banned_until<=clock_timestamp()) and (email_confirmed_at is not null or phone_confirmed_at is not null))
+    then raise exception 'Session required' using errcode='28000'; end if;
   select * into v_record from picshaw_workspace_private.bootstraps where user_id = p_user;
   if found then
     if not exists (select 1 from public.organization_memberships m where m.organization_id = v_record.organization_id
@@ -71,9 +73,24 @@ begin
     if p_create and (p_name is distinct from v_record.name or p_site is distinct from v_record.site) then
       raise exception 'Workspace already created' using errcode = '23505';
     end if;
+    -- Bounded metadata-only recheck; GSC/reports separately lock membership.
+    if not exists(select 1 from public.organization_memberships where organization_id=v_record.organization_id
+      and user_id=p_user and revoked_at is null and role='owner') then
+      raise exception 'Workspace access denied' using errcode='42501';
+    end if;
+  if clock_timestamp()>=v_deadline or p_exp<=extract(epoch from clock_timestamp())
+    or not exists(select 1 from auth.sessions where id=p_session and user_id=p_user and (not_after is null or not_after>clock_timestamp()))
+    or not exists(select 1 from auth.users where id=p_user and is_anonymous=false and deleted_at is null and (banned_until is null or banned_until<=clock_timestamp()) and (email_confirmed_at is not null or phone_confirmed_at is not null))
+    then raise exception 'Session required' using errcode='28000'; end if;
     return jsonb_build_object('id',v_record.organization_id,'name',v_record.name,'site',v_record.site);
   end if;
-  if not p_create then return null; end if;
+  if not p_create then
+    if clock_timestamp()>=v_deadline or p_exp<=extract(epoch from clock_timestamp())
+    or not exists(select 1 from auth.sessions where id=p_session and user_id=p_user and (not_after is null or not_after>clock_timestamp()))
+    or not exists(select 1 from auth.users where id=p_user and is_anonymous=false and deleted_at is null and (banned_until is null or banned_until<=clock_timestamp()) and (email_confirmed_at is not null or phone_confirmed_at is not null))
+    then raise exception 'Session required' using errcode='28000'; end if;
+    return null;
+  end if;
   if p_name is null or length(p_name) not between 1 and 160 or p_name <> btrim(p_name) or p_name ~ '[[:cntrl:]]'
     or p_site is null or length(p_site) > 253 or p_site !~ '^([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$' then
     raise exception 'Invalid workspace' using errcode = '22023';
@@ -83,6 +100,10 @@ begin
   insert into public.organizations(id,name) values (v_org,p_name);
   insert into public.organization_memberships(organization_id,user_id,role) values (v_org,p_user,'owner');
   insert into picshaw_workspace_private.bootstraps(user_id,organization_id,name,site) values (p_user,v_org,p_name,p_site);
+  if clock_timestamp()>=v_deadline or p_exp<=extract(epoch from clock_timestamp())
+    or not exists(select 1 from auth.sessions where id=p_session and user_id=p_user and (not_after is null or not_after>clock_timestamp()))
+    or not exists(select 1 from auth.users where id=p_user and is_anonymous=false and deleted_at is null and (banned_until is null or banned_until<=clock_timestamp()) and (email_confirmed_at is not null or phone_confirmed_at is not null))
+    then raise exception 'Session required' using errcode='28000'; end if;
   return jsonb_build_object('id',v_org,'name',p_name,'site',p_site);
 end $$;
 revoke all on function picshaw_workspace_private.workspace(uuid,uuid,bigint,boolean,text,text) from public,anon,authenticated,service_role;

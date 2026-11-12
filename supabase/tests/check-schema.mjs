@@ -3,7 +3,7 @@ import { readFileSync, readdirSync } from 'node:fs'
 
 const directory = new URL('../migrations/', import.meta.url)
 const migrations = readdirSync(directory).filter(name => name.endsWith('.sql'))
-assert.equal(migrations.length, 5)
+assert.equal(migrations.length, 6)
 const foundation = migrations.find(name => name.endsWith('_tenant_foundation.sql'))
 assert.match(foundation, /^\d{14}_tenant_foundation\.sql$/)
 const sql = readFileSync(new URL(foundation, directory), 'utf8')
@@ -26,7 +26,7 @@ assert.match(sql, /source_runs','source_snapshots','recommended_actions','work_e
 assert.match(sql, /before update or delete/)
 assert.doesNotMatch(sql, /^\s*(?:access_token|refresh_token|client_secret|secret_key|password)\s+/im)
 const defaults = readFileSync(new URL(migrations.find(name => name.endsWith('_public_table_sequence_defaults.sql')), directory), 'utf8')
-const statements = defaults.replace(/^--.*$/gm, '').split(';').map(statement => statement.trim()).filter(Boolean)
+const statements = defaults.replace(/\r\n/g, '\n').replace(/^--.*$/gm, '').split(';').map(statement => statement.trim()).filter(Boolean)
 assert.deepEqual(statements, [
   'begin',
   'alter default privileges for role postgres in schema public\n  revoke all privileges on tables from public, anon, authenticated',

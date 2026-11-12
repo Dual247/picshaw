@@ -20,18 +20,19 @@ async function test(name,fn){await fn(); console.log(`PASS ${name}`);count++}
 const user=crypto.randomUUID(),session=crypto.randomUUID(),org=crypto.randomUUID(),other=crypto.randomUUID()
 const identity={actor:{id:user,sessionId:session,expiresAt:Math.floor(Date.now()/1000)+3600},organizationId:org}
 const sqlStore=async(actor,org,operation,payload)=> (await db.query('select picshaw_gsc_private.operation($1::uuid,$2::uuid,$3::bigint,$4::uuid,$5::text,$6::jsonb) as value',[actor.id,actor.sessionId,actor.expiresAt,org,operation,JSON.stringify(payload)])).rows[0].value
-let providerCalls=[],failRevoke=false,refreshScope=undefined,failComplete=false
+let providerCalls=[],storeCalls=[],failRevoke=false,refreshScope=undefined,failComplete=false
 const transport=async(url,options)=>{
   providerCalls.push({url,options})
   assert.equal(options.redirect,'error');assert.equal(options.cache,'no-store')
   if(url==='https://oauth2.googleapis.com/revoke') return new Response('',{status:failRevoke?503:200})
   if(url==='https://www.googleapis.com/webmasters/v3/sites')return Response.json({siteEntry:[{siteUrl:'sc-domain:example.com',permissionLevel:'siteOwner'},{siteUrl:'https://example.com/',permissionLevel:'siteFullUser'},{siteUrl:'sc-domain:denied.com',permissionLevel:'siteUnverifiedUser'}]})
+  if(url==='https://www.googleapis.com/webmasters/v3/sites/sc-domain%3Aexample.com/searchAnalytics/query')return Response.json({rows:[]})
   assert.equal(url,'https://oauth2.googleapis.com/token')
   const body=new URLSearchParams(options.body),refresh=body.get('grant_type')==='refresh_token'
   return Response.json({access_token:'mock-access',token_type:'Bearer',expires_in:3600,...(refresh?{...(refreshScope?{scope:refreshScope}:{})}:{refresh_token:'mock-refresh',scope:GSC_SCOPE})})
 }
 const cipher=tokenCipher(Buffer.alloc(32,4).toString('base64'))
-const service=createGscLifecycle({store:async(...args)=>{if(failComplete&&args[2]==='complete')throw Error('Lost result');return sqlStore(...args)},cipher,provider:googleProvider({clientId:'fake.apps.googleusercontent.com',clientSecret:'mock-secret-only'},transport),transport})
+const service=createGscLifecycle({store:async(...args)=>{storeCalls.push({operation:args[2],payload:args[3]});if(failComplete&&args[2]==='complete')throw Error('Lost result');return sqlStore(...args)},cipher,provider:googleProvider({clientId:'fake.apps.googleusercontent.com',clientSecret:'mock-secret-only'},transport),transport})
 try{
   await db.exec(readFileSync('supabase/tests/bootstrap.sql','utf8'))
   for(const name of readdirSync('supabase/migrations').filter(n=>n.endsWith('.sql')).sort())await db.exec(readFileSync(`supabase/migrations/${name}`,'utf8'))
@@ -43,6 +44,11 @@ try{
   await db.exec('set role picshaw_gsc')
   await test('server role has no direct token-table access',()=>assert.rejects(db.query('select * from picshaw_gsc_private.connections'),/permission denied/))
   await test('authenticated disconnected status',async()=>assert.equal((await service.status(identity)).status,'not_connected'))
+  await test('RPC replaces stale pooled legacy subject before RLS',async()=>{
+    await db.query("select set_config('request.jwt.claim.sub',$1,false)",[other])
+    assert.equal((await service.status(identity)).status,'not_connected')
+    // Leave this wrong session-level value in place for all later lifecycle calls.
+  })
   await test('wrong tenant and signed-out session denied',async()=>{await assert.rejects(service.status({...identity,organizationId:crypto.randomUUID()}));await assert.rejects(service.status({...identity,actor:{...identity.actor,sessionId:crypto.randomUUID()}}))})
   await test('AES-GCM context and tamper binding',()=>{const sealed=cipher.seal('secret','tenant:a');assert.equal(cipher.open(sealed,'tenant:a'),'secret');assert.throws(()=>cipher.open(sealed,'tenant:b'));assert.throws(()=>cipher.open(sealed+'x','tenant:a'))})
   let start,state
@@ -56,6 +62,31 @@ try{
   await test('selection rechecks provider and rejects normalized impostor',async()=>{await assert.rejects(service.properties(identity,connection,'example.com'));await service.properties(identity,connection,'sc-domain:example.com');assert.equal((await service.status(identity)).selectedProperty,'sc-domain:example.com')})
   await test('journey resolver binds persisted selection and current actor',async()=>{const resolver=service.journeyResolver(identity);assert.ok(await resolver.resolve({organizationId:org,connectionId:connection,propertyId:'sc-domain:example.com'}));assert.equal(await resolver.resolve({organizationId:org,connectionId:connection,propertyId:'https://example.com/'}),null)})
   await test('reader resolver never accepts caller actor substitution',async()=>assert.equal(await service.resolver(identity).resolve(other,org,connection),null))
+  await test('snapshot reader reuses one credential and fences every snapshot against current selection',async()=>{
+    const before=providerCalls.length,checks=storeCalls.filter(c=>c.operation==='check').length
+    const reader=await service.snapshotReader(identity,connection)
+    const input={actorId:user,organizationId:org,connectionId:connection,propertyId:'sc-domain:example.com',runId:crypto.randomUUID(),snapshotId:crypto.randomUUID(),window:{start:'2026-10-01',end:'2026-10-28'},dimensions:['page'],maxPages:1}
+    await reader.readSnapshot(input)
+    await reader.readSnapshot({...input,snapshotId:crypto.randomUUID(),dimensions:['date']})
+    const calls=providerCalls.slice(before)
+    assert.equal(calls.filter(c=>c.url==='https://oauth2.googleapis.com/token').length,1)
+    assert.equal(calls.filter(c=>c.url.endsWith('/searchAnalytics/query')).length,2)
+    const snapshotChecks=storeCalls.filter(c=>c.operation==='check').slice(checks)
+    assert.equal(snapshotChecks.length,2)
+    assert.equal(snapshotChecks[0].payload.generation,snapshotChecks[1].payload.generation)
+    let mark=providerCalls.length
+    await assert.rejects(reader.readSnapshot({...input,propertyId:'https://example.com/'}))
+    assert.equal(providerCalls.length,mark)
+    await service.properties(identity,connection,'https://example.com/')
+    mark=providerCalls.length
+    await assert.rejects(reader.readSnapshot(input))
+    assert.equal(providerCalls.length,mark)
+    // Switching back cannot revive a stale reader's original generation.
+    await service.properties(identity,connection,'sc-domain:example.com')
+    mark=providerCalls.length
+    await assert.rejects(reader.readSnapshot(input))
+    assert.equal(providerCalls.length,mark)
+  })
   await test('refresh accepts omitted scope but rejects expanded grant',async()=>{refreshScope=GSC_SCOPE+' email';await assert.rejects(service.properties(identity,connection));assert.equal((await service.status(identity)).status,'reconnect_required');refreshScope=undefined})
   await test('disconnect fails closed before failed remote revocation',async()=>{failRevoke=true;assert.equal((await service.disconnect(identity,connection)).revocationPending,true);assert.equal((await service.status(identity)).status,'disconnected');await assert.rejects(service.properties(identity,connection));await assert.rejects(service.start(identity))})
   await test('revocation retry retains same encrypted grant then erases',async()=>{failRevoke=false;assert.equal((await service.disconnect(identity,connection)).revocationPending,false);await db.exec('reset role');assert.equal((await db.query('select encrypted_refresh from picshaw_gsc_private.connections')).rows[0].encrypted_refresh,null);await db.exec('set role picshaw_gsc')})

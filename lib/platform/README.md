@@ -28,7 +28,7 @@ The current adapter imports ordinary final Google Web Search, not the separate G
 - `incomplete` covers unknown dates, missing aggregates and bounded/provider-incomplete snapshots. `inconsistent` covers disagreeing daily/property totals or literal zero property activity contradicted by observed positive page activity. The latter is a zero-versus-observed-activity contradiction, not a requirement that page sums match property totals; all original evidence is retained. Both retain observed data and explicit per-window coverage reasons but expose no comparison or actions. `unavailable` contains a sanitized error code and no partial snapshots, totals, comparison or actions; reading stops at the first source failure. Authorization failure throws `UNAUTHORIZED` and never becomes a report or sample result.
 - Relative change is null when the prior aggregate is zero. Missing prior page evidence remains null and never becomes zero historical traffic. Actions are generated only after the stronger six-snapshot review, retain their exact current/prior snapshot references and remain review suggestions, not explanations, promises or work-completion records. Render text escaped; even validated page URLs still require ordinary safe external-link handling.
 
-The contract is aligned with the planned tenant database's UUID run/snapshot identities and exact Google property identifiers, but deliberately installs no data writes, routes, OAuth flow, background tasks or provider calls by default. Connecting it to authenticated selection, storage and report presentation remains a separate launch gate.
+The contract is aligned with the planned tenant database's UUID run/snapshot identities and exact Google property identifiers, but deliberately installs no data writes, routes, OAuth flow, background tasks or provider calls by default. The production-gated report runtime below now supplies authenticated selection, durable storage and presentation; hosted verification and activation remain separate launch gates.
 
 
 ## Atomic persistence boundary
@@ -60,3 +60,27 @@ References reviewed: [Supabase sessions](https://supabase.com/docs/guides/auth/s
 
 
 The aggregate `npm run check:database` now runs static schema guards, 124 SQL assertions and the 22 persistence checks. CI installs locked application dependencies and the isolated PGlite runtime before this aggregate. `npm run check:supabase` also runs offline readiness mocks; neither aggregate targets the hosted project.
+
+## Production-gated private reports
+
+`report-service.ts`, `report-runtime.ts` and `report-handlers.ts` compose the
+reviewed journey with the real GSC lifecycle and the least-privilege
+`picshaw_reports_private.operation` RPC. `/platform/reports` reads this API.
+`restoreReviewedBundle` reconstructs safe source-derived output on every read.
+See `docs/private-search-reports.md` for the complete architecture, recovery
+semantics, measurement limits, deployment gates and verification status.
+
+This runtime intentionally does not instantiate the strict in-memory
+`persistence.ts` / `SessionAuthority.lockCurrent` contract above. Managed Supabase
+cannot grant the required Auth row-lock privilege here. The reviewed production
+RPC uses fresh SELECT-only session/account checks at entry and before every
+successful return, requires READ COMMITTED and VOLATILE execution, and enforces
+short database-clock deadlines. A session revoked just after the final check can
+race an already-authorized in-flight response/commit. Membership and connection
+locks remain strict for GSC/report operations. This is not instantaneous session
+revocation and must not be described as satisfying the older lockCurrent contract.
+
+All production gates default closed. Run `npm run check:reports` in addition to
+the existing platform, database, auth, UI, lint, typecheck and build gates. Local
+mocked/PGlite success is not evidence of hosted privileges, lock contention,
+Google consent, genuine imported customer data, or a launched portal.
