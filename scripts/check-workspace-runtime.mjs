@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from 'next/server.js'
 function load(name, dependencies = {}) {
   const exports = {}
   vm.runInNewContext(ts.transpileModule(readFileSync(`lib/supabase/${name}.ts`,'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText,
-    { exports, module: { exports }, URL, Headers, TextDecoder, Uint8Array, AbortSignal, Date, process: { env: {} },
+    { exports, module: { exports }, URL, Headers, TextDecoder, Uint8Array, AbortSignal, Date, process: { env: { PIC_SHAW_PORTAL_ACCESS_MODE: 'public' } },
       require: name => { if (name === 'server-only') return {}; if (name in dependencies) return dependencies[name]; throw Error(`Unexpected import ${name}`) } })
   return exports
 }

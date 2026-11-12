@@ -20,11 +20,12 @@ function load(name, dependencies = {}) {
 const config = load('config')
 const auth = load('auth')
 const admission = load('auth-admission', { './auth-admission-runtime': { readAdmissionConfig: () => null, createRuntimeAdmission: () => null } })
-const portal = load('portal-config', { './config': config, './auth-admission': admission, '../portal-origin': { PORTAL_ORIGIN: 'https://app.picshaw.com' } })
+const portal = load('portal-config', { './config': config, './auth': auth, './auth-admission': admission, '../portal-origin': { PORTAL_ORIGIN: 'https://app.picshaw.com' } })
 const server = load('server', { './config': config, '@supabase/ssr': { createServerClient: () => { throw Error('REAL SDK FORBIDDEN') } } })
 const handlers = load('portal-handlers', { './server': server, './portal-config': portal, './auth': auth, './auth-admission': admission, 'next/server': { NextRequest, NextResponse } })
 const env = {
   VERCEL_ENV: 'production',
+  PIC_SHAW_PORTAL_ACCESS_MODE: 'public',
   NEXT_PUBLIC_SUPABASE_URL: 'https://auth.example.com', NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: 'sb_publishable_mock',
   PIC_SHAW_AUTH_ORIGIN: 'https://app.picshaw.com', PIC_SHAW_AUTH_GOOGLE_ENABLED: 'true',
   PIC_SHAW_AUTH_APPLE_ENABLED: 'true', PIC_SHAW_AUTH_EMAIL_ENABLED: 'true',
@@ -57,7 +58,7 @@ function privateResponse(response) {
   assert.match(response.headers.get('x-robots-tag'), /noindex/)
 }
 let passed = 0
-async function test(name, fn) { calls = []; created = 0; result = { data: {}, error: null }; throws = false; cookieBatches = []; methodResults = {}; methodCookies = {}; throwMethods = []; cookieReads = []; await fn(); passed++; console.log(`PASS ${name}`) }
+async function test(name, fn) { calls = []; created = 0; result = { data: {}, error: null }; throws = false; cookieBatches = []; methodResults = { getUser: { data: { user: verifiedUser }, error: null } }; methodCookies = {}; throwMethods = []; cookieReads = []; await fn(); passed++; console.log(`PASS ${name}`) }
 const credentials = { email: 'person@example.com', password: 'a-long-mock-passphrase' }
 
 await test('preview, local and aliases fail closed even with all auth flags enabled', async () => {

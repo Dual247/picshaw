@@ -229,3 +229,28 @@ export function createSearchJourney(dependencies: JourneyDependencies) {
 }
 
 
+
+/** Rebuild a retained report from its six source snapshots. Stored summaries and
+ * arbitrary fields are never trusted or exposed; this is also the read boundary. */
+export function restoreReviewedBundle(value: unknown): ReviewedSnapshotBundle {
+  if (!record(value) || value.version !== 1 || !validId(value.runId) || !record(value.selection) ||
+      !validId(value.selection.organizationId) || !validId(value.selection.connectionId) || !validProperty(value.selection.propertyId) ||
+      !record(value.windows) || !record(value.snapshots)) fail()
+  const selection = { organizationId: value.selection.organizationId, connectionId: value.selection.connectionId, propertyId: value.selection.propertyId }
+  const windows = {} as Record<Period, Window>, snapshots = { current: {}, prior: {} } as Record<Period, SnapshotSet>
+  const seen = new Set<string>([value.runId])
+  for (const period of periods) {
+    const window = value.windows[period], set = value.snapshots[period]
+    if (!record(window) || typeof window.start !== 'string' || typeof window.end !== 'string' || !record(set)) fail()
+    windows[period] = { start: window.start, end: window.end }
+    validateWindow(windows[period])
+    for (const grain of grains) {
+      const source = set[grain]
+      if (!record(source) || !validId(source.id) || seen.has(source.id)) fail()
+      seen.add(source.id)
+      snapshots[period][grain] = copySnapshot(source, { ...selection, actorId: '', runId: value.runId,
+        snapshotId: source.id, window: windows[period], dimensions: dimensions[grain], maxPages: 1 })
+    }
+  }
+  return reviewBundle(selection, value.runId, windows, snapshots)
+}

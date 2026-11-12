@@ -8,7 +8,7 @@ function load(name, dependencies = {}, overrides = {}) {
   vm.runInNewContext(ts.transpileModule(readFileSync(`lib/supabase/${name}.ts`, 'utf8'), {
     compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
   }).outputText, {
-    exports, module: { exports }, URL, process: { env: {} },
+    exports, module: { exports }, URL, Response, process: { env: {} },
     fetch: () => { throw Error('REAL NETWORK FORBIDDEN') },
     require: name => {
       if (name === 'server-only') return {}

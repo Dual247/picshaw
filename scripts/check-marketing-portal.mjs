@@ -30,8 +30,7 @@ for (const ready of [false, true]) {
 for (const session of [false, true]) for (const provider of [false, true]) {
   const { GET } = load('app/api/portal-access/route.ts', {
     '@/lib/supabase/portal-config': {
-      authAvailability: () => ({ email: provider, google: false, apple: false }),
-      lifecycleAvailability: () => ({ session }),
+      publicPortalReady: () => session && provider,
     },
   })
   const response = GET()

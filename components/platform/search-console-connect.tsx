@@ -1,4 +1,5 @@
 'use client'
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
 type Status = { enabled: boolean; status?: string; connectionId?: string | null; selectedProperty?: string | null; revocationPending?: boolean }
 type Property = { siteUrl: string; permissionLevel: string }
@@ -20,7 +21,7 @@ export function SearchConsoleConnect() {
     <p>This source measures ordinary final Google Web Search. It does not import Google’s separate Generative AI report or prove AI visibility, leads or revenue.</p>
     <p role="status" aria-live="polite">{message}</p>
     <p>Connection: <strong>{status.enabled ? (status.status ?? 'Unknown').replaceAll('_',' ') : 'Not configured'}</strong></p>
-    {status.selectedProperty && <p>Selected property: {status.selectedProperty}</p>}
+    {status.selectedProperty && <><p>Selected property: {status.selectedProperty}</p><Link href="/platform/reports" className="underline">Open private Google Search reports</Link><p>Report availability is checked separately. Selecting a property does not import data.</p></>}
     {status.revocationPending && <p>Local access is disabled. Google revocation is still unconfirmed; retry disconnect or remove access in your Google account.</p>}
     {(!status.connectionId || status.status === 'disconnected' && !status.revocationPending) && <>
       <label className="flex gap-3"><input type="checkbox" checked={consent} onChange={event=>setConsent(event.target.checked)} disabled={!status.enabled || busy} /> I want to authorize read-only Search Console access for this workspace.</label>
@@ -28,7 +29,7 @@ export function SearchConsoleConnect() {
     </>}
     {status.status === 'active' && status.connectionId && <div className="space-y-3">
       <button className="rounded-lg border px-4 py-2 disabled:opacity-40" disabled={busy} onClick={()=>act(async()=>{const value=await request('properties',{connectionId:status.connectionId});setProperties(value.properties);setMessage(value.properties.length?'Choose the exact property below.':'Google returned no readable properties. No sample data was substituted.')})}>Load accessible properties</button>
-      {properties.map(property=><div key={property.siteUrl} className="flex flex-wrap items-center gap-3"><span>{property.siteUrl} ({property.permissionLevel})</span><button disabled={busy} className="rounded border px-3 py-1 disabled:opacity-40" onClick={()=>act(async()=>{await request('select',{connectionId:status.connectionId,propertyId:property.siteUrl});await refresh();setMessage('Property saved. Report import is not enabled yet.')})}>Select</button></div>)}
+      {properties.map(property=><div key={property.siteUrl} className="flex flex-wrap items-center gap-3"><span>{property.siteUrl} ({property.permissionLevel})</span><button disabled={busy} className="rounded border px-3 py-1 disabled:opacity-40" onClick={()=>act(async()=>{await request('select',{connectionId:status.connectionId,propertyId:property.siteUrl});await refresh();setMessage('Property saved. Open private reports to check import availability. No data has been imported.')})}>Select</button></div>)}
     </div>}
     {status.connectionId && (status.status !== 'disconnected' || status.revocationPending) && <div className="space-y-2"><p>Disconnect disables local access first and asks Google to revoke this app’s grant. This can affect other connections using the same Google app grant. Existing reports are retained.</p><button disabled={busy} className="rounded border border-red-300 px-4 py-2 disabled:opacity-40" onClick={()=>act(async()=>{await request('disconnect',{connectionId:status.connectionId});setProperties([]);await refresh();setMessage('Disconnect processed. Check revocation status above.')})}>Disconnect and revoke Google access</button></div>}
     <button disabled={busy} className="block underline disabled:opacity-40" onClick={()=>act(async()=>{await refresh();setMessage('Status refreshed.')})}>Refresh status</button>

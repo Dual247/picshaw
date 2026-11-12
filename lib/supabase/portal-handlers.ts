@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import type { CookieOptions } from '@supabase/ssr'
 import { createRequestSupabaseClient, AUTH_RESPONSE_HEADERS } from './server'
 import { readPortalConfig, validEmailCredentials, validEmail, validNewPassword, type PortalEnvironment } from './portal-config'
-import { requireVerifiedActor, verifiedActorFromResponse } from './auth'
+import { requireVerifiedActor, requirePortalActor, verifiedPortalActorFromResponse, portalEmailAllowed } from './auth'
 import { checkDeploymentAuthAdmission, type AuthAdmission, type AuthAdmissionAction } from './auth-admission'
 
 type Dependencies = { env?: PortalEnvironment; createClient?: typeof createRequestSupabaseClient; admit?: AuthAdmission }
@@ -16,6 +16,16 @@ function responseContext(request: NextRequest, dependencies: Dependencies) {
   const currentCookies = new Map(request.cookies.getAll().map(({ name, value }) => [name, value]))
   const headers = new Headers({ ...AUTH_RESPONSE_HEADERS, 'Referrer-Policy': 'no-referrer', 'X-Robots-Tag': 'noindex, nofollow' })
   return {
+    discardAuth: () => {
+      // Reject an ineligible portal session without revoking an unrelated account
+      // upstream. Also replace any freshly written chunks before this response.
+      for (const name of currentCookies.keys()) {
+        if (name === '__Host-picshaw-auth' || name.startsWith('__Host-picshaw-auth.') || name.startsWith('__Host-picshaw-auth-')) {
+          cookies.set(name, { name, value: '', options: { secure: true, httpOnly: true, sameSite: 'lax', path: '/', maxAge: 0 } })
+          currentCookies.delete(name)
+        }
+      }
+    },
     client: () => (dependencies.createClient ?? createRequestSupabaseClient)({
       getAll: () => Array.from(currentCookies, ([name, value]) => ({ name, value })),
       setAll: (values, extraHeaders) => {
@@ -87,6 +97,11 @@ export async function handleAuthPost(request: NextRequest, action: string, depen
   const fields = body && typeof body === 'object' && !Array.isArray(body) ? body as Record<string, unknown> : null
   if (!fields || (action === 'recover' && !validEmail(fields.email)) ||
       (action === 'reset-password' && !validNewPassword(fields.password))) return context.finish({ error: 'Please check the form and try again.' }, 400)
+  // Before admission/SDK/email calls. This is an exact server-side pilot list,
+  // never a client flag, domain match, user metadata or tenant selector.
+  if ((emailAction || action === 'recover') && !portalEmailAllowed(fields.email, dependencies.env)) {
+    return context.finish({ error: 'Customer sign-in is not open yet. This pilot is limited to approved test accounts.' }, 403)
+  }
   if (!sessionAction) {
     try {
       const admission = await (dependencies.admit ?? checkDeploymentAuthAdmission)({ action: action as AuthAdmissionAction, request })
@@ -104,8 +119,9 @@ export async function handleAuthPost(request: NextRequest, action: string, depen
         if (result.error && ![400, 401, 403].includes(result.error.status ?? 0) && result.error.name !== 'AuthSessionMissingError') {
           return context.finish({ state: 'unknown', error: 'We could not verify your session right now. Please retry; this does not mean you have been signed out.' }, 503)
         }
-        try { verifiedActorFromResponse(result) } catch {
-          return context.finish({ state: 'signed-out', message: 'Your session is missing, expired or no longer valid. Please sign in again.' }, 401)
+        try { verifiedPortalActorFromResponse(result, dependencies.env) } catch {
+          context.discardAuth()
+          return context.finish({ state: 'signed-out', message: 'Your session is unavailable for this portal. Please sign in with an approved account.' }, 401)
         }
         return context.finish({ state: 'signed-in', message: 'Your account session is active. Workspace access is separate.' })
       } catch { return context.finish({ state: 'unknown', error: 'We could not verify your session right now. Please retry; this does not mean you have been signed out.' }, 503) }
@@ -131,7 +147,10 @@ export async function handleAuthPost(request: NextRequest, action: string, depen
       return context.finish({ message: 'If this address is eligible, a recovery email will arrive. Open the link in this same browser. Check spam or try again later if needed.' })
     }
     if (action === 'reset-password') {
-      try { await requireVerifiedActor(client) } catch { return context.finish({ error: 'Open a new recovery link in this browser or sign in again before changing your password.' }, 401) }
+      try { await requirePortalActor(client, dependencies.env) } catch {
+        context.discardAuth()
+        return context.finish({ error: 'Open a new recovery link in this browser or sign in with an approved account before changing your password.' }, 401)
+      }
       // Auth server enforces secure password change/reauthentication settings.
       // Never infer recovery permission from a query string or an unsigned cookie.
       const { data, error } = await client.auth.updateUser({ password: fields.password as string })
@@ -157,12 +176,20 @@ export async function handleAuthPost(request: NextRequest, action: string, depen
       const { data, error } = await client.auth.signUp({ email, password, options: { emailRedirectTo: config.callback } })
       if (error) return context.finish({ error: 'We could not process that request. Try again later, or sign in if you already have an account.' }, 400)
       // Never claim a new account exists: Supabase can obscure duplicate signups.
-      if (data.session) return context.finish({ message: 'Signed in. Workspace access still requires an approved membership.' })
+      if (data.session) {
+        try { await requirePortalActor(client, dependencies.env) } catch {
+          context.discardAuth(); return context.finish({ error: failed }, 403)
+        }
+        return context.finish({ state: 'signed-in', message: 'Signed in. Workspace access still requires an approved membership.' })
+      }
       return context.finish({ message: 'If this address is eligible, a confirmation email will arrive. Open it in this browser to finish. You can also sign in if you already have an account.' })
     }
     const { data, error } = await client.auth.signInWithPassword({ email, password })
     if (error || !data.session) return context.finish({ error: failed }, 400)
-    return context.finish({ message: 'Signed in. Workspace access still requires an approved membership.' })
+    try { await requirePortalActor(client, dependencies.env) } catch {
+      context.discardAuth(); return context.finish({ error: failed }, 403)
+    }
+    return context.finish({ state: 'signed-in', message: 'Signed in. Workspace access still requires an approved membership.' })
   } catch { return context.finish({ error: failed }, 400) }
 }
 
@@ -191,6 +218,9 @@ export async function handleAuthCallback(request: NextRequest, dependencies: Dep
     // provider OAuth state validation. A code without its browser verifier fails.
     const { data, error } = await client.auth.exchangeCodeForSession(code, flowId ? { flowId } : undefined)
     if (error || !data.session) return failure()
+    try { await requirePortalActor(client, dependencies.env) } catch {
+      context.discardAuth(); return failure()
+    }
     // Recovery type comes from the SDK's verifier, never an incoming type/next.
     // Identity never unlocks data. Both redirect destinations are fixed.
     // Installed SDK returns redirectType at runtime, though public AuthTokenResponse

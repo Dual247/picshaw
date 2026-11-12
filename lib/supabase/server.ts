@@ -27,7 +27,21 @@ export function createRequestSupabaseClient(
     cookieOptions: { name: '__Host-picshaw-auth', secure: true, httpOnly: true, sameSite: 'lax', path: '/' },
     global: {
       // Do not cache upstream token or user responses in Next's data cache.
-      fetch: (input, init) => fetch(input, { ...init, cache: 'no-store', redirect: 'error' }),
+      fetch: async (input, init) => {
+        const response = await fetch(input, { ...init, cache: 'no-store', redirect: 'error' })
+        const target = new URL(typeof input === 'string' ? input : input instanceof URL ? input.href : input.url)
+        // auth-js 2.x deliberately suppresses ANY logout 401/403/404, including
+        // gateway errors and bad JWTs. None proves that global revocation worked.
+        // Treat every failed logout as unconfirmed. Keep local SDK cleanup, but
+        // surface an uncertainty result instead of
+        // allowing the SDK to turn these failed upstream requests into success.
+        if (target.origin === url && target.pathname === '/auth/v1/logout' &&
+            !response.ok) {
+          await response.body?.cancel()
+          return Response.json({ message: 'Server-side sign-out could not be confirmed.' }, { status: 503 })
+        }
+        return response
+      },
     },
     cookies: {
       getAll: () => cookies.getAll(),

@@ -30,6 +30,11 @@ export function AuthForm({ mode, available, callbackError = false }: {
       const result = await response.json()
       if (!response.ok) { setError(true); setMessage(result.error || 'Sign-in could not be completed. Please try again.'); return }
       if (result.url) { window.location.assign(result.url); return }
+      // A full same-origin navigation starts only after the response has applied
+      // its HttpOnly cookies. Never accept a caller-selected return destination.
+      // Intentional hard navigation drops the pre-login Router Cache.
+      // eslint-disable-next-line @next/next/no-location-assign-relative-destination
+      if (result.state === 'signed-in') { window.location.assign('/platform'); return }
       setMessage(result.message || 'Request completed.')
     } catch { setError(true); setMessage('We could not connect. Please try again when your connection is ready.') }
     finally { inFlight.current = false; setBusy(false) }
@@ -59,6 +64,7 @@ export function AuthForm({ mode, available, callbackError = false }: {
       <p className="portal-eyebrow mb-2">CLIENT PORTAL</p>
       <h1 id="auth-title" className="text-2xl font-semibold tracking-tight">{signup ? 'Create your account' : 'Welcome back'}</h1>
       <p className="portal-muted mt-2 text-sm">{signup ? 'Choose how you’d like to get started.' : 'Choose how you’d like to sign in.'}</p>
+      {available.pilot && anyAvailable && <p className="mt-5 rounded-xl border border-primary/25 bg-primary/5 p-4 text-sm">Private verification pilot. Only approved test accounts can continue. Customer sign-in is not open yet.</p>}
       {!anyAvailable && <div id="setup-notice" className="mt-5 rounded-xl border border-primary/25 bg-primary/5 p-4 text-sm leading-relaxed"><strong className="block font-medium">Sign-in is being prepared</strong><span className="portal-muted">Google, Apple and email are shown for preview. Secure provider setup is pending, so no accounts or emails can be created here yet.</span></div>}
       <div className="mt-6 grid gap-3" aria-describedby={!anyAvailable ? 'setup-notice' : undefined}>
         {(['google', 'apple'] as const).map(provider => <button key={provider} type="button" disabled={!available[provider] || busy} onClick={() => void submit(provider)} className="portal-button secondary flex w-full items-center justify-center gap-3 disabled:cursor-not-allowed disabled:opacity-60">

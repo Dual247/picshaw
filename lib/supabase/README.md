@@ -35,8 +35,8 @@ Keep configuration in approved environment-specific secret storage. Do not publi
   They are operator gates, not automatic provider-configuration verification.
   `PIC_SHAW_AUTH_SESSION_ENABLED` separately gates checks, logout and password update;
   it can remain enabled during a provider pause so existing sessions can be revoked.
-  All four flags are false in the template. A provider flag cannot bypass the
-  missing distributed admission adapter; initiation UI remains unavailable too.
+  All four flags are false in the template. A provider flag cannot bypass an
+  unconfigured/unavailable distributed admission backend; initiation UI fails closed too.
 
 Project URL and modern `sb_publishable_` key are validated lazily. No service-role,
 legacy JWT or secret key is accepted. Provider secrets belong in Supabase settings,
@@ -96,6 +96,12 @@ never unconditional clearing/revocation. Existing JWT access tokens may remain
 valid until expiry even after refresh sessions are revoked. Sensitive future APIs
 need the appropriate session/authorization checks and short approved JWT lifetimes.
 
+The pinned auth-js 2.x SDK suppresses broad logout 401/403/404 responses. The
+request transport normalizes those specific logout failures to an uncertainty
+error so a gateway rejection or bad JWT cannot become false global logout success.
+Local cookie cleanup is preserved. Password update still reports the separate
+partial-success state if password change succeeded but revocation is unconfirmed.
+
 Recovery calls `resetPasswordForEmail` with the fixed callback and returns neutral
 eligibility wording for success/account-specific error results. It never asserts
 email delivery or reveals whether an address exists. Same-browser PKCE is required.
@@ -113,29 +119,29 @@ recovery link; it does not disable that server protection. After a successful up
 the route requests global sign-out. If this fails, it explicitly reports that the
 password changed but revocation is unconfirmed, directing the user to session controls.
 
-## Distributed abuse-admission adapter: not wired
+## Distributed abuse-admission adapter: implemented, not proof of provisioning
 
 `lib/supabase/auth-admission.ts` exports a server-only `AuthAdmission` interface:
 `({ action, request }) => Promise<{ status: 'allow' | 'limited' | 'unavailable' }>`.
-The production function currently always returns `unavailable`. Tests inject a mock
-guard through server-only function dependencies; HTTP callers cannot supply one.
-`authAdmissionConfigured=false` is a UI readiness signal only, not a security bypass.
-Changing environment flags or creating database tables does not implement this guard.
+The production function lazily creates the Vercel-ingress/Postgres implementation
+in `auth-admission-runtime.ts`. It requires production deployment, canonical portal
+origin, a dedicated project, restricted pooler login and a server-only HMAC key.
+Missing setup, uncertain results and outages return `unavailable`. Tests inject a
+mock guard through server-only dependencies; HTTP callers cannot supply one.
+`authAdmissionConfigured` is only a configuration signal, never a connectivity or
+deployment verification. Local code/migrations do not establish hosted provisioning.
 
 Login, signup, OAuth initiation, recovery and password update must receive an explicit
 allow before any SDK client is created. Limited returns 429; unavailable/throw returns
 503. Session inspection and logout bypass this initiation guard so users can revoke
 sessions during an outage, but still require exact origin and lifecycle configuration.
 
-Choose/approve the deployment ingress and distributed backend first. Implement trusted
-client identification (never trust arbitrary forwarded IP headers), atomic shared
-limits across instances, email/account abuse controls without storing plaintext PII,
-expiration, outage behavior and privacy-safe telemetry. Do not transmit raw passwords,
-request bodies, cookies or tokens to a limiter. Strip/verify any edge assertion, prevent
-direct-origin bypass, and test concurrency and backend outages. No in-memory counter,
-client-controlled header or operator "verified" switch is acceptable enforcement.
-No provider, paid service, backend or rule was created here. This remains a concrete
-activation blocker, not a working rate-limit integration.
+The implementation compares Vercel's ingress identity headers, groups IPv6 /64s,
+HMACs network identity and invokes an atomic restricted SQL function with a bounded
+timeout. It never sends request bodies, passwords, cookies or tokens to the limiter.
+Real ingress trust, direct-origin denial, shared concurrency, retention, credentials,
+upstream account/email abuse controls and outage behavior still need live verification.
+No in-memory counter or operator "verified" switch substitutes for those checks.
 
 ## Secure setup checklist
 
@@ -238,6 +244,14 @@ Additional readiness tooling:
 Tests transpile modules, mock SDK/Auth responses and forbid live SDK/network
 calls. They verify config gates, validation, origin policy, route outcomes, cookie
 propagation and response isolation, **not** actual OAuth, browser sessions or RLS.
+`check-portal-sdk-flows.mjs` additionally runs the actual pinned SDK through the
+actual response handlers with a synthetic HTTP transport. It covers refresh/chunk
+deletion, per-request isolation, revoked session cleanup, masked logout failures,
+partial password-update success and browser-bound one-time recovery PKCE. This is
+not a live Auth, JWT-signature or tenant isolation test. `check-portal-auth-ui.mjs`
+checks fixed post-login navigation, pending confirmation and duplicate requests.
+The separately authorized live acceptance plan and offline evidence harness are
+in `docs/portal-live-acceptance.md`; they do not enable or perform live operations.
 Dependencies stay exactly pinned: `@supabase/ssr` 0.12.7, `@supabase/supabase-js`
 2.119.0; both package lockfiles retained. Node 22+ is required.
 
