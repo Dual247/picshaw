@@ -157,12 +157,12 @@ export async function handleAuthPost(request: NextRequest, action: string, depen
       const { data, error } = await client.auth.signUp({ email, password, options: { emailRedirectTo: config.callback } })
       if (error) return context.finish({ error: 'We could not process that request. Try again later, or sign in if you already have an account.' }, 400)
       // Never claim a new account exists: Supabase can obscure duplicate signups.
-      if (data.session) return context.finish({ message: 'Signed in. Workspace access still requires an approved membership.' })
+      if (data.session) return context.finish({ state: 'signed-in', message: 'Signed in. Workspace access still requires an approved membership.' })
       return context.finish({ message: 'If this address is eligible, a confirmation email will arrive. Open it in this browser to finish. You can also sign in if you already have an account.' })
     }
     const { data, error } = await client.auth.signInWithPassword({ email, password })
     if (error || !data.session) return context.finish({ error: failed }, 400)
-    return context.finish({ message: 'Signed in. Workspace access still requires an approved membership.' })
+    return context.finish({ state: 'signed-in', message: 'Signed in. Workspace access still requires an approved membership.' })
   } catch { return context.finish({ error: failed }, 400) }
 }
 

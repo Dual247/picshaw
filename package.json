@@ -10,7 +10,7 @@
     "typecheck": "tsc --noEmit --pretty false",
     "check:platform": "node scripts/check-platform-core.mjs && node scripts/check-platform-journey.mjs && node scripts/check-platform-boundary.mjs && node scripts/check-portal-host-boundary.mjs && node scripts/check-marketing-portal.mjs",
     "check:ui": "node scripts/check-ui-state.mjs",
-    "check:supabase": "node scripts/check-supabase-auth.mjs && node scripts/check-supabase-flows.mjs && node scripts/check-supabase-readiness-tests.mjs && node scripts/check-auth-admission.mjs",
+    "check:supabase": "node scripts/check-supabase-auth.mjs && node scripts/check-supabase-flows.mjs && node scripts/check-portal-sdk-flows.mjs && node scripts/check-portal-auth-ui.mjs && node scripts/check-portal-live-evidence-tests.mjs && node scripts/check-supabase-readiness-tests.mjs && node scripts/check-auth-admission.mjs",
     "check:database": "node supabase/tests/check-schema.mjs && node supabase/tests/run-isolated.mjs && node scripts/check-platform-persistence.mjs && node scripts/check-auth-admission-database.mjs"
   },
   "dependencies": {

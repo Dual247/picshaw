@@ -30,6 +30,11 @@ export function AuthForm({ mode, available, callbackError = false }: {
       const result = await response.json()
       if (!response.ok) { setError(true); setMessage(result.error || 'Sign-in could not be completed. Please try again.'); return }
       if (result.url) { window.location.assign(result.url); return }
+      // A full same-origin navigation starts only after the response has applied
+      // its HttpOnly cookies. Never accept a caller-selected return destination.
+      // Intentional hard navigation drops the pre-login Router Cache.
+      // eslint-disable-next-line @next/next/no-location-assign-relative-destination
+      if (result.state === 'signed-in') { window.location.assign('/platform'); return }
       setMessage(result.message || 'Request completed.')
     } catch { setError(true); setMessage('We could not connect. Please try again when your connection is ready.') }
     finally { inFlight.current = false; setBusy(false) }
