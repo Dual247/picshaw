@@ -81,10 +81,11 @@ try {
   for (const width of [1440, 1024, 390, 320]) {
     const mobile = await browser.newPage({ viewport: { width, height: 1000 }, reducedMotion: 'reduce' })
     await mobile.route('**/_vercel/**', route => route.fulfill({ status: 200, contentType: 'application/javascript', body: '' }))
-    for (const path of ['/', '/ai-visibility-audit', '/methodology', '/blog', '/ai-receptionist', '/privacy-policy', '/ai-visibility-retainer', ...hubPaths, industryPaths[0]]) {
+    for (const path of ['/', '/ai-visibility-audit', '/methodology', '/blog', '/ai-receptionist', '/privacy-policy', '/ai-visibility-retainer', '/web-design-for-contractors', ...hubPaths, industryPaths[0]]) {
       await mobile.goto(baseURL + path, { waitUntil: 'networkidle' })
       assert.ok(await mobile.evaluate(() => document.documentElement.scrollWidth - innerWidth <= 1), `${path}: overflow ${width}`)
       if (path === '/') await mobile.screenshot({ path: `validation/reposition-header-${width}.png` })
+      if (path === '/web-design-for-contractors') await mobile.screenshot({ path: `validation/contractor-landing-${width}.png`, fullPage: true })
     }
     if (width < 1280) {
       await mobile.getByRole('button', { name: 'Open menu', exact: true }).click()

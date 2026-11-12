@@ -23,8 +23,9 @@ export function Header() {
   const pathname = usePathname()
   const isReceptionist = pathname === '/ai-receptionist'
   const isRetainer = pathname === '/ai-visibility-retainer'
-  const ctaHref = isReceptionist ? '/ai-receptionist#enquiry' : isRetainer ? '/ai-visibility-retainer#contact' : '/#contact'
-  const ctaLabel = isReceptionist ? 'Request a demo' : isRetainer ? 'Discuss my plan' : 'Discuss my business'
+  const isContractor = pathname === '/web-design-for-contractors'
+  const ctaHref = isReceptionist ? '/ai-receptionist#enquiry' : isRetainer ? '/ai-visibility-retainer#contact' : isContractor ? '/web-design-for-contractors#contact' : '/#contact'
+  const ctaLabel = isReceptionist ? 'Request a demo' : isRetainer ? 'Discuss my plan' : isContractor ? 'Discuss my website' : 'Discuss my business'
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50)
     const frame = requestAnimationFrame(handleScroll)
