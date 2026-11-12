@@ -3,13 +3,13 @@ import vm from 'node:vm'
 import { readFileSync } from 'node:fs'
 import ts from 'typescript'
 import { NextRequest, NextResponse } from 'next/server.js'
-let fetches = 0, auth = true, membership = true, revoke = false
+let fetches = 0, auth = true, membership = true, revoke = false, accessMode = 'pilot'
 const actor = {id:'user',sessionId:'session',expiresAt:9999999999}
 const exports = {}
 const dependencies = {
   'server-only': {}, 'next/server': {NextRequest,NextResponse},
   '../supabase/server': {AUTH_RESPONSE_HEADERS:{'Cache-Control':'private, no-store'},createRequestSupabaseClient:()=>({})},
-  '../supabase/portal-config': {readPortalConfig:()=>({origin:'https://app.picshaw.com',url:'https://example.supabase.co',sessionEnabled:true})},
+  '../supabase/portal-config': {readPortalConfig:()=>({origin:'https://app.picshaw.com',url:'https://example.supabase.co',sessionEnabled:true,accessMode})},
   '../supabase/workspace-runtime': {deploymentWorkspaceStore:()=>async()=>membership?{id:'org'}:null,requireWorkspaceActor:async()=>{if(!auth)throw Error('PRIVATE');return actor}},
   '../supabase/auth-admission': {checkDeploymentAuthAdmission:async()=>({status:'allow'})},
   './website-analysis': {analyzeWebsite:async()=>{fetches++;if(revoke)auth=false;return {title:'Evidence'}}},
@@ -21,10 +21,12 @@ function request(value=body,headers={}) {return new NextRequest('https://app.pic
 assert.equal((await exports.handleAnalysis(request())).status,503)
 for(const headers of [{host:'evil.example'},{origin:'https://evil.example'},{'sec-fetch-site':'cross-site'}]) assert.equal((await exports.handleAnalysis(request(body,headers),deps)).status,403)
 for(const value of [{...body,consent:false},{...body,actorId:'spoof'},{url:1,consent:true},null,[],{...body,url:'a'.repeat(5000)}]) assert.equal((await exports.handleAnalysis(request(value),deps)).status,400)
+for(const mode of ['closed','public']){accessMode=mode;assert.equal((await exports.handleAnalysis(request(),deps)).status,503)}accessMode='pilot'
 assert.equal(fetches,0)
 auth=false; assert.equal((await exports.handleAnalysis(request(),deps)).status,401);auth=true
 membership=false;assert.equal((await exports.handleAnalysis(request(),deps)).status,409);membership=true
 assert.equal((await exports.handleAnalysis(request(),{...deps,admit:async()=>({status:'limited'})})).status,429)
+for(const mode of ['closed','public']){accessMode=mode;assert.equal((await exports.handleAnalysis(request(),deps)).status,503)}accessMode='pilot'
 assert.equal(fetches,0)
 const success=await exports.handleAnalysis(request(),deps);assert.equal(success.status,200);assert.match(success.headers.get('cache-control'),/no-store/);assert.equal(success.headers.get('referrer-policy'),'no-referrer');assert.equal(fetches,1)
 revoke=true;const revoked=await exports.handleAnalysis(request(),deps);assert.equal(revoked.status,503);assert.doesNotMatch(await revoked.text(),/Evidence|PRIVATE/)

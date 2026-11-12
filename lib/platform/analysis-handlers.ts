@@ -43,7 +43,7 @@ export async function handleAnalysis(request: NextRequest, deps: Dependencies = 
   if (request.headers.get('host') !== 'app.picshaw.com' || new URL(request.url).origin !== config.origin || request.method !== 'POST' || request.headers.get('origin') !== config.origin || (request.headers.has('sec-fetch-site') && request.headers.get('sec-fetch-site') !== 'same-origin') || request.nextUrl.search) return finish({ error: 'Open the portal to continue.' }, 403)
   const enabled = (deps.env ?? process.env).PIC_SHAW_ANALYSIS_ENABLED === 'true'
   const workspace = deps.workspace === undefined ? deploymentWorkspaceStore() : deps.workspace
-  if (!config.sessionEnabled || !enabled || !workspace) return finish({ enabled: false, error: 'Website analysis is not enabled for this deployment.' }, 503)
+  if (config.accessMode !== 'pilot' || !config.sessionEnabled || !enabled || !workspace) return finish({ enabled: false, error: 'Website analysis is not enabled for this deployment.' }, 503)
   let body
   try {
     body = await smallBody(request)
