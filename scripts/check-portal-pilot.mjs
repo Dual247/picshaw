@@ -23,7 +23,7 @@ const env = { VERCEL_ENV: 'production', PIC_SHAW_AUTH_ORIGIN: origin, NEXT_PUBLI
   ...Object.fromEntries(['GOOGLE', 'APPLE', 'EMAIL', 'SESSION'].map(key => [`PIC_SHAW_AUTH_${key}_ENABLED`, 'true'])) }
 const users = [idA, idB].map((id, index) => ({ id, email: emails[index], email_confirmed_at: '2026-01-01T00:00:00Z', is_anonymous: false }))
 const auth = load('lib/supabase/auth.ts'), config = load('lib/supabase/config.ts')
-let admitted = 0, created = 0, calls = [], currentUser = users[0], instantSignup = false, stores = 0
+let admitted = 0, created = 0, calls = [], currentUser = users[0], instantSignup = false, stores = 0, signOutFailure = false, getUserThrows = false
 const admission = { authAdmissionConfigured: true, checkDeploymentAuthAdmission: async () => { admitted++; return { status: 'allow' } } }
 const portal = load('lib/supabase/portal-config.ts', { './config': config, './auth': auth, './auth-admission': admission, '../portal-origin': { PORTAL_ORIGIN: origin } })
 const cookie = (name, value) => ({ name, value, options: { secure: true, httpOnly: true, sameSite: 'lax', path: '/' } })
@@ -33,8 +33,10 @@ function createClient(adapter) {
     calls.push(name)
     if (name === 'getClaims') return { data: { claims: { sub: currentUser.id, session_id: '20000000-0000-4000-8000-000000000001', exp: Math.floor(Date.now() / 1000) + 3600,
       role: 'authenticated', is_anonymous: false, iss: `${project}/auth/v1`, aud: 'authenticated' } }, error: null }
+    if (name === 'getUser' && getUserThrows) throw Error('synthetic identity network failure')
     if (name === 'getUser' || name === 'updateUser') return { data: { user: currentUser }, error: null }
-    if (name === 'signOut') return { error: null }
+    if (name === 'signOut' && signOutFailure === 'throw') throw Error('synthetic signout transport failure')
+    if (name === 'signOut') return { error: signOutFailure ? { message: 'synthetic revocation failure' } : null }
     if (name === 'resetPasswordForEmail') return { data: {}, error: null }
     if (name === 'signUp' && !instantSignup) return { data: { session: null }, error: null }
     adapter.setAll([cookie('__Host-picshaw-auth.0', 'untrusted-fresh-cookie'), cookie('__Host-picshaw-auth.1', 'untrusted-fresh-chunk')], {})
@@ -48,7 +50,7 @@ const request = (body = {}, extra = {}) => new NextRequest(`${origin}/api/platfo
 const post = (action, body = {}, settings = env) => handlers.handleAuthPost(request(body), action, { env: settings })
 const credentials = email => ({ email, password: 'synthetic-test-passphrase' })
 let tests = 0
-async function test(name, run) { admitted = 0; created = 0; calls = []; currentUser = users[0]; instantSignup = false; stores = 0; await run(); tests++; console.log(`PASS ${name}`) }
+async function test(name, run) { admitted = 0; created = 0; calls = []; currentUser = users[0]; instantSignup = false; stores = 0; signOutFailure = false; getUserThrows = false; await run(); tests++; console.log(`PASS ${name}`) }
 
 await test('missing, unknown and closed mode reject all initiation despite provider flags', async () => {
   for (const mode of [undefined, '', 'true', 'PILOT', 'closed']) {
@@ -169,5 +171,61 @@ await test('workspace, GSC and report handlers share the real pilot identity gat
     }
     assert.equal((await operation()).status, 200); assert.equal(stores, before + 1)
   }
+})
+
+await test('optional owner registers without enrollment and only verified exact email plus pinned UUID can enter', async () => {
+  const email='owner@example.com', ownerId='10000000-0000-4000-8000-000000000003'
+  const pending={...env,PIC_SHAW_PILOT_OWNER_EMAIL:email}
+  assert.equal((await post('sign-up',credentials(email),pending)).status,200)
+  currentUser={id:ownerId,email,email_confirmed_at:'2026-01-01T00:00:00Z',is_anonymous:false}
+  assert.throws(()=>auth.verifiedPortalActorFromResponse({data:{user:currentUser},error:null},pending))
+  const ready={...pending,PIC_SHAW_PILOT_OWNER_ID:ownerId}
+  assert.equal(auth.verifiedPortalActorFromResponse({data:{user:currentUser},error:null},ready).id,ownerId)
+  for(const user of [{...currentUser,id:idA},{...currentUser,email:'other@example.com'},{...currentUser,email:'OWNER@example.com'},{...currentUser,email_confirmed_at:null},{...currentUser,is_anonymous:true}])
+    assert.throws(()=>auth.verifiedPortalActorFromResponse({data:{user},error:null},ready))
+  for(const settings of [{...ready,PIC_SHAW_PILOT_OWNER_ID:idA},{...ready,PIC_SHAW_PILOT_OWNER_ID:'bad'},{...ready,PIC_SHAW_PORTAL_ACCESS_MODE:'closed'},{...ready,PIC_SHAW_PILOT_USER_A_ID:undefined}])
+    assert.throws(()=>auth.verifiedPortalActorFromResponse({data:{user:currentUser},error:null},settings))
+  for(const user of users)assert.equal(auth.verifiedPortalActorFromResponse({data:{user},error:null},ready).id,user.id)
+  for(const emailValue of ['*','@example.com','owner@example.com.evil.test ','Owner@example.com',emails[0]]){
+    const settings={...env,PIC_SHAW_PILOT_OWNER_EMAIL:emailValue,PIC_SHAW_PILOT_OWNER_ID:ownerId}
+    assert.equal(auth.readPortalAccess(settings).owner,null)
+    for(const user of users)assert.equal(auth.verifiedPortalActorFromResponse({data:{user},error:null},settings).id,user.id)
+  }
+  assert.equal(portal.publicPortalReady(ready),false)
+  assert.equal(portal.authAvailability(ready).google,false)
+})
+
+await test('confirmed pending owner callback revokes local session and redirects to neutral notice, not workspace', async () => {
+  const pending={...env,PIC_SHAW_PILOT_OWNER_EMAIL:'owner@example.com'}
+  currentUser={id:'10000000-0000-4000-8000-000000000003',email:'owner@example.com',email_confirmed_at:'2026-01-01T00:00:00Z',is_anonymous:false}
+  const callback=()=>handlers.handleAuthCallback(new NextRequest(`${origin}/platform/auth/callback?code=synthetic`,{headers:{host:'app.picshaw.com'}}),{env:pending})
+  const result=await callback()
+  assert.equal(result.headers.get('location'),`${origin}/platform/sign-in?notice=access-pending`)
+  assert.equal(result.cookies.get('__Host-picshaw-auth.0').maxAge,0)
+  assert.deepEqual(calls,['exchangeCodeForSession','getUser','signOut'])
+  currentUser={...currentUser,email_confirmed_at:null};calls=[]
+  assert.equal((await callback()).headers.get('location'),`${origin}/platform/sign-in?error=callback`)
+  assert.equal(calls.includes('signOut'),false)
+})
+
+await test('pending owner notice is withheld when local revocation cannot be confirmed', async () => {
+  const pending={...env,PIC_SHAW_PILOT_OWNER_EMAIL:'owner@example.com'}
+  currentUser={id:'10000000-0000-4000-8000-000000000003',email:'owner@example.com',email_confirmed_at:'2026-01-01T00:00:00Z',is_anonymous:false};signOutFailure=true
+  const result=await handlers.handleAuthCallback(new NextRequest(`${origin}/platform/auth/callback?code=synthetic`,{headers:{host:'app.picshaw.com'}}),{env:pending})
+  assert.equal(result.status,503);assert.equal(result.headers.get('location'),null)
+  assert.match((await result.json()).error,/Email confirmation completed, but sign-out could not be confirmed/)
+  assert.equal(result.cookies.get('__Host-picshaw-auth.0').maxAge,0)
+  signOutFailure='throw'
+  const thrown=await handlers.handleAuthCallback(new NextRequest(`${origin}/platform/auth/callback?code=synthetic`,{headers:{host:'app.picshaw.com'}}),{env:pending})
+  assert.equal(thrown.status,503);assert.equal(thrown.cookies.get('__Host-picshaw-auth.0').maxAge,0)
+})
+
+await test('callback discards exchanged cookies if fresh identity verification throws', async () => {
+  getUserThrows=true
+  const result=await handlers.handleAuthCallback(new NextRequest(`${origin}/platform/auth/callback?code=synthetic`,{headers:{host:'app.picshaw.com',cookie:'__Host-picshaw-auth.8=old'}}),{env})
+  assert.equal(result.headers.get('location'),`${origin}/platform/sign-in?error=callback`)
+  assert.equal(result.cookies.get('__Host-picshaw-auth.0').maxAge,0)
+  assert.equal(result.cookies.get('__Host-picshaw-auth.1').maxAge,0)
+  assert.equal(result.cookies.get('__Host-picshaw-auth.8').maxAge,0)
 })
 console.log(`${tests} restricted pilot checks passed. Synthetic SDK/accounts only; upstream Auth signup and Data API policies require independent hosted verification.`)
