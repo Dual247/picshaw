@@ -1,5 +1,6 @@
 import 'server-only'
 import { createHmac } from 'node:crypto'
+import { AdmissionDeadlineError, admissionFailureDiagnostic, reportAdmissionDiagnostic } from './auth-admission-diagnostics'
 import type { AuthAdmission, AuthAdmissionAction } from './auth-admission'
 
 const actions: readonly AuthAdmissionAction[] = ['google', 'apple', 'sign-in', 'sign-up', 'recover', 'reset-password', 'callback', 'workspace-bootstrap', 'workspace-read']
@@ -18,23 +19,25 @@ export function createDistributedAuthAdmission(options: {
   const key = new Uint8Array(options.hmacKey)
   return async ({ action, request }) => {
     let timer: ReturnType<typeof setTimeout> | undefined
+    let deadlineReached = false
     const controller = new AbortController()
     try {
-      if (!actions.includes(action)) return { status: 'unavailable' }
+      if (!actions.includes(action)) { reportAdmissionDiagnostic('action_rejected'); return { status: 'unavailable' } }
       const principal = options.resolvePrincipal(request)
-      if (!principal || principal.length > 256) return { status: 'unavailable' }
+      if (!principal || principal.length > 256) { reportAdmissionDiagnostic('ingress_principal_unavailable'); return { status: 'unavailable' } }
       const digest = createHmac('sha256', key).update('picshaw-auth-admission:v1\0').update(principal).digest('hex')
       const result = await Promise.race([
         options.consume(action, digest, controller.signal),
         new Promise<never>((_, reject) => {
-          timer = setTimeout(() => { controller.abort(); reject(new Error('Admission timeout.')) }, 1500)
+          timer = setTimeout(() => { deadlineReached = true; controller.abort(); reject(new AdmissionDeadlineError('Admission timeout.')) }, 1500)
         }),
       ])
       // No coercion, permissive truthiness, or diagnostic payload reflection.
       if (result === true) return { status: 'allow' }
-      if (result === false) return { status: 'limited' }
+      if (result === false) { reportAdmissionDiagnostic('limited'); return { status: 'limited' } }
+      reportAdmissionDiagnostic('backend_result_invalid')
       return { status: 'unavailable' }
-    } catch { return { status: 'unavailable' } }
+    } catch (error) { reportAdmissionDiagnostic(deadlineReached ? 'backend_deadline' : admissionFailureDiagnostic(error)); return { status: 'unavailable' } }
     finally { if (timer) clearTimeout(timer) }
   }
 }

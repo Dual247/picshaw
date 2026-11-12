@@ -17,10 +17,12 @@ function load(name, dependencies = {}, overrides = {}) {
   })
   return exports
 }
-const backend = load('auth-admission-backend')
+const diagnostics = load('auth-admission-diagnostics')
+const backend = load('auth-admission-backend', { './auth-admission-diagnostics': diagnostics })
 let options, calls = [], response = [{allowed: true}], error
 const runtime = load('auth-admission-runtime', {
   './auth-admission-backend': backend,
+  './auth-admission-diagnostics': diagnostics,
   '@vercel/functions': { ipAddress: request => request.headers.get('x-real-ip') },
   postgres: {default: config => {
     options = config
@@ -85,7 +87,7 @@ error = Error('Sensitive diagnostic must not be logged')
 const beforeOutage = calls.length
 assert.equal((await run(request())).status,'unavailable')
 assert.equal(calls.length, beforeOutage + 1, 'An outage must not trigger retries')
-const fast = load('auth-admission-backend',{}, {setTimeout: callback => setTimeout(callback, 1)})
+const fast = load('auth-admission-backend',{'./auth-admission-diagnostics':diagnostics}, {setTimeout: callback => setTimeout(callback, 1)})
 let aborted = false
 const hanging = fast.createDistributedAuthAdmission({hmacKey:Buffer.alloc(32,1),resolvePrincipal:()=> 'v4:203.0.113.1',consume:(_a,_d,signal)=>{
   signal.addEventListener('abort',()=>{aborted=true})
@@ -93,7 +95,7 @@ const hanging = fast.createDistributedAuthAdmission({hmacKey:Buffer.alloc(32,1),
 }})
 assert.equal((await hanging({action:'google',request:request()})).status,'unavailable')
 assert.equal(aborted,true)
-const disabled = load('auth-admission', {'./auth-admission-runtime':runtime})
+const disabled = load('auth-admission', {'./auth-admission-runtime':runtime, './auth-admission-diagnostics':diagnostics})
 assert.equal(disabled.authAdmissionConfigured,false)
 assert.equal((await disabled.checkDeploymentAuthAdmission({action:'google',request:request()})).status,'unavailable')
 console.log('PASS admission config, disabled deployment, header validation, IPv6 grouping, HMAC privacy, strict results, database/logging outage and timeout; no network.')
