@@ -96,7 +96,7 @@ export function SearchReportDashboard() {
         <button className="portal-button disabled:opacity-40" disabled={busy || access !== 'enabled' || needsCheck} onClick={() => void run('sync')}>Import / retry Google Search</button>
       </div>
       {needsCheck && <p className="text-sm portal-muted">Check import status before retrying. If a lease is still running, wait and check again. There are no automatic retries.</p>}
-      <nav aria-label="Report setup" className="flex flex-wrap gap-5 text-sm"><Link className="portal-text-link" href="/platform/onboarding">Workspace and Google setup</Link>{access === 'signed-out' && <Link className="portal-text-link" href="/platform/sign-in">Sign in</Link>}<Link className="portal-text-link" href="/platform/account">Session and sign-out controls</Link><Link className="portal-text-link" href="/platform/preview">Separate fictional sample</Link></nav>
+      <nav aria-label="Report setup" className="flex flex-wrap gap-5 text-sm"><Link className="portal-text-link" href="/platform/connect">Connect Google Search Console</Link><Link className="portal-text-link" href="/platform/analyze">Analyze a website page</Link><Link className="portal-text-link" href="/platform/onboarding">Workspace and Google setup</Link>{access === 'signed-out' && <Link className="portal-text-link" href="/platform/sign-in">Sign in</Link>}<Link className="portal-text-link" href="/platform/account">Session and sign-out controls</Link><Link className="portal-text-link" href="/platform/preview">Separate fictional sample</Link></nav>
     </section>
     {report && access === 'enabled' && <SearchReportView review={report.review} />}
   </div>

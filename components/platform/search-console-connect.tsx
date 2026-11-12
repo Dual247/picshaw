@@ -8,7 +8,7 @@ export function SearchConsoleConnect() {
   const [message,setMessage] = useState('Checking connection configuration…'), [busy,setBusy] = useState(false), [consent,setConsent] = useState(false)
   async function request(action: string, body = {}) {
     const response = await fetch(`/api/platform/gsc/${action}`, { method:'POST', credentials:'same-origin', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body), cache:'no-store' })
-    const value = await response.json()
+    const value = await response.json().catch(() => { throw Error('Connection unavailable. Open the configured portal and try again.') })
     if (!response.ok) throw Error(value.error ?? 'Connection unavailable.')
     return value
   }

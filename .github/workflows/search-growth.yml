@@ -59,6 +59,8 @@ jobs:
         run: node scripts/check-contact.mjs
       - name: Validate platform contracts and privacy boundary
         run: npm run check:platform
+      - name: Validate safe single-page analysis
+        run: npm run check:analysis
       - name: Validate portal rendering and disclosure contracts
         run: node components/platform/portal-render.test.cjs
       - name: Validate Supabase auth and offline readiness contracts
