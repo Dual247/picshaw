@@ -16,7 +16,7 @@ function load(name, dependencies = {}, overrides = {}) {
 const diagnostics=load('auth-admission-diagnostics')
 const backend=load('auth-admission-backend',{'./auth-admission-diagnostics':diagnostics})
 let driverError=null,result=[{allowed:true}],queries=0,driverOptions
-const runtime=load('auth-admission-runtime',{'./auth-admission-backend':backend,'./auth-admission-diagnostics':diagnostics,
+const runtime=load('auth-admission-runtime',{'./database-tls':load('database-tls'),'./auth-admission-backend':backend,'./auth-admission-diagnostics':diagnostics,
  '@vercel/functions':{ipAddress:r=>r.headers.get('x-real-ip')},postgres:{default:options=>{driverOptions=options;return()=>({signal:async()=>{queries++;if(driverError)throw driverError;return result}})}}})
 const env={VERCEL:'1',VERCEL_ENV:'production',PIC_SHAW_AUTH_ORIGIN:'https://app.picshaw.com',NEXT_PUBLIC_SUPABASE_URL:'https://abcdefghijklmnopqrst.supabase.co',PIC_SHAW_ADMISSION_DB_HOST:'aws-0-us-east-1.pooler.supabase.com',PIC_SHAW_ADMISSION_DB_PASSWORD:'PRIVATE_PASSWORD_'+'p'.repeat(32),PIC_SHAW_ADMISSION_HMAC_KEY:'ab'.repeat(32)}
 const request=(headers={},origin='https://app.picshaw.com')=>({nextUrl:new URL(origin+'/api/platform/auth/sign-in'),headers:new Headers({host:'app.picshaw.com','x-real-ip':'203.0.113.7','x-vercel-forwarded-for':'203.0.113.7',authorization:'PRIVATE_TOKEN',...headers})})

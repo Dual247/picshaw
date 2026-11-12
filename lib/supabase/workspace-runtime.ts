@@ -1,5 +1,6 @@
 import 'server-only'
 import postgres from 'postgres'
+import { createSupabasePoolerTls } from './database-tls'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { requirePortalActor, AuthenticationRequiredError, type PortalAccessEnvironment } from './auth'
 import { parseWorkspaceInput, type WorkspaceInput } from './workspace-input'
@@ -38,7 +39,7 @@ export function createWorkspaceStore(env: Environment = process.env): WorkspaceS
   const config = readWorkspaceConfig(env)
   if (!config) return null
   const sql = postgres({ host: config.host, port: 6543, database: 'postgres', username: config.user,
-    password: config.password, ssl: { rejectUnauthorized: true }, prepare: false, max: 2, max_pipeline: 1,
+    password: config.password, ssl: createSupabasePoolerTls(config.host), prepare: false, max: 2, max_pipeline: 1,
     connect_timeout: 2, queue_timeout: 2, query_timeout: 3, cancel_timeout: 1, idle_timeout: 10,
     max_lifetime: 60, fetch_types: false, onnotice: () => {}, debug: false })
   return async (actor, input) => {

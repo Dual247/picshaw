@@ -2,6 +2,7 @@ import 'server-only'
 import { isIP } from 'node:net'
 import { ipAddress } from '@vercel/functions'
 import postgres from 'postgres'
+import { createSupabasePoolerTls } from './database-tls'
 import { createDistributedAuthAdmission } from './auth-admission-backend'
 import { AdmissionIngressError } from './auth-admission-diagnostics'
 import type { AuthAdmission } from './auth-admission'
@@ -53,7 +54,7 @@ export function createRuntimeAdmission(env: Environment = process.env): AuthAdmi
   // startup parameter injection, notices/debug logs, or insecure TLS fallback.
   const sql = postgres({
     host: config.host, port: 6543, database: 'postgres', username: config.user,
-    password: config.password, ssl: { rejectUnauthorized: true },
+    password: config.password, ssl: createSupabasePoolerTls(config.host),
     prepare: false, max: 1, max_pipeline: 1,
     connect_timeout: 1, queue_timeout: 1, query_timeout: 1, cancel_timeout: 1,
     idle_timeout: 10, max_lifetime: 60, fetch_types: false,

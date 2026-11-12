@@ -1,4 +1,6 @@
 import assert from 'node:assert/strict'
+import * as crypto from 'node:crypto'
+import * as tls from 'node:tls'
 import vm from 'node:vm'
 import { readFileSync } from 'node:fs'
 import ts from 'typescript'
@@ -12,7 +14,7 @@ function load(name, dependencies = {}) {
 }
 const input = load('workspace-input'), auth = load('auth')
 let options, parameters, rows = [{ workspace: { id: '10000000-0000-4000-8000-000000000010', name:'Workspace',site:'example.com' } }]
-const runtime = load('workspace-runtime', { './workspace-input':input, './auth':auth, postgres: { default: opts => {
+const runtime = load('workspace-runtime', { './database-tls':load('database-tls',{'node:crypto':crypto,'node:tls':tls}), './workspace-input':input, './auth':auth, postgres: { default: opts => {
   options = opts
   return (_strings,...args) => { parameters=args; return { signal: async signal => { assert.ok(signal); return rows } } }
 } } })

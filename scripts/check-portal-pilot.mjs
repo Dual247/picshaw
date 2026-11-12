@@ -145,7 +145,7 @@ await test('pilot cannot bypass production host, origin, deployment or distribut
 })
 
 const input = load('lib/supabase/workspace-input.ts')
-const runtime = load('lib/supabase/workspace-runtime.ts', { './auth': auth, './workspace-input': input, postgres: { default: () => { throw Error('Real DB forbidden') } } })
+const runtime = load('lib/supabase/workspace-runtime.ts', { './database-tls': {}, './auth': auth, './workspace-input': input, postgres: { default: () => { throw Error('Real DB forbidden') } } })
 const workspace = async () => { stores++; return { id: '30000000-0000-4000-8000-000000000001', name: 'Synthetic', site: 'example.com' } }
 const workspaceHandlers = load('lib/supabase/workspace-handlers.ts', { './server': server, './portal-config': portal, './auth-admission': admission,
   './workspace-runtime': runtime, './workspace-input': input, 'next/server': { NextRequest, NextResponse } })
