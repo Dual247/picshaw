@@ -54,18 +54,22 @@ GSC permissions and retained Google data credentials are separate from sign-in.
 
 ## Fixture and observation rules
 
-Use distinct browser profiles A and B and separate controlled synthetic accounts.
-Each account receives only its own synthetic organization. Use `example.com`
-hostnames and fictional workspace names, no client data or real business imports.
-Use an additional signed-out profile for anonymous/callback tests. Private browser
+Prefer distinct browser profiles A and B and separate controlled synthetic accounts.
+If only one Chrome profile is available, use the separately coordinated in-memory
+API jars and sequential browser plan in [the pilot API lab](portal-pilot-api-lab.md).
+Two tabs are not separate sessions. Each account receives only its own synthetic
+organization. Use `example.com` hostnames and fictional workspace names, no client
+data or real business imports. Use an additional signed-out profile when available;
+otherwise follow the API-lab plan and do browser cases sequentially. Private browser
 state stays on the test computer; never commit or attach cookies, HAR files,
 storage-state exports, raw email links, JWTs, passwords, query strings or keys.
 
 Record only pass/fail, HTTP status, cookie **attributes/names**, row counts and
 fixture labels. Redact screenshots. Do not collect a diagnostic HAR by default.
 Inspect JWT claims only inside an authorized test runtime, never print them. The
-issued-token/PostgREST step requires a separately reviewed secure test transport;
-this repository intentionally does not include a credential-taking live runner.
+issued-token/PostgREST step requires the separately reviewed private-stdin API lab
+or another approved secure test transport. That lab is inert by default and keeps
+generated passwords and issued tokens in memory; its synthetic tests are not live evidence.
 
 ## Required cases and expected outcomes
 

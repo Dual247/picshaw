@@ -19,7 +19,7 @@ function load(name, dependencies = {}) {
 }
 const config = load('config')
 const auth = load('auth')
-const admission = load('auth-admission', { './auth-admission-runtime': { readAdmissionConfig: () => null, createRuntimeAdmission: () => null } })
+const admission = load('auth-admission', { './auth-admission-runtime': { readAdmissionConfig: () => null, createRuntimeAdmission: () => null }, './auth-admission-diagnostics': { reportAdmissionDiagnostic: () => {} } })
 const portal = load('portal-config', { './config': config, './auth': auth, './auth-admission': admission, '../portal-origin': { PORTAL_ORIGIN: 'https://app.picshaw.com' } })
 const server = load('server', { './config': config, '@supabase/ssr': { createServerClient: () => { throw Error('REAL SDK FORBIDDEN') } } })
 const handlers = load('portal-handlers', { './server': server, './portal-config': portal, './auth': auth, './auth-admission': admission, 'next/server': { NextRequest, NextResponse } })

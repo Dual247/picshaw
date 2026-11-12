@@ -1,6 +1,7 @@
 import 'server-only'
 import type { NextRequest } from 'next/server'
 import { createRuntimeAdmission, readAdmissionConfig } from './auth-admission-runtime'
+import { reportAdmissionDiagnostic } from './auth-admission-diagnostics'
 
 export type AuthAdmissionAction = 'google' | 'apple' | 'sign-in' | 'sign-up' | 'recover' | 'reset-password' | 'callback' | 'workspace-bootstrap' | 'workspace-read'
 export type AuthAdmissionResult = { status: 'allow' } | { status: 'limited' } | { status: 'unavailable' }
@@ -20,6 +21,7 @@ let admission: AuthAdmission | null | undefined
 export const checkDeploymentAuthAdmission: AuthAdmission = async context => {
   try {
     admission ??= createRuntimeAdmission()
-    return admission ? await admission(context) : { status: 'unavailable' }
-  } catch { return { status: 'unavailable' } }
+    if (!admission) { reportAdmissionDiagnostic('configuration_unavailable'); return { status: 'unavailable' } }
+    return await admission(context)
+  } catch { reportAdmissionDiagnostic('runtime_unavailable'); return { status: 'unavailable' } }
 }

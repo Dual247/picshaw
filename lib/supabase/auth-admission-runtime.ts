@@ -3,6 +3,7 @@ import { isIP } from 'node:net'
 import { ipAddress } from '@vercel/functions'
 import postgres from 'postgres'
 import { createDistributedAuthAdmission } from './auth-admission-backend'
+import { AdmissionIngressError } from './auth-admission-diagnostics'
 import type { AuthAdmission } from './auth-admission'
 
 type Environment = Record<string, string | undefined>
@@ -61,10 +62,13 @@ export function createRuntimeAdmission(env: Environment = process.env): AuthAdmi
   return createDistributedAuthAdmission({
     hmacKey: Buffer.from(config.key, 'hex'),
     resolvePrincipal: request => {
-      if (request.nextUrl.origin !== 'https://app.picshaw.com' || request.headers.get('host') !== 'app.picshaw.com') return null
+      if (request.nextUrl.origin !== 'https://app.picshaw.com' || request.headers.get('host') !== 'app.picshaw.com') throw new AdmissionIngressError('ingress_origin_rejected')
       const principal = canonicalNetworkIdentity(ipAddress(request))
       // Reject inconsistent identity headers instead of trusting either one.
-      return principal && principal === canonicalNetworkIdentity(request.headers.get('x-vercel-forwarded-for') ?? undefined) ? principal : null
+      const forwarded = canonicalNetworkIdentity(request.headers.get('x-vercel-forwarded-for') ?? undefined)
+      if (!principal || !forwarded) throw new AdmissionIngressError('ingress_principal_unavailable')
+      if (principal !== forwarded) throw new AdmissionIngressError('ingress_identity_mismatch')
+      return principal
     },
     consume: async (action, principalDigest, signal) => {
       // Never retry an ambiguous result: a committed debit followed by a lost
