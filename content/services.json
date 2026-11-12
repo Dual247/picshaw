@@ -283,17 +283,17 @@
   },
   {
     "slug": "web-design-for-contractors",
-    "title": "Web design for contractors and home-service businesses",
-    "description": "Contractor websites with clear services, mobile-friendly contact options and useful quote forms. Picshaw serves local businesses from Los Angeles.",
-    "eyebrow": "Contractors · Home services",
-    "intro": "Show people what you do, where you work and how to request an estimate. Picshaw designs websites around the practical questions a homeowner asks before getting in touch.",
+    "title": "Website design for home service contractors",
+    "description": "Website design for home service contractors, with clear service pages, mobile-friendly layouts and local SEO foundations. Plan your project with Picshaw.",
+    "eyebrow": "Web design · Contractors & home services",
+    "intro": "Turn a good first impression into a clear next step. Picshaw creates websites for plumbers, roofers, HVAC teams, landscapers and home improvement businesses. Show homeowners what you do, where you work and why to choose you, then make it easy to call or request an estimate.",
     "sections": [
       {
-        "id": "first-screen",
-        "title": "Make the first screen earn its place",
+        "id": "service-pages",
+        "title": "Service pages that make your work easy to find",
         "paragraphs": [
-          "Our starting point is straightforward: name the trade, explain the service area and make the next step obvious. A homeowner with a leaking pipe should not have to interpret a vague slogan before finding out whether you can help.",
-          "For a plumbing business, an illustrative first screen might identify the plumbing services offered, give the actual coverage area and provide a tap-to-call option plus an estimate request. Emergency availability should appear only when the business genuinely provides it. This is a design example, not a measured client outcome."
+          "A homeowner should quickly see whether you handle their job. We organise your website around the services you actually offer, with clear navigation and useful service pages for work such as roof repairs, drain cleaning or kitchen renovations.",
+          "Each page can explain the work, who it suits, your service area and the next step. For a small business with several trades, we help group related services so potential customers can find the right information without clicking through a long list."
         ],
         "links": [
           {
@@ -303,64 +303,134 @@
         ]
       },
       {
-        "id": "quote-path",
-        "title": "Ask for enough information—not everything",
+        "id": "mobile-friendly",
+        "title": "Mobile-friendly websites that are easy to use",
         "paragraphs": [
-          "A useful enquiry form can ask for contact details, the type of job and the location information needed to decide whether it is in scope. Photos or scheduling integrations may help some businesses, but those features should be scoped rather than promised by default.",
-          "Before launch, test where messages arrive, how errors are explained and what the customer sees after submission. Do not display a successful confirmation when no enquiry has been delivered."
-        ],
-        "bullets": [
-          "Clear service navigation on a small screen.",
-          "A working phone link using the business's real number.",
-          "An estimate request with explicit required fields.",
-          "Honest availability and response expectations."
+          "Home services websites need to work on a small screen. We plan readable text, clear menus and buttons that are easy to tap. A homeowner can check your services, view your work and find your phone number without searching through the page.",
+          "Fast load speeds are a design priority. We size images sensibly, keep layouts focused and review page performance within the agreed scope. A user-friendly experience also means clear form labels, helpful error messages and a contact route that works on mobile and desktop."
         ]
       },
       {
-        "id": "trust",
-        "title": "Use proof you can stand behind",
+        "id": "build-trust",
+        "title": "Build trust with the work you have already done",
         "paragraphs": [
-          "Use your actual project photographs with permission, describe the work accurately and include credentials only when they are current and applicable. Testimonials should be genuine and authorised.",
-          "Picshaw's homepage includes labelled design concepts to demonstrate design direction. They are not customer case studies or evidence of increased bookings. A project case study should be added only when the client, work and any reported outcomes are verified."
+          "High-quality project photos help homeowners understand the work you take on. We can organise your supplied images into a visually appealing gallery, with short descriptions of the problem, the job and the finished result. Before-and-after images are useful when they show the same project accurately.",
+          "Genuine customer testimonials, current credentials and clear business details help visitors assess your company. You approve the information and confirm permission to use it. Design concepts are labelled as examples, so visitors can distinguish an illustration from a completed client project."
+        ]
+      },
+      {
+        "id": "local-search",
+        "title": "Give local search a clear foundation",
+        "paragraphs": [
+          "Search engine optimization starts with pages that describe your trade and the places you serve. We plan page titles, headings and internal links around those services, then check the agreed pages can be crawled and understood.",
+          "Your website and Google Business Profile should agree on your name, contact details and coverage. We can assess that consistency in a scoped local search project. Ongoing content, profile management and AI-search visibility are separate services, with their own deliverables and measurement."
         ],
         "links": [
           {
-            "label": "View Picshaw's labelled design concepts",
-            "href": "/#work"
+            "label": "Explore local SEO",
+            "href": "/local-seo"
+          },
+          {
+            "label": "Learn about AI-search optimization",
+            "href": "/ai-search-optimization"
           }
         ]
       },
       {
-        "id": "choose-scope",
-        "title": "Choose the scope around the business",
+        "id": "landing-pages",
+        "title": "Landing pages that match the job people want",
         "paragraphs": [
-          "The $1,000 Website Refresh may suit an established site whose existing content needs a stronger presentation and enquiry path. A Growth Site from $2,500 is the published option for a 5–10 page website with a broader service structure.",
-          "Roofers, landscapers, plumbers and other trades have different information needs. We review the existing website and agree which pages and functionality are needed; there is no assumption that every trade needs the same template."
+          "A visitor arriving from an advert should find the service and offer they clicked. Focused landing pages can support a campaign for boiler replacements, roof inspections or garden projects, with relevant photos and one clear route to enquire.",
+          "We agree which campaign pages your project needs and how each enquiry will be recorded. Website designs should feel consistent with the rest of your business, while the wording addresses that specific job. Additional campaign pages are scoped and quoted before work begins."
+        ]
+      },
+      {
+        "id": "enquiries",
+        "title": "Make it easy to call or request an estimate",
+        "paragraphs": [
+          "We use your real phone number for tap-to-call links and plan quote forms around the details your team needs: contact information, job type and service location. A clear “Request a free estimate” action works when that is what your business offers.",
+          "Before launch, we check the form’s required fields, confirmation message and destination. We also agree what happens after an enquiry arrives. Booking tools, job-management integrations and an optional AI receptionist can be assessed separately, so the website fits the way your team follows up."
         ],
         "links": [
           {
-            "label": "Compare refresh and rebuild options",
+            "label": "Explore the optional AI receptionist",
+            "href": "/ai-receptionist"
+          }
+        ]
+      },
+      {
+        "id": "process",
+        "title": "A clear plan from the first conversation to launch",
+        "paragraphs": [
+          "Start with your website address, main services, coverage area and the kind of enquiries you want. We review the existing site and agree the pages, content, functionality and responsibilities in a written scope. If you are starting from scratch, we plan that structure with you.",
+          "You review the design and content before launch. Timing is agreed after the scope, access and content requirements are clear. For an existing site, we identify important URLs and any domain, hosting or email dependencies before planning the switch."
+        ],
+        "bullets": [
+          "Agree the pages, quote and content needed to begin.",
+          "Review the design, wording and enquiry journey together.",
+          "Check mobile layouts, links and forms, then complete the agreed handoff."
+        ]
+      },
+      {
+        "id": "website-pricing",
+        "title": "Choose the right scope for your contractor website",
+        "paragraphs": [
+          "The $1,000 Website Refresh is a defined project for an existing website. It may suit a contractor whose services and content are still right, but whose design, mobile layout or enquiry path needs work. The written scope confirms which pages and changes are included.",
+          "The Growth Site starts at $2,500 for a 5–10 page website. It suits businesses that need a broader service structure or a new site. We confirm the price after reviewing the pages, content and functionality you need."
+        ],
+        "bullets": [
+          "Advanced integrations and ongoing SEO are quoted separately.",
+          "Confirm hosting, domain renewals, subscriptions and photography costs in the proposal.",
+          "Agree the launch timing, handoff and any ongoing support before work starts."
+        ],
+        "links": [
+          {
+            "label": "Compare website refresh and redesign options",
             "href": "/website-redesign"
           },
           {
-            "label": "Explore local SEO",
-            "href": "/local-seo"
+            "label": "Read the $1,000 website refresh guide",
+            "href": "/blog/1000-website-refresh"
+          },
+          {
+            "label": "See ongoing AI visibility services",
+            "href": "/ai-visibility-retainer"
           }
         ]
       }
     ],
     "questions": [
       {
-        "question": "Can I keep my current domain?",
-        "answer": "Often yes. We review the existing domain, hosting and email arrangements before agreeing a migration so the website change does not assume those services can be moved together."
+        "question": "How much does a contractor website cost?",
+        "answer": "Picshaw’s Website Refresh is $1,000 for a defined scope on an existing site. A Growth Site starts at $2,500 for 5–10 pages. We confirm your pages and requirements in writing; advanced integrations, ongoing SEO and third-party costs are agreed separately."
       },
       {
-        "question": "Can you add online booking or job-management software?",
-        "answer": "We can assess the integration you need. Compatibility, subscription costs and implementation effort must be confirmed in the scope; they are not automatically included in the refresh."
+        "question": "How long will the website take?",
+        "answer": "We agree the timeline after reviewing the scope, access and content you can supply. Page count, integrations and review rounds affect the schedule. Your project plan sets out the work and approvals needed before a launch date is confirmed."
       },
       {
-        "question": "What should I send for a review?",
-        "answer": "Your current website address, your main services and the areas you actually cover. Explain whether your priority is calls, estimate requests or a different action."
+        "question": "Can I keep my current domain and business email?",
+        "answer": "Often, yes. We review your domain, hosting and email setup before planning changes. Keeping the domain is usually a separate decision from choosing where the website runs. Tell us who manages those accounts so we can agree the access and launch steps."
+      },
+      {
+        "question": "Will the website include search engine optimization?",
+        "answer": "The agreed website scope includes SEO foundations such as useful headings, page titles and a clear service structure. Ongoing local SEO and AI-search work are separate services. Search rankings and enquiry volumes depend on several factors, so we agree deliverables and measurement rather than guaranteed positions."
+      },
+      {
+        "question": "Who supplies the website copy, photos and testimonials?",
+        "answer": "We agree content responsibilities before work begins. Your service details, project photos and genuine customer testimonials help make the site specific to your business. We can plan how to present that material; new copywriting or photography requirements are confirmed in the proposal."
+      },
+      {
+        "question": "Can you connect booking or job-management software?",
+        "answer": "We can assess the tools your team uses and the connection you need. Compatibility, access, subscription costs and implementation effort must be confirmed first. Advanced integrations and an optional AI receptionist are separate scopes, so you know what is included before committing."
+      },
+      {
+        "question": "Can you improve my existing website instead of rebuilding it?",
+        "answer": "Yes. Send us the website address and explain what is getting in the way. A refresh may be enough when the structure and content still fit your business. A larger redesign may make sense when you need new services, more pages or different functionality."
+      },
+      {
+        "question": "What if my business does not have a website yet?",
+        "answer": "Tell us your trade, main services, coverage area and preferred way to receive enquiries. Share any logo, photos or business information you already have. We can use that brief to recommend a page structure and confirm a suitable scope and quote."
       }
     ]
   },
