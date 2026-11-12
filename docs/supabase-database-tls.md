@@ -1,6 +1,6 @@
 # Supabase database TLS trust preparation
 
-Status: **prepared but not activated**. No production runtime imports `lib/supabase/database-tls.ts`. Adding this helper does not change any connection, deployment, environment variable, operating-system trust store, or process-wide trust setting. Runtime wiring requires a separately reviewed and authorized change.
+Status: **runtime wiring approved for the restricted pilot; deployment is a separate release step**. The admission, workspace, GSC and reports database drivers import `lib/supabase/database-tls.ts`. The preparation changes no hosted setting, environment variable, operating-system trust store, or process-wide trust setting. The user approved this exact driver-scoped trust change on 2026-11-12, with certificate and hostname checks retained. The release owner handles integration, publication, and deployment.
 
 ## Supported configuration
 
@@ -34,7 +34,7 @@ A parent-authorized SSLRequest-only probe to the verified `aws-1-us-west-1.poole
 
 This proves the local client-to-pooler chain and hostname only. It does not prove Vercel's observed failure category, database credentials, role grants, admission debits, or the pooler's upstream verification. Confirm the deployed fixed-enum diagnostic before attributing its failure to CA trust.
 
-Offline regression: `node scripts/check-database-tls.mjs`. It tests CA identity/validity and rejection, pooler-host restrictions, immutable strict TLS options, the installed driver's object-mode TLS context handling, and Node's normal hostname verifier. It performs no network operation.
+Offline regressions: `node scripts/check-database-tls.mjs` and `node scripts/check-database-runtime-tls.mjs`. It tests CA identity/validity and rejection, pooler-host restrictions, immutable strict TLS options, the installed driver's object-mode TLS context handling, and Node's normal hostname verifier. It performs no network operation.
 
 ## Activation and rotation gates
 

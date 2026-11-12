@@ -31,7 +31,7 @@ o/bKiIz+Fq8=
 -----END CERTIFICATE-----`
 const EXPECTED_FINGERPRINT = '80:70:25:AD:50:D4:ED:21:9D:2C:9C:7D:29:9C:00:4F:82:4E:B0:0C:F7:F6:5A:FE:F6:07:D0:7B:72:E6:CA:FA'
 
-/** Prepared only: no production runtime imports this helper yet.
+/** Scoped verified TLS for the four dedicated Supabase database drivers.
  * Trust is scoped to this driver's connection, never the OS or process.
  * The host must come from server configuration, not a request. Rotation needs
  * a reviewed certificate from the official Dashboard, not a failing peer.

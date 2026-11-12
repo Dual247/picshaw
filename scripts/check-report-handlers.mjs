@@ -53,7 +53,7 @@ await test('concurrency busy and provider-unavailable status remain truthful',as
  state='completed';assert.equal((await handleReports(req(),'sync',deps)).status,200)
 })
 let drivers=0
-const {readReportConfig,createDeploymentReports}=load('report-runtime',{'postgres':()=>{drivers++;throw Error('LIVE DB FORBIDDEN')},'./report-service':{},'./gsc-runtime':{deploymentGsc:()=>null}})
+const {readReportConfig,createDeploymentReports}=load('report-runtime',{'../supabase/database-tls':{createSupabasePoolerTls:()=>{throw Error('Disabled runtime must not initialize TLS')}},'postgres':()=>{drivers++;throw Error('LIVE DB FORBIDDEN')},'./report-service':{},'./gsc-runtime':{deploymentGsc:()=>null}})
 const config={VERCEL:'1',VERCEL_ENV:'production',PIC_SHAW_AUTH_ORIGIN:'https://app.picshaw.com',PIC_SHAW_REPORTS_ENABLED:'true',PIC_SHAW_AUTH_SESSION_ENABLED:'true',PIC_SHAW_WORKSPACE_ENABLED:'true',PIC_SHAW_GSC_ENABLED:'true',NEXT_PUBLIC_SUPABASE_URL:'https://abcdefghijklmnopqrst.supabase.co',PIC_SHAW_REPORTS_DB_HOST:'aws-1-us-west-1.pooler.supabase.com',PIC_SHAW_REPORTS_DB_PASSWORD:'x'.repeat(32)}
 await test('production runtime uses dedicated report role and disabled gates never contact DB',()=>{
  assert.equal(readReportConfig(config).user,'picshaw_reports.abcdefghijklmnopqrst')

@@ -20,7 +20,7 @@ function load(name, dependencies = {}, overrides = {}) {
 const diagnostics = load('auth-admission-diagnostics')
 const backend = load('auth-admission-backend', { './auth-admission-diagnostics': diagnostics })
 let options, calls = [], response = [{allowed: true}], error
-const runtime = load('auth-admission-runtime', {
+const runtime = load('auth-admission-runtime', { './database-tls': load('database-tls'),
   './auth-admission-backend': backend,
   './auth-admission-diagnostics': diagnostics,
   '@vercel/functions': { ipAddress: request => request.headers.get('x-real-ip') },

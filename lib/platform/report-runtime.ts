@@ -1,5 +1,6 @@
 import 'server-only'
 import postgres from 'postgres'
+import { createSupabasePoolerTls } from '../supabase/database-tls'
 import { createReportService, type ReportStore } from './report-service'
 import { deploymentGsc } from './gsc-runtime'
 
@@ -14,7 +15,7 @@ export function createDeploymentReports(env: Record<string, string | undefined> 
   const config = readReportConfig(env), lifecycle = config ? deploymentGsc() : null
   if (!config || !lifecycle) return null
   const sql = postgres({ host: config.host, port: 6543, database: 'postgres', username: config.user, password: config.password,
-    ssl: { rejectUnauthorized: true }, prepare: false, max: 2, max_pipeline: 1, connect_timeout: 2, queue_timeout: 2,
+    ssl: createSupabasePoolerTls(config.host), prepare: false, max: 2, max_pipeline: 1, connect_timeout: 2, queue_timeout: 2,
     query_timeout: 5, cancel_timeout: 1, idle_timeout: 10, max_lifetime: 60, fetch_types: false, onnotice: () => {}, debug: false })
   const store: ReportStore = async ({ actor, organizationId }, operation, payload) => {
     const rows = await sql`select picshaw_reports_private.operation(${actor.id}::uuid,${actor.sessionId}::uuid,${actor.expiresAt}::bigint,
