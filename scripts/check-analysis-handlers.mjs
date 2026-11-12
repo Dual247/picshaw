@@ -29,7 +29,7 @@ assert.equal((await exports.handleAnalysis(request(),{...deps,admit:async()=>({s
 for(const mode of ['closed','public']){accessMode=mode;assert.equal((await exports.handleAnalysis(request(),deps)).status,503)}accessMode='pilot'
 assert.equal(fetches,0)
 const success=await exports.handleAnalysis(request(),deps);assert.equal(success.status,200);assert.match(success.headers.get('cache-control'),/no-store/);assert.equal(success.headers.get('referrer-policy'),'no-referrer');assert.equal(fetches,1)
-revoke=true;const revoked=await exports.handleAnalysis(request(),deps);assert.equal(revoked.status,503);assert.doesNotMatch(await revoked.text(),/Evidence|PRIVATE/)
+revoke=true;const revoked=await exports.handleAnalysis(request(),deps);assert.equal(revoked.status,401);assert.doesNotMatch(await revoked.text(),/Evidence|PRIVATE/)
 console.log('Analysis handler checks passed: gates, consent, bounds, origin, auth, workspace, rate limits, revocation and private headers. No network.')
 let cancelled=false
 const stalled=request()
@@ -55,3 +55,28 @@ assert.equal((await exports.handleAnalysis(oversized,deps)).status,400)
 assert.ok(Date.now()-oversizedStart<1000,'Oversized request must not await stalled cancellation')
 assert.equal(fetches,priorFetches)
 console.log('PASS oversized request does not await never-settling cancellation')
+
+// Exercise deliberate SQL function signals separately from infrastructure errors,
+// both before network work and after the final authorization recheck.
+auth=true;revoke=false
+for (const [code,message,status] of [
+  ['42501','Workspace access denied',403], ['28000','Session required',401],
+  ['42501','permission denied for schema private',503], ['28000','database login failed',503],
+  ['08006','connection lost',503], ['XX000','Workspace access denied',503],
+]) {
+  for (const at of [1,2]) {
+    let calls=0;const before=fetches
+    const response=await exports.handleAnalysis(request(),{...deps,workspace:async()=>{if(++calls===at)throw Object.assign(new Error(message),{code});return {id:'org'}}})
+    assert.equal(response.status,status,`${code} ${message} at workspace call ${at}`)
+    const result=await response.json();assert.equal(Object.hasOwn(result,'analysis'),false)
+    assert.equal(fetches-before,at===1?0:1)
+    assert.match(response.headers.get('cache-control'),/no-store/)
+    assert.doesNotMatch(JSON.stringify(result),/permission denied|database login|connection lost|42501|28000|Evidence/)
+  }
+}
+const neverCreated=await exports.handleAnalysis(request(),{...deps,workspace:async()=>null})
+assert.equal(neverCreated.status,409)
+let calls=0
+const removed=await exports.handleAnalysis(request(),{...deps,workspace:async()=>++calls===1?{id:'org'}:null})
+assert.equal(removed.status,401);assert.equal(Object.hasOwn(await removed.json(),'analysis'),false)
+console.log('PASS exact workspace denial403, session401, never-created409, unknown database503, and final recheck with no result leakage')

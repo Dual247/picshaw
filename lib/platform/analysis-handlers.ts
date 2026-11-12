@@ -7,6 +7,10 @@ import { requireWorkspaceActor, deploymentWorkspaceStore } from '../supabase/wor
 import { checkDeploymentAuthAdmission, type AuthAdmission } from '../supabase/auth-admission'
 import { analyzeWebsite } from './website-analysis'
 
+class AnalysisWorkspaceAccessError extends Error {
+  constructor(readonly status: 401 | 403) { super('Workspace access is unavailable.') }
+}
+
 type AnalysisEnvironment = PortalEnvironment & { PIC_SHAW_ANALYSIS_ENABLED?: string }
 type Dependencies = { env?: AnalysisEnvironment; createClient?: typeof createRequestSupabaseClient; workspace?: ReturnType<typeof deploymentWorkspaceStore>; analyze?: typeof analyzeWebsite; admit?: AuthAdmission }
 async function smallBody(request: NextRequest): Promise<Record<string, unknown>> {
@@ -44,6 +48,17 @@ export async function handleAnalysis(request: NextRequest, deps: Dependencies = 
   const enabled = (deps.env ?? process.env).PIC_SHAW_ANALYSIS_ENABLED === 'true'
   const workspace = deps.workspace === undefined ? deploymentWorkspaceStore() : deps.workspace
   if (config.accessMode !== 'pilot' || !config.sessionEnabled || !enabled || !workspace) return finish({ enabled: false, error: 'Website analysis is not enabled for this deployment.' }, 503)
+  // Interpret only the workspace function's deliberate, fixed authorization
+  // signals. Database grants, configuration failures and outages stay errors.
+  const resolveWorkspace = async (actor: Awaited<ReturnType<typeof requireWorkspaceActor>>) => {
+    try { return await workspace(actor, null) } catch (error) {
+      if (error && typeof error === 'object' && 'code' in error && 'message' in error) {
+        if (error.code === '42501' && error.message === 'Workspace access denied') throw new AnalysisWorkspaceAccessError(403)
+        if (error.code === '28000' && error.message === 'Session required') throw new AnalysisWorkspaceAccessError(401)
+      }
+      throw error
+    }
+  }
   let body
   try {
     body = await smallBody(request)
@@ -57,15 +72,17 @@ export async function handleAnalysis(request: NextRequest, deps: Dependencies = 
     }, deps.env)
     let actor
     try { actor = await requireWorkspaceActor(client, config.url, deps.env) } catch { return finish({ error: 'Sign in again to analyze your website.' }, 401) }
-    const selected = await workspace(actor, null)
+    const selected = await resolveWorkspace(actor)
     if (!selected) return finish({ error: 'Create your workspace first.' }, 409)
     const analysis = await (deps.analyze ?? analyzeWebsite)(body.url as string)
     // A successful fetch does not preserve authority after logout or membership removal.
-    const currentActor = await requireWorkspaceActor(client, config.url, deps.env)
-    const currentWorkspace = await workspace(currentActor, null)
+    let currentActor
+    try { currentActor = await requireWorkspaceActor(client, config.url, deps.env) } catch { return finish({ error: 'Sign in again to analyze your website.' }, 401) }
+    const currentWorkspace = await resolveWorkspace(currentActor)
     if (currentActor.id !== actor.id || currentActor.sessionId !== actor.sessionId || currentWorkspace?.id !== selected.id) return finish({ error: 'Access changed. Sign in and try again.' }, 401)
     return finish({ enabled: true, analysis })
-  } catch {
+  } catch (error) {
+    if (error instanceof AnalysisWorkspaceAccessError) return finish({ error: error.status === 403 ? 'You no longer have access to this workspace.' : 'Sign in again to analyze your website.' }, error.status)
     return finish({ error: 'This public HTML page could not be safely analyzed. Check the HTTPS URL and try again.' }, 503)
   }
 }
