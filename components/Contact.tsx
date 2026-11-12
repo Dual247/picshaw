@@ -18,18 +18,21 @@ const options = [
 const emptyForm = { name: '', email: '', business: '', website: '', message: '' }
 const inputClass = 'w-full rounded-lg border border-border bg-background px-4 py-3 text-base text-foreground outline-none placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20'
 
-export function Contact({ compact = false, initialService = 'audit' }: { compact?: boolean; initialService?: string }) {
+export function Contact({ compact = false, initialService = 'audit', variant = 'default' }: { compact?: boolean; initialService?: string; variant?: 'default' | 'contractor' }) {
+  const isContractor = variant === 'contractor'
+  const displayedOptions = isContractor ? options.filter(option => ['1k', '2.5k', 'unsure'].includes(option.value)) : options
   const [step, setStep] = useState(1)
   const [selectedService, setSelectedService] = useState(initialService)
   const [data, setData] = useState(emptyForm)
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle')
   const [errorMessage, setErrorMessage] = useState('')
   const submitting = useRef(false)
-  const isWebsite = ['1k', '2.5k', 'monthly'].includes(selectedService)
+  const isWebsite = isContractor || ['1k', '2.5k', 'monthly'].includes(selectedService)
   const isRetainer = isRetainerService(selectedService)
   const terms = enquiryTerms(selectedService)
   const change = (key: keyof typeof emptyForm, value: string) => setData(previous => ({ ...previous, [key]: value }))
   useEffect(() => {
+    if (isContractor) return
     const select = (event: Event) => {
       const detail = (event as CustomEvent<unknown>).detail
       if (typeof detail !== 'string' || !isRetainerService(detail) || submitting.current) return
@@ -39,7 +42,7 @@ export function Contact({ compact = false, initialService = 'audit' }: { compact
     }
     window.addEventListener(RETAINER_SELECTION_EVENT, select)
     return () => window.removeEventListener(RETAINER_SELECTION_EVENT, select)
-  }, [])
+  }, [isContractor])
   const next = (event: FormEvent) => { event.preventDefault(); setStep(2); requestAnimationFrame(() => document.getElementById('contact-name')?.focus()) }
   async function submit(event: FormEvent) {
     event.preventDefault()
@@ -61,7 +64,7 @@ export function Contact({ compact = false, initialService = 'audit' }: { compact
   }
   return <section id="contact" className={`scroll-mt-28 ${compact ? 'mt-16 border-t border-border pt-14' : 'border-t border-border py-20 md:py-28'}`} aria-labelledby="contact-heading">
     <div className={compact ? '' : 'mx-auto max-w-[1400px] px-6 md:px-12 lg:px-20'}><div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
-      <div><p className="mb-5 text-xs font-medium uppercase tracking-[0.2em] text-primary">Start a conversation</p><h2 id="contact-heading" className="text-3xl font-semibold leading-tight tracking-tight md:text-5xl">Find your next<br />search opportunity.</h2><p className="mt-6 max-w-lg text-lg leading-8 text-muted-foreground">Tell us about your business and website. We will recommend the right starting point and confirm the scope, fee and delivery date before any paid work begins.</p><p className="mt-5 max-w-lg text-sm leading-7 text-muted-foreground">The enquiry is free. A full audit is a separately quoted service—not an instant automated score or a free ongoing programme.</p>
+      <div><p className="mb-5 text-xs font-medium uppercase tracking-[0.2em] text-primary">Start a conversation</p><h2 id="contact-heading" className="text-3xl font-semibold leading-tight tracking-tight md:text-5xl">{isContractor ? <>Let&apos;s put your<br />website to work.</> : <>Find your next<br />search opportunity.</>}</h2><p className="mt-6 max-w-lg text-lg leading-8 text-muted-foreground">{isContractor ? 'Tell us about your services, your service area and the jobs you want more of. We will review your current website and confirm the scope, fee and delivery date before any paid work begins.' : 'Tell us about your business and website. We will recommend the right starting point and confirm the scope, fee and delivery date before any paid work begins.'}</p><p className="mt-5 max-w-lg text-sm leading-7 text-muted-foreground">{isContractor ? <>The enquiry is free. Starting a business without a website? <a href="mailto:hello@picshaw.com" className="underline underline-offset-4">Email us about your new site.</a></> : 'The enquiry is free. A full audit is a separately quoted service—not an instant automated score or a free ongoing programme.'}</p>
         <div className="mt-8 space-y-4 text-sm"><a href="mailto:hello@picshaw.com" className="flex items-center gap-2 text-primary">hello@picshaw.com<ArrowUpRight size={15} aria-hidden="true" /></a><a href="tel:+17379009237" className="block text-muted-foreground">(737) 900-9237</a><p className="text-muted-foreground">Los Angeles, California</p></div>
       </div>
       <div className="min-w-0 rounded-2xl border border-border bg-card p-6 sm:p-8">
@@ -71,8 +74,8 @@ export function Contact({ compact = false, initialService = 'audit' }: { compact
           {step === 1 ? <form onSubmit={next} className="space-y-6" data-enquiry-type={isWebsite ? 'website' : 'aeo'}>
             <div><label htmlFor="contact-website" className="mb-2 block text-sm font-medium">Your website <span className="text-primary">*</span></label><input id="contact-website" name="website" type="text" required maxLength={2048} autoComplete="url" value={data.website} onChange={event => change('website', event.target.value)} className={inputClass} placeholder="yourbusiness.com" /></div>
             <div><label htmlFor="contact-email" className="mb-2 block text-sm font-medium">Email <span className="text-primary">*</span></label><input id="contact-email" name="email" type="email" required maxLength={254} autoComplete="email" value={data.email} onChange={event => change('email', event.target.value)} className={inputClass} placeholder="you@business.com" /></div>
-            <fieldset><legend className="mb-3 text-sm font-medium">What would you like to explore?</legend><div className="grid gap-3 sm:grid-cols-2">{options.map(option => <label key={option.value} className={`flex cursor-pointer items-start gap-3 rounded-lg border p-3 text-sm leading-6 ${selectedService === option.value ? 'border-primary bg-primary/5' : 'border-border'}`}><input type="radio" name="service_interest" value={option.value} checked={selectedService === option.value} onChange={() => setSelectedService(option.value)} className="mt-1 h-4 w-4 shrink-0 accent-[var(--primary)]" /><span>{option.label}</span></label>)}</div></fieldset>
-            <Link href={RETAINER_PATH} className="inline-block text-sm text-primary underline underline-offset-4">Compare monthly plans and terms</Link>
+            <fieldset><legend className="mb-3 text-sm font-medium">What would you like to explore?</legend><div className="grid gap-3 sm:grid-cols-2">{displayedOptions.map(option => <label key={option.value} className={`flex cursor-pointer items-start gap-3 rounded-lg border p-3 text-sm leading-6 ${selectedService === option.value ? 'border-primary bg-primary/5' : 'border-border'}`}><input type="radio" name="service_interest" value={option.value} checked={selectedService === option.value} onChange={() => setSelectedService(option.value)} className="mt-1 h-4 w-4 shrink-0 accent-[var(--primary)]" /><span>{option.label}</span></label>)}</div></fieldset>
+            {!isContractor && <Link href={RETAINER_PATH} className="inline-block text-sm text-primary underline underline-offset-4">Compare monthly plans and terms</Link>}
             <button type="submit" className="w-full rounded-lg bg-primary px-5 py-3.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90">Continue</button>
           </form> : <form onSubmit={submit} className="space-y-5" data-enquiry-type={isWebsite ? 'website' : 'aeo'} aria-busy={status === 'submitting'}>
             <button type="button" onClick={() => { setStep(1); setStatus('idle') }} disabled={status === 'submitting'} className="flex items-center gap-2 text-sm text-muted-foreground"><ArrowLeft size={14} aria-hidden="true" />Back</button>

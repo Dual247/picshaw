@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import { ContentPage, ContentSections, ReviewCTA } from '@/components/ContentPage'
+import { ContractorLanding } from '@/components/ContractorLanding'
 import { services, getService } from '@/lib/content'
 import { absoluteUrl, jsonLd, ORGANIZATION_ID, pageMetadata } from '@/lib/site'
 
@@ -13,6 +14,7 @@ export async function generateMetadata({ params }: Props) {
 export default async function ServicePage({ params }: Props) {
   const service = getService((await params).service)
   if (!service) notFound()
+  if (service.slug === 'web-design-for-contractors') return <ContractorLanding service={service} />
   return <ContentPage title={service.title} intro={service.intro} eyebrow={service.eyebrow} path={`/${service.slug}`}>
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd({ '@context': 'https://schema.org', '@type': 'Service', '@id': absoluteUrl(`/${service.slug}#service`), name: service.title, description: service.description, url: absoluteUrl(`/${service.slug}`), provider: { '@id': ORGANIZATION_ID } }) }} />
     <ContentSections sections={service.sections} />
