@@ -6,18 +6,23 @@ export const SITE_NAME = 'Picshaw'
 export const ORGANIZATION_ID = `${SITE_URL}/#organization`
 export const isPreview = Boolean(process.env.VERCEL_ENV && process.env.VERCEL_ENV !== 'production')
 export const absoluteUrl = (path = '/') => new URL(path, SITE_URL).toString()
-export const additionalPagePaths = ['/ai-visibility-audit', '/ai-visibility-retainer', '/methodology', '/ai-receptionist', '/privacy-policy']
+export const additionalPagePaths = ['/ai-visibility-audit', '/ai-visibility-retainer', '/methodology', '/ai-receptionist', '/privacy-policy', '/services', '/industries']
 
 export const serviceLinks = [
   { label: 'AI Visibility Audit', href: '/ai-visibility-audit' },
   { label: 'Monthly AI Visibility Retainer', href: '/ai-visibility-retainer' },
-  { label: 'AI-search optimization', href: '/ai-search-optimization' },
+  { label: 'AEO & AI-search optimization', href: '/ai-search-optimization' },
   { label: 'AI receptionist', href: '/ai-receptionist' },
-  { label: 'Website redesign', href: '/website-redesign' },
+  { label: 'Website design & redesign', href: '/website-redesign' },
   { label: 'Local SEO', href: '/local-seo' },
+  { label: 'Google Business Profile optimization', href: '/google-business-profile-optimization' },
+  { label: 'Technical SEO', href: '/technical-seo' },
+  { label: 'Landing page design', href: '/landing-page-design' },
   { label: 'Contractor websites', href: '/web-design-for-contractors' },
 ]
 export const editorialLinks = [
+  { label: 'All services', href: '/services' },
+  { label: 'Industries we serve', href: '/industries' },
   { label: 'Our methodology', href: '/methodology' },
   { label: 'About Picshaw', href: '/about' },
   { label: 'Guides & insights', href: '/blog' },

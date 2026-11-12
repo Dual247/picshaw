@@ -5,9 +5,13 @@ import { chromium } from 'playwright'
 const baseURL = process.env.PREVIEW_URL || 'http://127.0.0.1:3000'
 const origin = 'https://www.picshaw.com'
 const services = JSON.parse(await readFile('content/services.json', 'utf8'))
+const industries = JSON.parse(await readFile('content/industries.json', 'utf8'))
 const allArticles = JSON.parse(await readFile('content/articles.json', 'utf8'))
 const articles = allArticles.filter(article => article.status === 'published' && Date.parse(article.publishedAt) <= Date.now())
-const paths = ['/', '/about', '/blog', '/ai-visibility-audit', '/methodology', '/ai-receptionist', '/privacy-policy', '/ai-visibility-retainer', ...services.map(service => `/${service.slug}`), ...articles.map(article => `/blog/${article.slug}`)]
+const servicePaths = services.map(service => `/${service.slug}`)
+const industryPaths = industries.map(industry => `/industries/${industry.slug}`)
+const hubPaths = ['/services', '/industries']
+const paths = ['/', '/about', '/blog', '/ai-visibility-audit', '/methodology', '/ai-receptionist', '/privacy-policy', '/ai-visibility-retainer', ...hubPaths, ...servicePaths, ...industryPaths, ...articles.map(article => `/blog/${article.slug}`)]
 await mkdir('validation', { recursive: true })
 const browser = await chromium.launch({ headless: true })
 const report = []
@@ -45,6 +49,7 @@ try {
   for (const draft of allArticles.filter(article => article.status === 'draft')) { assert.ok(!xml.includes(draft.slug)); assert.equal((await page.request.get(baseURL + '/blog/' + draft.slug)).status(), 404) }
   assert.equal((await page.request.get(baseURL + '/this-page-does-not-exist')).status(), 404)
   assert.equal((await page.request.get(baseURL + '/blog/this-post-does-not-exist')).status(), 404)
+  assert.equal((await page.request.get(baseURL + '/industries/this-industry-does-not-exist')).status(), 404)
   assert.equal((await page.request.post(baseURL + '/api/contact', { data: {} })).status(), 400)
   const intercepted = []
   await page.route('**/api/contact', route => { intercepted.push(route.request().postDataJSON()); return route.fulfill({ status: 200, contentType: 'application/json', body: '{"success":true}' }) })
@@ -76,13 +81,18 @@ try {
   for (const width of [1440, 1024, 390, 320]) {
     const mobile = await browser.newPage({ viewport: { width, height: 1000 }, reducedMotion: 'reduce' })
     await mobile.route('**/_vercel/**', route => route.fulfill({ status: 200, contentType: 'application/javascript', body: '' }))
-    for (const path of ['/', '/ai-visibility-audit', '/methodology', '/blog', '/ai-receptionist', '/privacy-policy', '/ai-visibility-retainer', '/web-design-for-contractors']) {
+    for (const path of ['/', '/ai-visibility-audit', '/methodology', '/blog', '/ai-receptionist', '/privacy-policy', '/ai-visibility-retainer', '/web-design-for-contractors', ...hubPaths, industryPaths[0]]) {
       await mobile.goto(baseURL + path, { waitUntil: 'networkidle' })
       assert.ok(await mobile.evaluate(() => document.documentElement.scrollWidth - innerWidth <= 1), `${path}: overflow ${width}`)
       if (path === '/') await mobile.screenshot({ path: `validation/reposition-header-${width}.png` })
       if (path === '/web-design-for-contractors') await mobile.screenshot({ path: `validation/contractor-landing-${width}.png`, fullPage: true })
     }
-    if (width < 1024) { await mobile.getByRole('button', { name: 'Open menu', exact: true }).click(); await mobile.locator('#mobile-navigation').getByRole('link', { name: 'Our approach', exact: true }).click(); await mobile.waitForURL(baseURL + '/methodology'); await mobile.locator('#mobile-navigation').waitFor({ state: 'detached' }) }
+    if (width < 1280) {
+      await mobile.getByRole('button', { name: 'Open menu', exact: true }).click()
+      await mobile.locator('#mobile-navigation').getByRole('link', { name: 'Industries', exact: true }).click()
+      await mobile.waitForURL(baseURL + '/industries')
+      await mobile.locator('#mobile-navigation').waitFor({ state: 'detached' })
+    }
     report.push({ viewportWidth: width, overflow: false, navigation: 'passed' }); await mobile.close()
   }
   const nojs = await browser.newPage({ javaScriptEnabled: false, viewport: { width: 1440, height: 1000 } })
@@ -90,11 +100,13 @@ try {
   assert.equal(await nojs.locator('#faq details').count(), 4); assert.equal(await nojs.locator('#faq details p').count(), 4)
   await nojs.locator('#faq details').last().locator('summary').click(); assert.ok(await nojs.locator('#faq details').last().locator('p').isVisible())
   assert.ok((await nojs.locator('h1').innerText()).includes('a reason to call.'))
-  for (const path of ['/ai-visibility-audit', '/methodology', '/ai-receptionist', '/privacy-policy', '/ai-visibility-retainer', ...articles.map(article => '/blog/' + article.slug)]) {
+  for (const path of ['/ai-visibility-audit', '/methodology', '/ai-receptionist', '/privacy-policy', '/ai-visibility-retainer', ...hubPaths, ...servicePaths, ...industryPaths, ...articles.map(article => '/blog/' + article.slug)]) {
     await nojs.goto(baseURL + path, { waitUntil: 'networkidle' }); const text = await nojs.locator('main').innerText(); assert.ok(text.length > 500)
     const article = articles.find(item => path === '/blog/' + item.slug)
     if (article) for (const section of article.sections) assert.ok(text.includes(section.paragraphs[0]), article.slug)
+    const industry = industries.find(item => path === '/industries/' + item.slug)
+    if (industry) for (const section of industry.sections) assert.ok(text.includes(section.paragraphs[0]), industry.slug)
   }
-  report.push({ noJavaScript: 'AEO hero, audit, methodology, receptionist copy, four homepage FAQ answers and all existing article sections readable' }); await nojs.close()
+  report.push({ noJavaScript: 'AEO hero, audit, methodology, receptionist copy, service and industry pages, both hubs, four homepage FAQ answers and all existing article sections readable' }); await nojs.close()
   console.log(JSON.stringify(report, null, 2)); await writeFile('validation/search-browser-report.json', JSON.stringify(report, null, 2))
 } finally { await browser.close() }

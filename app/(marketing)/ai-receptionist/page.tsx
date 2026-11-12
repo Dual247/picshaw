@@ -48,7 +48,7 @@ export default function AIReceptionistPage() {
             <div className="min-w-0">
               <p className={eyebrow}>Managed by Picshaw / Founding pilot</p>
               <h1 id="receptionist-title" className="mt-6 text-[clamp(2.6rem,4.7vw,4.3rem)] font-semibold leading-[1.05] tracking-[-0.045em]">You do the work.<br /><span className="text-primary">Let AI take<br />the call.</span></h1>
-              <p className="mt-6 max-w-lg text-lg leading-8 text-muted-foreground">Turn unanswered calls into clear enquiries for your team. See the workflow, understand the cost, then discuss a setup for your business.</p>
+              <p className="mt-6 max-w-lg text-lg leading-8 text-muted-foreground">A managed AI receptionist and phone answering pilot for local service businesses. Capture after-hours enquiries, qualify routine requests and hand clear callback details to your team.</p>
               <p className="mt-6 text-xl font-medium">{money(receptionistOffer.monthly)}<span className="text-sm font-normal text-muted-foreground"> / month</span><span className="mx-3 text-muted-foreground">+</span>{money(receptionistOffer.setup)}<span className="text-sm font-normal text-muted-foreground"> setup</span></p>
               <p className="mt-2 text-sm text-muted-foreground">{receptionistOffer.includedMinutes} included minutes · ${receptionistOffer.additionalMinute.toFixed(2)} per extra minute · USD</p>
               <div className="mt-7 flex flex-wrap items-center gap-5"><a href="#enquiry" className={primaryButton}>Request a demo<ArrowUpRight size={18} aria-hidden="true" /></a><a href="#pricing" className={`inline-flex min-h-12 items-center gap-2 text-sm font-medium ${focus}`}>See the full pricing<ArrowUpRight size={16} aria-hidden="true" /></a></div>

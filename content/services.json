@@ -1,17 +1,17 @@
 [
   {
     "slug": "website-redesign",
-    "title": "Website redesign for small businesses",
-    "description": "Refresh an outdated business website with Picshaw. Mobile-first design, clear enquiry paths and SEO foundations, with a $1,000 refresh option.",
-    "eyebrow": "Website redesign · Los Angeles",
-    "intro": "Keep what works. Fix what gets in the way. Picshaw helps local businesses turn an outdated website into a clearer, more useful place to call, enquire or request a quote.",
+    "title": "Website design and redesign for small businesses",
+    "description": "Website design and redesign for Los Angeles and Orange County businesses. Mobile-first layouts, useful service pages and clear paths to calls and enquiries.",
+    "eyebrow": "Website design · Los Angeles & Orange County",
+    "intro": "Give customers a clear view of your services and an easy next step. Picshaw designs and redesigns small business websites around the journey from a first visit to a call, enquiry or quote request.",
     "sections": [
       {
         "id": "refresh-or-rebuild",
-        "title": "A refresh or a rebuild? Start with the actual problem.",
+        "title": "Choose a website design scope that fits your business",
         "paragraphs": [
-          "A refresh is worth considering when your services and existing content are still right, but the design, mobile experience or route to an enquiry needs attention. A rebuild may be more appropriate when you need a different structure, more service pages or a new integration.",
-          "For example, a contractor with accurate service information but a hard-to-find phone number has a different brief from a company adding several new services. We review your existing site before recommending the scope. This is a scoping example, not a client result."
+          "A website refresh suits a business with accurate service information that needs stronger design, mobile usability or a clearer contact journey. A broader website redesign can reorganise navigation, introduce service pages and support an expanded offer. We review your current site, priorities and platform before recommending the scope.",
+          "For a new small business website, the first decisions are the audience, services and primary action. A contractor may prioritise estimate requests, while a venue may need a clear route to an availability enquiry. Those decisions shape the page structure, copy and design."
         ],
         "links": [
           {
@@ -22,15 +22,15 @@
       },
       {
         "id": "scope",
-        "title": "What the website refresh focuses on",
+        "title": "Mobile-first pages with a clear conversion path",
         "paragraphs": [
-          "The published Website Refresh package is $1,000. The starting point is the existing offer: visual redesign, mobile-first layout, click-to-call and quote forms, SEO structure, a clear contact experience and basic analytics setup. The written scope confirms the pages and changes before work begins."
+          "We bring together visual design, useful content and the practical steps a visitor takes to get in touch. The agreed work can include a mobile-first layout, click-to-call links, quote forms, page titles, headings, descriptions and basic analytics setup. Your written scope identifies the pages and functionality included."
         ],
         "bullets": [
-          "Make the main service and next step obvious on mobile and desktop.",
-          "Restructure existing content so visitors can find services, location and contact details.",
-          "Set page titles, headings and descriptions that reflect the real business.",
-          "Test the enquiry path rather than treating the form's appearance as proof that it works."
+          "Explain your offer and service area on the first screen.",
+          "Connect service information, genuine project evidence and relevant buyer questions.",
+          "Use clear buttons and forms that suit the enquiry you want.",
+          "Test mobile navigation, form delivery, error messages and confirmations before launch."
         ],
         "links": [
           {
@@ -41,26 +41,30 @@
       },
       {
         "id": "migration",
-        "title": "Do not lose the useful parts of the old site",
+        "title": "Plan the launch around your existing website",
         "paragraphs": [
-          "Before changing an existing website, we identify important URLs and available search data. Where addresses need to change, relevant redirects and updated internal links belong in the launch scope. We do not assume every old page should be redirected to the homepage.",
-          "A redesign is not a promise that rankings will stay unchanged. Search systems need to process changes, and the migration plan depends on the current site. Tell us about domain, hosting, booking or email dependencies before the launch is scheduled."
+          "We identify important pages and review available search data before changing the structure. When URLs change, the launch scope includes relevant redirects and updated internal links. This gives visitors and search systems a route from the previous pages to the appropriate new content.",
+          "Tell us about your domain, hosting, email and booking tools during scoping. We agree access, launch responsibilities and the handoff before scheduling the change. Search data after launch helps us review how the updated pages are being discovered."
         ],
         "sources": [
           {
-            "label": "Google: site moves with URL changes",
+            "label": "Google guidance on site moves with URL changes",
             "href": "https://developers.google.com/search/docs/crawling-indexing/site-move-with-url-changes"
           }
         ]
       },
       {
         "id": "larger-projects",
-        "title": "When the Growth Site is the better fit",
+        "title": "Pricing for a refresh or a Growth Site",
         "paragraphs": [
-          "Picshaw's Growth Site starts at $2,500 and is the published option for a 5–10 page site. Projects that need more pages, new integrations or a different content structure need a confirmed quote rather than an assumption that everything fits the refresh.",
-          "Domain renewals, hosting arrangements, third-party subscriptions, new photography and ongoing content work should be clarified in the proposal. The refresh price is not a promise of unlimited work or lifetime third-party services. You receive a handoff; the ownership and account-transfer details are agreed for your project."
+          "The published Website Refresh is $1,000 for an agreed refresh scope. A Growth Site starts at $2,500 for a 5–10 page website. The right package depends on your existing content, page structure and required functionality.",
+          "Your proposal confirms the pages, integrations, account arrangements and delivery date. Hosting, domain renewals, photography and third-party subscriptions are discussed during scoping so you can plan the full project cost."
         ],
         "links": [
+          {
+            "label": "Explore focused landing page design",
+            "href": "/landing-page-design"
+          },
           {
             "label": "Explore ongoing local SEO work",
             "href": "/local-seo"
@@ -70,80 +74,84 @@
     ],
     "questions": [
       {
-        "question": "Can you work with my existing website?",
-        "answer": "Yes. Send its address with the review request. The recommendation depends on its structure, content and any platform or integration constraints."
+        "question": "Can you redesign my existing website?",
+        "answer": "Yes. Send your website address and explain what you want visitors to do. We review the current structure, platform and integrations, then recommend the design and content changes that fit your priorities."
       },
       {
-        "question": "Does a redesign guarantee more leads?",
-        "answer": "No. The work improves the website and enquiry path; traffic quality, your offer, competition and follow-up also affect the outcome. We measure enquiries rather than promising a percentage increase."
+        "question": "How do you assess whether the design is working?",
+        "answer": "We agree the important actions, test the contact journey and review available visits and enquiry data. Your offer, traffic quality and follow-up also influence the enquiries the website produces."
       },
       {
-        "question": "Is ongoing SEO included forever?",
-        "answer": "No. Technical foundations and an ongoing acquisition programme are different scopes. Picshaw's published Monthly Partner option starts at $500 per month; confirm the deliverables in your proposal."
+        "question": "How are website maintenance and ongoing SEO priced?",
+        "answer": "Website maintenance is quoted as a separate service for agreed support and updates. Ongoing search work is available through the Core AI Visibility Retainer at $1,500 per month with a three-month minimum, then month to month."
       }
     ]
   },
   {
     "slug": "ai-search-optimization",
-    "title": "AI-search optimization for local businesses",
-    "description": "Make your business website easier to discover and understand in search. Picshaw audits crawlability, useful content, evidence and AI-search eligibility.",
-    "eyebrow": "AEO · AI-search visibility",
-    "intro": "Give search systems useful, accessible information about your business. Picshaw's approach to answer engine optimization starts with a website people can trust—not a promise to make an AI assistant recommend you.",
+    "title": "AI search optimization and AEO services",
+    "description": "AEO and GEO services for local businesses. Improve technical access, useful content and ChatGPT search visibility with Picshaw's audit and monthly programme.",
+    "eyebrow": "Answer engine optimization · Los Angeles",
+    "intro": "Help people researching your services find clear, useful information about your business. Picshaw's AI search optimization work brings together technical access, accurate business details, buyer-focused content and measurable enquiry paths.",
     "sections": [
       {
         "id": "meaning",
-        "title": "What AEO work actually involves",
+        "title": "AEO and GEO built around your buyers' questions",
         "paragraphs": [
-          "Answer engine optimization describes work intended to improve visibility in AI-powered search experiences. For Picshaw, that means checking access, explaining your services clearly, supporting claims with evidence and measuring relevant visits and enquiries.",
-          "Google says its generative search features build on its core search systems. We therefore treat AI-search work as an extension of useful content and sound SEO, not a replacement for them."
+          "Answer engine optimization (AEO), generative engine optimization (GEO) and LLM SEO describe related approaches to visibility in AI-powered search. We use one programme to address the practical work behind those goals, including accessible pages, clear service explanations and evidence a potential customer can evaluate.",
+          "Buyers may research a business through ChatGPT, Perplexity or Google AI Overviews. Your audit scope identifies the platforms, questions and market being reviewed. Google's guidance connects its generative search features with established SEO foundations, so our work starts with useful content and a sound website structure."
         ],
         "sources": [
           {
-            "label": "Google: optimizing for generative AI search",
+            "label": "Google guidance on generative AI search",
             "href": "https://developers.google.com/search/docs/fundamentals/ai-optimization-guide"
           }
         ]
       },
       {
         "id": "access",
-        "title": "First, check whether public pages can be read",
+        "title": "Improve the foundations for ChatGPT search visibility",
         "paragraphs": [
-          "The audit covers robots rules, indexing directives, canonical URLs, sitemaps, readable page content and crawlable links. Hosting-level restrictions are checked separately: an open robots file does not override a firewall or a login.",
-          "OpenAI documents OAI-SearchBot for ChatGPT search and GPTBot for potential training use. These are separate controls. We do not change a business's training preference merely to enable search access."
+          "We review robots rules, indexing directives, canonical URLs, sitemaps, readable content and crawlable links. Where access is available, we also investigate hosting restrictions that affect public pages. Findings become an ordered implementation plan with the affected URLs and the next action.",
+          "OpenAI provides OAI-SearchBot controls for ChatGPT search and GPTBot controls for potential training use. We review search access against the business's chosen settings and agree any proposed changes."
         ],
         "links": [
           {
             "label": "Read the ChatGPT search eligibility guide",
             "href": "/blog/chatgpt-search-visibility"
+          },
+          {
+            "label": "Explore technical SEO services",
+            "href": "/technical-seo"
           }
         ],
         "sources": [
           {
-            "label": "OpenAI: crawler controls",
+            "label": "OpenAI crawler controls",
             "href": "https://developers.openai.com/api/docs/bots"
           }
         ]
       },
       {
         "id": "content",
-        "title": "Then, give people a reason to choose your business",
+        "title": "Create content that helps a customer choose",
         "paragraphs": [
-          "We look for unanswered buying questions: what you do, who you serve, where you work, what happens next and what your prices include. Those questions belong on useful service pages, supported by real examples and a named business.",
-          "Concept designs must be labelled as concepts. Results need a source and a timeframe. We will not manufacture client reviews, awards, rankings or third-party endorsements to make the site look established."
+          "We turn real buying questions into useful service pages and guides. These explain what you do, who you serve, where you work, what the price includes and how to enquire. Each page needs a clear purpose and information your business can confirm.",
+          "The content plan uses genuine experience, authorised project examples and current business details. Design concepts carry a clear label. Any reported result includes its source and timeframe so readers can understand the evidence."
         ],
         "bullets": [
-          "Specific service explanations and accurate business information.",
-          "Practical guides that connect to a relevant next step.",
-          "First-hand examples where available, with concept work clearly distinguished.",
-          "Structured data that matches the content visitors can actually read."
+          "Specific service descriptions and practical answers to buyer questions.",
+          "Consistent business information across the agreed sources.",
+          "Relevant internal links and an easy route to enquire.",
+          "Structured data that reflects the visible, accurate page content."
         ]
       },
       {
         "id": "measurement",
-        "title": "Measure visibility separately from business outcomes",
+        "title": "Use monthly evidence to choose the next improvement",
         "paragraphs": [
-          "We use the search and analytics data available for your accounts. Identifiable AI referrals, landing-page visits and completed enquiries are different measures; none should be presented as the other.",
-          "No provider can guarantee that ChatGPT or Google will cite a particular page. A useful first engagement is a scoped audit and implementation plan. Ongoing content and promotion are agreed separately, after the basics and measurement are in place."
+          "Core includes a repeatable sample of approximately 20 buyer questions across ChatGPT and Google AI experiences, one agreed page or guide each month, scoped access and listing checks, and a 30-minute reporting walkthrough. The report records test dates, markets, observed mentions and linked sources.",
+          "Available search and analytics data helps us review identifiable AI referrals, landing-page visits and qualified enquiries. These observations guide the next round of technical or content work. Platform coverage beyond the published Core scope is agreed in your proposal."
         ],
         "links": [
           {
@@ -151,8 +159,8 @@
             "href": "/local-seo"
           },
           {
-            "label": "Learn about Picshaw",
-            "href": "/about"
+            "label": "Read our visibility measurement method",
+            "href": "/methodology"
           },
           {
             "label": "Monthly AI Visibility Retainer pricing",
@@ -163,48 +171,52 @@
     ],
     "questions": [
       {
-        "question": "Can you guarantee a ChatGPT recommendation?",
-        "answer": "No. We can improve the information and access you control, but the search platform decides what appears for a particular request."
+        "question": "Can AI search optimization guarantee inclusion in an answer?",
+        "answer": "Each search platform decides what appears, and results vary with the question, market, sources and date. Our commitment covers the agreed technical and content work, documented observations and reporting."
       },
       {
-        "question": "Is an llms.txt file the main solution?",
-        "answer": "No. Google explicitly says it does not use llms.txt to improve visibility. We prioritise useful pages, accurate information, real evidence and ordinary search foundations."
+        "question": "How do AEO services work with my existing SEO?",
+        "answer": "We review your current pages, access controls and available search data first. The plan builds on that foundation with relevant buyer questions, accurate business information and AI-search observation alongside your existing search measurement."
       },
       {
         "question": "How is the work priced?",
-        "answer": "A single-location AI Visibility Audit is $1,250. Core ongoing AI visibility is $1,500 per month with a three-month minimum, then month to month. Website redesign is separate, with a scoped written proposal."
+        "answer": "A single-location AI Visibility Audit is $1,250. The Core AI Visibility Retainer is $1,500 per month for one location and one primary market, with a three-month minimum, then month to month. Website redesign receives its own written scope."
       }
     ]
   },
   {
     "slug": "local-seo",
-    "title": "Local SEO for small service businesses",
-    "description": "Build a clearer local search presence with Picshaw: technical checks, service content, genuine business information and enquiry-focused measurement.",
-    "eyebrow": "Local SEO · Los Angeles",
-    "intro": "Help nearby customers understand what you offer and how to contact you. Start with an honest diagnosis of the website, then invest in the pages and improvements that fit your business.",
+    "title": "Local SEO services in Los Angeles and Orange County",
+    "description": "Local SEO services for Los Angeles and Orange County businesses. Improve service pages, business listings and technical foundations with a measured monthly plan.",
+    "eyebrow": "Local search optimization · LA & Orange County",
+    "intro": "Help nearby customers find your services and take the next step. Picshaw supports businesses serving Los Angeles and Orange County with local SEO work grounded in their actual services, coverage areas and enquiry goals.",
     "sections": [
       {
         "id": "diagnosis",
-        "title": "Not indexed, or just not ranking? They are different problems.",
+        "title": "Start with the services and areas you want to grow",
         "paragraphs": [
-          "A page can be accessible and indexed without attracting enquiries. Before prescribing more posts, we inspect important URLs and review the available Search Console data. That separates an access problem from a content, relevance or demand problem.",
-          "An early report should state what was checked, what the data actually says and where access is still missing. A low-traffic website does not need an invented forecast; it needs a clear baseline and an ordered set of changes."
+          "We review your priority services, real coverage area and the enquiries you want to receive. Available Search Console data and important page checks help identify opportunities in technical access, service content and the contact journey. This creates a baseline for the work that follows.",
+          "A business serving one primary market may need a focused set of page improvements. A company covering several locations may need a broader structure and reporting scope. We agree the market, pages and access requirements before recommending the programme."
         ],
         "links": [
           {
-            "label": "Diagnose a site that is not appearing in Google",
+            "label": "Explore website visibility diagnosis",
             "href": "/blog/website-not-appearing-in-google"
           }
         ]
       },
       {
         "id": "pages",
-        "title": "Build pages around real services—not every keyword variation",
+        "title": "Service pages that answer local buying questions",
         "paragraphs": [
-          "We organise the site around distinct services and useful customer questions. A service-area page should add meaningful information about where and how the business operates, not just replace the city name in a template.",
-          "The scope can include titles, descriptions, headings, internal links, canonical URLs and a sitemap. Content work then explains the business clearly and gives visitors an appropriate route to call or request a quote."
+          "We organise content around distinct services and the questions customers ask before contacting you. A useful service-area page explains where you work, the jobs you take and any genuine local information that helps someone decide whether your business is a fit.",
+          "The scope can include page titles, descriptions, headings, internal links, canonical URLs and a sitemap. Copy connects those foundations to a practical next step, such as calling about availability or requesting an estimate. Genuine project details strengthen the page when they are available."
         ],
         "links": [
+          {
+            "label": "Explore landing pages for services and local offers",
+            "href": "/landing-page-design"
+          },
           {
             "label": "Website design for contractors",
             "href": "/web-design-for-contractors"
@@ -213,10 +225,16 @@
       },
       {
         "id": "profiles",
-        "title": "Keep business information genuine and consistent",
+        "title": "Connect business profiles with the website",
         "paragraphs": [
-          "Business profiles and website details should agree about the name, contact information and services. Reviews should come from real customers and reflect their own experience.",
-          "Google Business Profile work is appropriate only for an eligible business. Qualifying in-person customer contact matters; an online-only business should not create a fictitious office to obtain a local listing. We check eligibility before adding profile work to the scope."
+          "We check business information across the agreed sources, which can include Google Business Profile, Apple Maps, Bing and relevant directories. Consistent contact details, service descriptions and website destinations help customers move from a listing to useful information about your business.",
+          "Google Business Profile upkeep starts with eligibility, verification and appropriate access. For an eligible profile, the agreed work can include service information, a post or update, and review-response drafts for your approval. The website and profile use the locations and coverage areas your business can confirm."
+        ],
+        "links": [
+          {
+            "label": "Explore Google Business Profile optimization",
+            "href": "/google-business-profile-optimization"
+          }
         ],
         "sources": [
           {
@@ -227,10 +245,10 @@
       },
       {
         "id": "scope",
-        "title": "Separate launch foundations from ongoing work",
+        "title": "A local SEO programme with clear monthly work",
         "paragraphs": [
-          "Picshaw's ongoing AI Visibility Retainer Core is $1,500 per month with a three-month minimum, then month to month. It combines scoped local search foundations and AI visibility measurement. Website maintenance on its own is a separate service.",
-          "We recommend judging the programme by relevant search visits, completed enquiries and qualified conversations. Ranking screenshots and traffic totals are supporting information, not proof of new customers."
+          "The Core AI Visibility Retainer is $1,500 per month with a three-month minimum, then month to month. It covers one location and one primary market, combining scoped local search foundations, eligible profile upkeep, one useful page or guide each month and AI visibility measurement.",
+          "A monthly report and 30-minute walkthrough connect the completed work with available search visits, identifiable referrals and qualified enquiries. We use that evidence to choose the next priorities. Additional locations or primary markets receive a tailored scope."
         ],
         "links": [
           {
@@ -250,16 +268,16 @@
     ],
     "questions": [
       {
-        "question": "Can you promise the first position in my city?",
-        "answer": "No. Rankings depend on the query, competition and the search system. We agree the work and measurement, not a guaranteed position."
+        "question": "Can you help a business serving both LA and Orange County?",
+        "answer": "Yes. Share your actual service areas and priority locations. We assess the page and listing work required, then confirm the market coverage in the proposal. Core covers one location and one primary market."
       },
       {
-        "question": "Should I create a page for every neighbourhood?",
-        "answer": "Only where there is genuinely useful, distinct information. We do not recommend a large set of near-identical location pages just to capture keyword variations."
+        "question": "When is a dedicated service-area page useful?",
+        "answer": "A dedicated page earns its place when it adds specific information about the services, coverage or work in that area. We review the customer need and available evidence before adding it to the content plan."
       },
       {
-        "question": "Do I need to replace my whole website?",
-        "answer": "Not necessarily. The review may identify fixes that can be made on your current site. A redesign should solve a real problem, not be the default recommendation."
+        "question": "How will I know what local SEO is achieving?",
+        "answer": "We document the completed work and review available search and enquiry data against the starting baseline. Search positions vary with the query, location and competition, so the review also considers the relevance of the visits and conversations reaching your business."
       }
     ]
   },
@@ -413,6 +431,245 @@
       {
         "question": "What if my business does not have a website yet?",
         "answer": "Tell us your trade, main services, coverage area and preferred way to receive enquiries. Share any logo, photos or business information you already have. We can use that brief to recommend a page structure and confirm a suitable scope and quote."
+      }
+    ]
+  },
+  {
+    "slug": "google-business-profile-optimization",
+    "title": "Google Business Profile optimization for local businesses",
+    "description": "Google Business Profile optimization in Los Angeles and Orange County. Accurate service details, approved updates and review-response support from Picshaw.",
+    "eyebrow": "Google Business Profile · Local visibility",
+    "intro": "Make it easier for a nearby customer to understand your business and get in touch. Picshaw helps eligible local businesses keep their Google Business Profile information useful, accurate and connected to the website.",
+    "sections": [
+      {
+        "id": "profile-review",
+        "title": "Start with an accurate, accessible business profile",
+        "paragraphs": [
+          "A profile review begins with the services you provide, your real operating area and the details customers see. We compare the profile with your website and the information you confirm, then identify which updates would make the business easier to understand.",
+          "Our profile upkeep work starts with an eligible, verified Google Business Profile and agreed management access. We review access and verification status during scoping, identify the person approving changes and confirm the locations covered by the work."
+        ],
+        "sources": [
+          {
+            "label": "Google Business Profile eligibility and ownership guidance",
+            "href": "https://support.google.com/business/answer/13763036?hl=en"
+          }
+        ]
+      },
+      {
+        "id": "deliverables",
+        "title": "Profile improvements tied to your real services",
+        "paragraphs": [
+          "The agreed scope focuses on information a customer uses when comparing businesses. We use your confirmed details and genuine customer experience to prepare changes, with the website providing fuller service explanations and a clear enquiry route."
+        ],
+        "bullets": [
+          "Review contact details, business hours, service information and the website destination.",
+          "Prepare an agreed post or profile update using accurate business information.",
+          "Develop relevant customer-question content where profile features support it.",
+          "Draft responses to genuine customer reviews for your approval.",
+          "Check that the linked page explains the service and provides a working next step."
+        ],
+        "links": [
+          {
+            "label": "Explore the wider local SEO programme",
+            "href": "/local-seo"
+          }
+        ]
+      },
+      {
+        "id": "process",
+        "title": "A review and approval process you can follow",
+        "paragraphs": [
+          "You supply the current business details, services and priorities. We review the accessible profile, prepare the agreed updates and send content for approval. Publishing follows the access and approval arrangements in your scope, with Google's processing affecting when changes appear.",
+          "The review records completed work and any updates awaiting access, approval or processing. We also look at the available website visits and enquiries associated with the profile, helping you decide which service information or contact steps need attention next."
+        ]
+      },
+      {
+        "id": "pricing",
+        "title": "How profile upkeep fits the monthly programme",
+        "paragraphs": [
+          "Google Business Profile upkeep is part of the published Core AI Visibility Retainer for an eligible, verified and accessible profile. Core is $1,500 per month for one location and one primary market, with a three-month minimum, then month to month.",
+          "Core also includes scoped website access checks, one useful page or guide each month, AI visibility testing and reporting. A focused profile request receives a written scope based on the access and changes required. Additional locations are quoted around their coverage needs."
+        ],
+        "links": [
+          {
+            "label": "See the Core deliverables and pricing",
+            "href": "/ai-visibility-retainer"
+          }
+        ]
+      }
+    ],
+    "questions": [
+      {
+        "question": "Can you work with our existing Google Business Profile?",
+        "answer": "Yes. Send the public profile link, website address and location you want reviewed. We confirm eligibility, verification status and the management access required before agreeing the work."
+      },
+      {
+        "question": "Who approves posts and review responses?",
+        "answer": "Your designated business contact approves the drafts using the agreed workflow. Service details and review responses reflect information your business can confirm and the customer's genuine experience."
+      },
+      {
+        "question": "What should I expect from profile optimization?",
+        "answer": "Expect an agreed set of information improvements and a record of completed work. Google determines profile presentation and search positions. We review the available visits and enquiries to understand how customers are using the information."
+      }
+    ]
+  },
+  {
+    "slug": "technical-seo",
+    "title": "Technical SEO services for small business websites",
+    "description": "Technical SEO audits and scoped fixes for small business websites. Review crawlability, indexing, page structure and mobile performance with Picshaw.",
+    "eyebrow": "Technical SEO · Website foundations",
+    "intro": "Give your service pages a sound foundation for discovery and a usable experience on mobile. Picshaw reviews the technical issues affecting your website, prioritises the findings and scopes the fixes around your business goals.",
+    "sections": [
+      {
+        "id": "diagnosis",
+        "title": "Find the issue behind weak search visibility",
+        "paragraphs": [
+          "A technical SEO review starts with your important pages and available search data. We examine whether the intended public URLs can be reached, understood and followed through the site, then investigate the controls or page behaviour that may be affecting discovery.",
+          "Tell us about recent redesigns, platform changes or pages that have stopped attracting visits. This context helps focus the investigation. The review records the URLs checked, the access available and the evidence behind each recommended change."
+        ],
+        "links": [
+          {
+            "label": "Read the guide to a website missing from Google",
+            "href": "/blog/website-not-appearing-in-google"
+          }
+        ]
+      },
+      {
+        "id": "checks",
+        "title": "Technical SEO checks with practical deliverables",
+        "paragraphs": [
+          "The scope concentrates on the pages that explain your offer and lead to enquiries. Findings identify the affected page or setting, the proposed improvement and the access needed to complete it."
+        ],
+        "bullets": [
+          "Review robots rules, indexing directives, canonical URLs and sitemap coverage.",
+          "Check readable page content, headings, titles, descriptions and crawlable internal links.",
+          "Inspect relevant redirects and links when existing page addresses change.",
+          "Review mobile layout and loading behaviour on the agreed pages.",
+          "Check that relevant structured data reflects visible, accurate business information."
+        ]
+      },
+      {
+        "id": "implementation",
+        "title": "Prioritise, implement and check the agreed fixes",
+        "paragraphs": [
+          "We order the findings around the importance of the affected pages, the evidence available and the effort involved. A blocked service page may need early attention, while a wider change to navigation or page templates needs a more detailed implementation scope.",
+          "The proposal confirms which fixes Picshaw will implement and which need your hosting provider or another account owner. After agreed changes, we recheck the affected pages and contact journey. Available Search Console data supports follow-up on discovery and indexing as search systems process the updates."
+        ],
+        "links": [
+          {
+            "label": "Plan a website design or redesign project",
+            "href": "/website-redesign"
+          }
+        ]
+      },
+      {
+        "id": "scope",
+        "title": "Scope technical work around the website you have",
+        "paragraphs": [
+          "Technical SEO implementation is quoted around the pages, platform, access and fixes required. The $1,250 single-location AI Visibility Audit includes a broader review of search access, business accuracy, buyer questions and the enquiry path, with a documented action plan.",
+          "Ongoing key-page access and indexing checks form part of Core at $1,500 per month with a three-month minimum, then month to month. Larger technical rebuilds receive a project scope that defines the implementation and launch responsibilities."
+        ],
+        "links": [
+          {
+            "label": "Explore the AI Visibility Audit",
+            "href": "/ai-visibility-audit"
+          },
+          {
+            "label": "See the monthly Core scope",
+            "href": "/ai-visibility-retainer"
+          }
+        ]
+      }
+    ],
+    "questions": [
+      {
+        "question": "Can you improve technical SEO on our current website?",
+        "answer": "The review identifies changes that fit your current platform and access. Send the website address and describe any recent changes or search concerns so we can assess the appropriate scope."
+      },
+      {
+        "question": "What do we receive from the review?",
+        "answer": "You receive documented findings for the agreed pages, supporting evidence and prioritised actions. The proposal identifies the implementation work, account access and follow-up checks included in the engagement."
+      },
+      {
+        "question": "How does technical SEO support AI-search visibility?",
+        "answer": "The work reviews the accessible content and search foundations used by discovery systems. Our AEO service adds buyer-question content, business-information checks and sampled AI-search observations to that technical starting point."
+      }
+    ]
+  },
+  {
+    "slug": "landing-page-design",
+    "title": "Landing page design for local businesses",
+    "description": "Landing page design for services, local offers and enquiry campaigns. Picshaw builds mobile-first pages with focused copy, quote forms and clear next steps.",
+    "eyebrow": "Landing page design · Enquiry-focused websites",
+    "intro": "Give visitors a useful destination for the service or offer that brought them to you. Picshaw designs focused landing pages that explain the offer, answer buying questions and make the next step easy to take.",
+    "sections": [
+      {
+        "id": "purpose",
+        "title": "One page built around one customer decision",
+        "paragraphs": [
+          "A landing page can support a particular service, genuine service area or seasonal offer. We start by agreeing the audience, how visitors will arrive and the action you want them to take. That might be a phone call, an estimate request or an availability enquiry.",
+          "The page then gives the customer enough information to act. A service page can explain the work involved and the next steps. An area page can describe actual coverage and relevant project experience. A seasonal offer needs clear terms, timing and a working contact route."
+        ],
+        "links": [
+          {
+            "label": "Connect service pages with a local SEO plan",
+            "href": "/local-seo"
+          }
+        ]
+      },
+      {
+        "id": "design",
+        "title": "Design and copy that support the enquiry",
+        "paragraphs": [
+          "The design brings the offer, genuine evidence and contact options together in a mobile-first layout. We organise the copy around the questions that affect the decision, using business details and claims you can confirm."
+        ],
+        "bullets": [
+          "A clear headline that identifies the service and customer benefit.",
+          "Useful detail about scope, coverage, process and relevant pricing.",
+          "Authorised project images or testimonials where they are available.",
+          "A focused call-to-action with click-to-call links or an agreed enquiry form.",
+          "Page titles, descriptions and internal links that fit the wider website."
+        ]
+      },
+      {
+        "id": "process",
+        "title": "From an agreed brief to a tested live page",
+        "paragraphs": [
+          "We review your existing website and the offer, then agree the page structure, required content and contact action. You provide the business facts and available assets. The design and copy go through the agreed review process before publication.",
+          "Launch checks cover mobile layout, links, required form fields, message delivery and the confirmation a customer sees. Basic analytics setup can support the agreed measurement. After launch, available visits and enquiry data help identify whether the offer or contact journey needs further improvement."
+        ]
+      },
+      {
+        "id": "pricing",
+        "title": "A scope based on content and functionality",
+        "paragraphs": [
+          "Landing page work is quoted around the content, design, form and any integration required. The proposal confirms the page, review process, access and delivery date. Tell us about existing booking tools or quote systems during the brief so we can assess the connection.",
+          "For a broader website project, Picshaw's Website Refresh is $1,000 for an agreed refresh scope. The Growth Site starts at $2,500 for a 5–10 page website. We can assess how a new landing page fits those wider website priorities."
+        ],
+        "links": [
+          {
+            "label": "Compare website design and redesign options",
+            "href": "/website-redesign"
+          },
+          {
+            "label": "See website design for contractors",
+            "href": "/web-design-for-contractors"
+          }
+        ]
+      }
+    ],
+    "questions": [
+      {
+        "question": "Can the landing page sit on my current website?",
+        "answer": "Often yes. We review your platform, page structure and access before agreeing the implementation. The design can follow your existing brand while giving the particular offer a focused presentation."
+      },
+      {
+        "question": "What should I provide for the brief?",
+        "answer": "Send the offer, audience, actual coverage area and the action you want visitors to take. Include your current website, confirmed pricing, available images and the details needed to handle an enquiry."
+      },
+      {
+        "question": "How do you measure landing page performance?",
+        "answer": "We agree the important action and review the available traffic and enquiry data. Traffic quality, offer clarity and your follow-up affect outcomes, so we use the evidence to guide subsequent changes."
       }
     ]
   }

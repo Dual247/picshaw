@@ -11,6 +11,7 @@ import { retainerOptions, isRetainerService, RETAINER_PATH, corePrice, auditPric
 import styles from './EditorialHome.module.css'
 
 type Guide = { slug: string; title: string; category: string }
+type IndustryLink = { slug: string; name: string }
 const questions = [
   { question: 'What is AI-search visibility?', answer: 'It is how easily people can discover and understand your business through AI-powered search. Answer engine optimization (AEO) improves the technical foundations, service information and evidence that support that discovery.' },
   { question: 'Do I need a new website?', answer: 'Not necessarily. We start with what you have. A redesign is a separate scope, recommended only when the existing website or enquiry experience needs it.' },
@@ -18,9 +19,9 @@ const questions = [
   { question: 'What does it cost to get started?', answer: 'An enquiry is free. A single-location AI Visibility Audit is $1,250. The Core AI Visibility Retainer is $1,500 per month with a three-month minimum, then month to month. Website builds and the AI receptionist pilot are separate.' },
 ]
 const services = [
-  { number: '01', title: 'AI-search visibility.', description: 'Find the gaps. Strengthen your search foundations. Make your expertise easier to discover.', href: '/ai-search-optimization', label: 'Explore AEO' },
-  { number: '02', title: 'Websites with purpose.', description: 'A better first impression. Clearer services. A simpler route from visitor to enquiry.', href: '/website-redesign', label: 'Explore website design' },
-  { number: '03', title: 'Ready for the call.', description: 'Explore after-hours enquiry capture and callbacks, configured around your business.', href: '/ai-receptionist', label: 'Explore AI receptionist', tag: 'Founding pilot' },
+  { number: '01', title: 'AEO & AI visibility.', description: 'Answer engine optimization for clearer visibility in ChatGPT, Perplexity and Google AI search experiences.', href: '/ai-search-optimization', label: 'Explore AEO' },
+  { number: '02', title: 'Website design.', description: 'Mobile-first websites and redesigns that make your services clear and guide visitors to an enquiry.', href: '/website-redesign', label: 'Explore website design' },
+  { number: '03', title: 'AI phone answering.', description: 'Explore after-hours call capture, enquiry qualification and callbacks through our managed AI receptionist pilot.', href: '/ai-receptionist', label: 'Explore AI receptionist', tag: 'Founding pilot' },
 ]
 const enquiryOptions = [
   { value: 'audit', label: 'AI Visibility Audit — $1,250' },
@@ -102,7 +103,7 @@ function HomeEnquiry() {
   </section>
 }
 
-export function EditorialHome({ guides }: { guides: Guide[] }) {
+export function EditorialHome({ guides, industryLinks }: { guides: Guide[]; industryLinks: IndustryLink[] }) {
   const faqSchema = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: questions.map(item => ({ '@type': 'Question', name: item.question, acceptedAnswer: { '@type': 'Answer', text: item.answer } })) }
   return <div className={styles.home}>
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema).replace(/</g, '\\u003c') }} />
@@ -112,7 +113,7 @@ export function EditorialHome({ guides }: { guides: Guide[] }) {
         <div className={styles.heroGrid}>
           <div>
             <h1 id="home-title" className={styles.heroTitle}>Get found.<br /><span>Give customers<br />a reason to call.</span></h1>
-            <p className={styles.heroIntro}>Websites and AI-search visibility for local businesses. Make your services easier to discover, your value easier to understand, and the next step easier to take.</p>
+            <p className={styles.heroIntro}>Website design, local SEO and AI-search visibility for service businesses across Los Angeles and Orange County. Help customers find your services, understand your value and get in touch.</p>
             <div className={styles.heroActions}><a href="#contact" className={styles.primaryButton}>Discuss my business<ArrowUpRight size={18} aria-hidden="true" /></a><a href="#services" className={styles.textLink}>See services &amp; pricing<ArrowDown size={16} aria-hidden="true" /></a></div>
           </div>
 
@@ -129,7 +130,7 @@ export function EditorialHome({ guides }: { guides: Guide[] }) {
           </aside>
         </div>
         <p className={styles.heroReassurance}>Work directly with Ash Patel. Clear scope. No ranking or lead guarantees.</p>
-        <div className={styles.audience}><span>Built around local expertise.</span><p>Home services<span aria-hidden="true">/</span>Contractors<span aria-hidden="true">/</span>Owner-led businesses</p></div>
+        <div className={styles.audience}><span>Built around local expertise.</span><p>Practices<span aria-hidden="true">/</span>Professional services<span aria-hidden="true">/</span>Trades<span aria-hidden="true">/</span>Hospitality</p></div>
       </div>
     </section>
 
@@ -158,9 +159,15 @@ export function EditorialHome({ guides }: { guides: Guide[] }) {
       </div>
       <p className={styles.pricingNote}>Prices in USD. Scope and any applicable taxes confirmed before paid work. AI receptionist is a separate founding pilot, scoped on enquiry.</p>
       <div className={styles.serviceList}>{services.map(service => <Link href={service.href} key={service.number} className={styles.serviceRow} aria-label={service.label}><span className={styles.serviceNumber}>{service.number}</span><div className={styles.serviceTitle}><h3>{service.title}</h3>{service.tag && <span className={styles.pilot}>{service.tag}</span>}</div><p>{service.description}</p><span className={styles.serviceArrow}><ArrowUpRight size={24} aria-hidden="true" /></span></Link>)}</div>
+      <div className={styles.serviceDiscovery}><Link href="/local-seo">Local SEO</Link><Link href="/google-business-profile-optimization">Google Business Profile optimization</Link><Link href="/technical-seo">Technical SEO</Link><Link href="/landing-page-design">Landing page design</Link><Link href="/services">All services <ArrowUpRight size={16} aria-hidden="true" /></Link></div>
     </div></section>
 
     <HomeEnquiry />
+    <section id="industries" className={styles.industrySection} aria-labelledby="home-industries-heading"><div className={styles.container}>
+      <div className={styles.sectionHead}><div><p className={styles.eyebrow}>Built around your customers</p><h2 id="home-industries-heading" className={styles.sectionTitle}>Your industry.<br /><em>Their next search.</em></h2></div><p className={styles.sideNote}>SEO, AI visibility and website design shaped around the way your customers choose.</p></div>
+      <div className={styles.industryGrid}>{industryLinks.map(industry => <Link key={industry.slug} href={`/industries/${industry.slug}`}>{industry.name}<ArrowUpRight size={17} aria-hidden="true" /></Link>)}</div>
+      <Link href="/industries" className={styles.textLink}>Explore services for your industry<ArrowRight size={17} aria-hidden="true" /></Link>
+    </div></section>
     <section id="work" className={styles.work} aria-labelledby="work-heading"><div className={styles.container}>
       <div className={styles.sectionHead}><div><p className={styles.eyebrow}>03 / Design directions</p><h2 id="work-heading" className={styles.sectionTitle}>Different businesses.<br /><em>Distinctive websites.</em></h2></div><p className={styles.sideNote}>A selection of illustrative concepts.<br />Design capability, not client results.</p></div>
       <div className={styles.workGrid}>{projects.map(project => <article key={project.title} className={styles.workCard}>

@@ -11,7 +11,7 @@ const navItems = [
   { label: 'Websites', href: '/website-redesign' },
   { label: 'Monthly plan', href: '/ai-visibility-retainer' },
   { label: 'AI receptionist', href: '/ai-receptionist' },
-  { label: 'Our approach', href: '/methodology' },
+  { label: 'Industries', href: '/industries' },
   { label: 'Guides', href: '/blog' },
   { label: 'Work', href: '/#work' },
   { label: 'About', href: '/about' },
