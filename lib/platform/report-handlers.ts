@@ -54,7 +54,7 @@ export async function handleReports(request: NextRequest, operation: Operation, 
       setAll: (cookies, extra) => { for (const cookie of cookies) { writes.set(cookie.name, cookie); current.set(cookie.name, cookie.value) }; Object.entries(extra).forEach(([key, value]) => headers.set(key, value)) },
     }, deps.env)
     let actor
-    try { actor = await requireWorkspaceActor(client, config.url) } catch { return finish({ error: 'Sign in again to open your search reports.' }, 401) }
+    try { actor = await requireWorkspaceActor(client, config.url, deps.env) } catch { return finish({ error: 'Sign in again to open your search reports.' }, 401) }
     const selected = await workspace(actor, null)
     if (!selected) return finish({ error: 'Create your workspace first.' }, 409)
     const identity = { actor, organizationId: selected.id }

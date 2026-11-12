@@ -1,14 +1,14 @@
 import 'server-only'
 import postgres from 'postgres'
 import type { SupabaseClient } from '@supabase/supabase-js'
-import { requireVerifiedActor, AuthenticationRequiredError } from './auth'
+import { requirePortalActor, AuthenticationRequiredError, type PortalAccessEnvironment } from './auth'
 import { parseWorkspaceInput, type WorkspaceInput } from './workspace-input'
 
 export type Workspace = WorkspaceInput & { id: string }
 export type WorkspaceActor = { id: string; sessionId: string; expiresAt: number }
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
-export async function requireWorkspaceActor(client: Pick<SupabaseClient, 'auth'>, projectUrl: string): Promise<WorkspaceActor> {
+export async function requireWorkspaceActor(client: Pick<SupabaseClient, 'auth'>, projectUrl: string, env?: PortalAccessEnvironment): Promise<WorkspaceActor> {
   // getClaims verifies the SAME token's signature, expiry and subject. Never
   // decode a cookie JWT and pair its unverified session_id with getUser().
   const { data, error } = await client.auth.getClaims()
@@ -17,7 +17,7 @@ export async function requireWorkspaceActor(client: Pick<SupabaseClient, 'auth'>
       !uuid.test(claims.session_id) || !Number.isSafeInteger(claims.exp) || claims.exp <= Date.now() / 1000 ||
       claims.role !== 'authenticated' || claims.is_anonymous !== false || claims.iss !== `${projectUrl}/auth/v1` ||
       !(claims.aud === 'authenticated' || (Array.isArray(claims.aud) && claims.aud.includes('authenticated')))) throw new AuthenticationRequiredError()
-  const actor = await requireVerifiedActor(client)
+  const actor = await requirePortalActor(client, env)
   if (actor.id !== claims.sub) throw new AuthenticationRequiredError()
   return { id: actor.id, sessionId: claims.session_id, expiresAt: claims.exp }
 }

@@ -56,7 +56,7 @@ export async function handleWorkspacePost(request: NextRequest, create: boolean,
       },
     }, dependencies.env)
     let actor
-    try { actor = await requireWorkspaceActor(client, config.url) } catch { return finish({ error: 'Sign in again to open your workspace.' }, 401) }
+    try { actor = await requireWorkspaceActor(client, config.url, dependencies.env) } catch { return finish({ error: 'Sign in again to open your workspace.' }, 401) }
     const workspace = await store(actor, input)
     return finish({ workspace })
   } catch {

@@ -13,6 +13,7 @@ const origin = 'https://app.picshaw.com'
 const project = 'https://supabase.example.com'
 const key = '__Host-picshaw-auth'
 const env = { VERCEL_ENV: 'production', NEXT_PUBLIC_SUPABASE_URL: project,
+  PIC_SHAW_PORTAL_ACCESS_MODE: 'public',
   NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: 'sb_publishable_fixture', PIC_SHAW_AUTH_ORIGIN: origin,
   ...Object.fromEntries(['GOOGLE', 'APPLE', 'EMAIL', 'SESSION'].map(name => [`PIC_SHAW_AUTH_${name}_ENABLED`, 'true'])) }
 const user = number => ({ id: `00000000-0000-4000-8000-${String(number).padStart(12, '0')}`,
@@ -60,7 +61,7 @@ function load(name, dependencies = {}) {
 }
 const config = load('config'), auth = load('auth')
 const server = load('server', { './config': config, '@supabase/ssr': { createServerClient } })
-const portal = load('portal-config', { './config': config, './auth-admission': admissions, '../portal-origin': { PORTAL_ORIGIN: origin } })
+const portal = load('portal-config', { './config': config, './auth': auth, './auth-admission': admissions, '../portal-origin': { PORTAL_ORIGIN: origin } })
 const handlers = load('portal-handlers', { './server': server, './auth': auth, './portal-config': portal,
   './auth-admission': admissions, 'next/server': { NextRequest, NextResponse } })
 async function post(action, jar = new Map(), body = {}, headers = {}) {
@@ -169,6 +170,7 @@ try {
   await test('real SDK recovery PKCE flow binds verifier to callback and consumes it once', async () => {
     const jar = new Map(); let redirect, challenge
     transport = (url, init) => {
+      if (url.pathname === '/auth/v1/user') return Response.json(user(1))
       if (url.pathname === '/auth/v1/recover') {
         redirect = new URL(url.searchParams.get('redirect_to'))
         const payload = JSON.parse(init.body); challenge = payload.code_challenge
