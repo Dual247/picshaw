@@ -34,7 +34,8 @@ try {
     assert.equal(title, expected, path)
     assert.equal(await page.locator('meta[property="og:title"]').getAttribute('content'), expected, `${path}: Open Graph title`)
     assert.equal(await page.locator('meta[name="twitter:title"]').getAttribute('content'), expected, `${path}: Twitter title`)
-    assert.equal(await page.locator('link[rel="canonical"]').getAttribute('href'), new URL(path, 'https://www.picshaw.com').href, `${path}: canonical unchanged`)
+    const canonical = await page.locator('link[rel="canonical"]').getAttribute('href')
+    assert.equal(new URL(canonical).href, new URL(path, 'https://www.picshaw.com').href, `${path}: canonical URL`)
     assert.equal(await page.locator('h1').count(), 1, `${path}: editorial heading retained`)
     report.titles.push({ path, title, characters: title.length, status: response.status() })
   }
