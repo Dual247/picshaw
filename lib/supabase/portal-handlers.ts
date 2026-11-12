@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import type { CookieOptions } from '@supabase/ssr'
 import { createRequestSupabaseClient, AUTH_RESPONSE_HEADERS } from './server'
 import { readPortalConfig, validEmailCredentials, validEmail, validNewPassword, type PortalEnvironment } from './portal-config'
-import { requireVerifiedActor, requirePortalActor, verifiedPortalActorFromResponse, portalEmailAllowed } from './auth'
+import { requireVerifiedActor, requirePortalActor, verifiedPortalActorFromResponse, portalEmailAllowed, pendingOwnerFromResponse } from './auth'
 import { checkDeploymentAuthAdmission, type AuthAdmission, type AuthAdmissionAction } from './auth-admission'
 
 type Dependencies = { env?: PortalEnvironment; createClient?: typeof createRequestSupabaseClient; admit?: AuthAdmission }
@@ -218,7 +218,17 @@ export async function handleAuthCallback(request: NextRequest, dependencies: Dep
     // provider OAuth state validation. A code without its browser verifier fails.
     const { data, error } = await client.auth.exchangeCodeForSession(code, flowId ? { flowId } : undefined)
     if (error || !data.session) return failure()
-    try { await requirePortalActor(client, dependencies.env) } catch {
+    const verified = await client.auth.getUser()
+    try { verifiedPortalActorFromResponse(verified, dependencies.env) } catch {
+      if (pendingOwnerFromResponse(verified, dependencies.env)) {
+        // A successful email confirmation is not access approval. Revoke this
+        // local exchange session and discard cookies before the neutral notice.
+        let signOutConfirmed = false
+        try { signOutConfirmed = !(await client.auth.signOut({ scope: 'local' })).error } catch { /* Uncertain revocation must not retain exchanged cookies. */ }
+        context.discardAuth()
+        if (!signOutConfirmed) return context.finish({ error: 'Email confirmation completed, but sign-out could not be confirmed. Workspace access is not enabled. Please try again later.' }, 503)
+        return context.finish({}, 303, `${config.origin}/platform/sign-in?notice=access-pending`)
+      }
       context.discardAuth(); return failure()
     }
     // Recovery type comes from the SDK's verifier, never an incoming type/next.
@@ -228,5 +238,5 @@ export async function handleAuthCallback(request: NextRequest, dependencies: Dep
     const destination = 'redirectType' in data && data.redirectType === 'recovery' && config.enabled.email && config.sessionEnabled
       ? '/platform/reset-password' : '/platform'
     return context.finish({}, 303, `${config.origin}${destination}`)
-  } catch { return failure() }
+  } catch { context.discardAuth(); return failure() }
 }

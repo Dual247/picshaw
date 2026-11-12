@@ -26,6 +26,8 @@ export function readPortalConfig(env: PortalEnvironment = {
   PIC_SHAW_PORTAL_ACCESS_MODE: process.env.PIC_SHAW_PORTAL_ACCESS_MODE,
   PIC_SHAW_PILOT_USER_A_ID: process.env.PIC_SHAW_PILOT_USER_A_ID,
   PIC_SHAW_PILOT_USER_B_ID: process.env.PIC_SHAW_PILOT_USER_B_ID,
+  PIC_SHAW_PILOT_OWNER_EMAIL: process.env.PIC_SHAW_PILOT_OWNER_EMAIL,
+  PIC_SHAW_PILOT_OWNER_ID: process.env.PIC_SHAW_PILOT_OWNER_ID,
 }) {
   if (env.VERCEL_ENV !== 'production' || env.PIC_SHAW_AUTH_ORIGIN !== PORTAL_ORIGIN) {
     throw new Error('Authentication is disabled on this deployment.')
