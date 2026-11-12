@@ -1,60 +1,18 @@
 [
   {
-    "slug": "dentists",
-    "name": "Dental practices",
-    "title": "Dental SEO, website design and AI visibility",
-    "description": "Help prospective patients find your dental practice, understand its services and request an appointment through clear websites, local SEO and AI visibility work.",
-    "eyebrow": "Dental practices",
-    "intro": "A prospective patient needs to understand the practice, the care it provides and how to arrange a visit. Picshaw connects those questions to useful service pages, an accurate local presence and a straightforward appointment request.",
-    "summary": "Give prospective patients a clear route from finding a dentist to choosing the appropriate appointment enquiry.",
-    "services": ["/local-seo", "/google-business-profile-optimization", "/website-redesign", "/ai-search-optimization"],
-    "sections": [
-      {
-        "id": "patient-journey",
-        "title": "Match the page to the reason for the visit",
-        "paragraphs": [
-          "Someone looking for a family dentist has different questions from someone researching implants or seeking an urgent appointment. We organise your actual services into clear paths, with relevant practitioner information, appointment expectations and contact options for each.",
-          "A search such as family dentist in Long Beach should lead to a page that explains who the practice sees, where it operates and how a new patient gets started. The practice supplies and reviews clinical explanations, eligibility information and any claims about treatment."
-        ]
-      },
-      {
-        "id": "practice-information",
-        "title": "Make everyday practice details easy to verify",
-        "paragraphs": [
-          "An attractive website still needs useful logistics. We review the mobile experience around directions, parking information supplied by the practice, opening hours, contact details and the route into your booking system. Insurance participation and financing information should reflect the practice's current arrangements.",
-          "The agreed scope can connect your service pages with Google Business Profile improvements and technical search checks. Photographs of the real team and premises give visitors useful context when the practice has permission to publish them."
-        ],
-        "bullets": [
-          "Service navigation that distinguishes routine visits from treatment consultations.",
-          "Accurate practice details across the website and eligible business profiles.",
-          "Tested booking links, contact forms and mobile phone actions."
-        ],
-        "links": [{"label": "Explore Google Business Profile work", "href": "/google-business-profile-optimization"}]
-      },
-      {
-        "id": "appointment-measurement",
-        "title": "Follow the enquiry through to the front desk",
-        "paragraphs": [
-          "We agree what counts as an appointment request and check how it reaches your team. A request form should explain the next step and collect only the information needed for that enquiry. Your approved patient systems can handle clinical intake.",
-          "Reporting can distinguish visits to treatment pages, booking-link clicks and submitted requests using the available analytics. The practice's appointment records are needed to establish which enquiries became booked visits, helping you focus subsequent improvements on the services you want to grow."
-        ]
-      }
-    ],
-    "questions": [
-      {"question": "Can we keep our current appointment system?", "answer": "We review its available links and integration options, then agree how the website should connect to it."},
-      {"question": "Who approves treatment descriptions?", "answer": "Your practice reviews clinical copy and supplies accurate practitioner, treatment and payment information before publication."},
-      {"question": "What should we bring to the first review?", "answer": "Your website, priority services, practice locations and the current process for handling new-patient enquiries."}
-    ]
-  },
-  {
     "slug": "med-spas",
-    "name": "Med spas and aesthetic clinics",
-    "title": "Med spa SEO and consultation-focused website design",
+    "name": "MedSpas",
+    "title": "MedSpa SEO, website design and AI visibility",
     "description": "Build a clearer online presence for your med spa or aesthetic clinic with treatment pages, provider information, local SEO and consultation enquiry design.",
     "eyebrow": "Med spas · Aesthetic clinics",
-    "intro": "People researching an aesthetic treatment want to understand the provider, the process and the next step. Picshaw helps clinics present that information clearly and turn genuine interest into a well-routed consultation enquiry.",
+    "intro": "Help prospective clients discover your treatments, understand your approach and request a consultation. Picshaw supports MedSpas and aesthetic clinics with website design, local SEO and AI-search visibility, connected to a clear handoff to reception.",
     "summary": "Connect treatment research with credible provider information, clear consultation details and a considered visual experience.",
-    "services": ["/website-redesign", "/local-seo", "/ai-search-optimization", "/landing-page-design"],
+    "services": [
+      "/website-redesign",
+      "/local-seo",
+      "/ai-search-optimization",
+      "/landing-page-design"
+    ],
     "sections": [
       {
         "id": "treatment-research",
@@ -76,7 +34,12 @@
           "Consultation pages with clear locations, contact options and next steps.",
           "Mobile layouts that balance photography, provider details and readable copy."
         ],
-        "links": [{"label": "See the website redesign approach", "href": "/website-redesign"}]
+        "links": [
+          {
+            "label": "See the website redesign approach",
+            "href": "/website-redesign"
+          }
+        ]
       },
       {
         "id": "consultation-path",
@@ -88,67 +51,140 @@
       }
     ],
     "questions": [
-      {"question": "Can you create a page for a particular treatment?", "answer": "Yes. We scope the page around your actual service, approved clinical copy, photography and consultation process."},
-      {"question": "Can existing campaign traffic use the new pages?", "answer": "Yes. We review the campaign message, destination and tracking so the visitor receives a coherent experience."},
-      {"question": "How do you approach AI visibility for clinics?", "answer": "We improve accessible service information, provider details and answers to practical questions, with measurement based on the data your accounts provide."}
-    ]
+      {
+        "question": "Can you create a page for a particular treatment?",
+        "answer": "Yes. We scope the page around your actual service, approved clinical copy, photography and consultation process."
+      },
+      {
+        "question": "Can existing campaign traffic use the new pages?",
+        "answer": "Yes. We review the campaign message, destination and tracking so the visitor receives a coherent experience."
+      },
+      {
+        "question": "How do you approach AI visibility for clinics?",
+        "answer": "We improve accessible service information, provider details and answers to practical questions, with measurement based on the data your accounts provide."
+      }
+    ],
+    "spotlight": {
+      "headline": "Turn treatment interest into consultation enquiries.",
+      "outcomes": [
+        "Help prospective clients discover your actual treatments.",
+        "Build confidence with provider information and approved photography.",
+        "Give reception a clearer consultation request."
+      ],
+      "cta": "Discuss my MedSpa",
+      "journey": {
+        "query": "laser hair removal consultation in Irvine",
+        "page": "Laser hair removal consultations",
+        "details": [
+          "Treatment information reviewed by the clinic",
+          "Provider details and consultation steps",
+          "A clear booking link or request form"
+        ],
+        "action": "Request a consultation",
+        "handoff": "A consultation request reaches reception. Your clinic confirms the next step."
+      }
+    }
   },
   {
-    "slug": "accounting-firms",
-    "name": "Accounting firms",
-    "title": "SEO and AI visibility for accounting firms",
-    "description": "Help the right businesses find your accounting firm through clear specialist services, useful buying information, local SEO and better enquiry journeys.",
-    "eyebrow": "Accounting firms",
-    "intro": "An owner choosing an accountant needs to recognise a fit with their business and understand how an engagement begins. Picshaw helps firms explain their specialisms and make the route from initial research to a discovery call clearer.",
-    "summary": "Show prospective clients which businesses you serve, what an engagement covers and how to start a conversation.",
-    "services": ["/ai-search-optimization", "/website-redesign", "/local-seo", "/ai-visibility-retainer"],
+    "slug": "dentists",
+    "name": "Dental practices",
+    "title": "Dental SEO, website design and AI visibility",
+    "description": "Help prospective patients find your dental practice, understand its services and request an appointment through clear websites, local SEO and AI visibility work.",
+    "eyebrow": "Dental practices",
+    "intro": "Help prospective patients find your practice, understand its services and request an appointment. Picshaw combines dental website design, local SEO and AI-search visibility with clear service pages and a straightforward route to your reception team.",
+    "summary": "Give prospective patients a clear route from finding a dentist to choosing the appropriate appointment enquiry.",
+    "services": [
+      "/local-seo",
+      "/google-business-profile-optimization",
+      "/website-redesign",
+      "/ai-search-optimization"
+    ],
     "sections": [
       {
-        "id": "service-fit",
-        "title": "Make the firm's specialisms easy to recognise",
+        "id": "patient-journey",
+        "title": "Match the page to the reason for the visit",
         "paragraphs": [
-          "Bookkeeping, tax preparation, outsourced accounting and advisory services answer different client needs. We organise your offer so a prospect can quickly find the engagement that matches their situation, with a clear explanation of the work, the business types served and the next step.",
-          "Useful content can address searches such as accounting firm for a growing Los Angeles business or bookkeeping support for a professional practice. The page should explain relevant experience and scope using information your firm can substantiate."
+          "Someone looking for a family dentist has different questions from someone researching implants or seeking an urgent appointment. We organise your actual services into clear paths, with relevant practitioner information, appointment expectations and contact options for each.",
+          "A search such as family dentist in Long Beach should lead to a page that explains who the practice sees, where it operates and how a new patient gets started. The practice supplies and reviews clinical explanations, eligibility information and any claims about treatment."
         ]
       },
       {
-        "id": "engagement-details",
-        "title": "Answer the questions that shape a discovery call",
+        "id": "practice-information",
+        "title": "Make everyday practice details easy to verify",
         "paragraphs": [
-          "Prospects may want to know which accounting platforms you support, how onboarding works, what their team supplies and whether work is recurring or project based. These details help a buyer assess fit before committing time to a meeting.",
-          "We can turn your existing service knowledge into concise pages, partner biographies and practical FAQs. Published fees, timelines and inclusions come from the firm and remain tied to the actual engagement offered. Your professionals review technical accounting and tax content."
+          "An attractive website still needs useful logistics. We review the mobile experience around directions, parking information supplied by the practice, opening hours, contact details and the route into your booking system. Insurance participation and financing information should reflect the practice's current arrangements.",
+          "The agreed scope can connect your service pages with Google Business Profile improvements and technical search checks. Photographs of the real team and premises give visitors useful context when the practice has permission to publish them."
         ],
         "bullets": [
-          "Distinct pages for materially different services and client needs.",
-          "Clear partner experience and verified professional credentials.",
-          "A discovery-call route with useful, proportionate qualification questions."
+          "Service navigation that distinguishes routine visits from treatment consultations.",
+          "Accurate practice details across the website and eligible business profiles.",
+          "Tested booking links, contact forms and mobile phone actions."
         ],
-        "links": [{"label": "Explore AI-search optimization", "href": "/ai-search-optimization"}]
+        "links": [
+          {
+            "label": "Explore Google Business Profile work",
+            "href": "/google-business-profile-optimization"
+          }
+        ]
       },
       {
-        "id": "qualified-enquiries",
-        "title": "Focus the website on engagements you can take on",
+        "id": "appointment-measurement",
+        "title": "Follow the enquiry through to the front desk",
         "paragraphs": [
-          "Your preferred client profile and capacity should shape the enquiry journey. A firm growing its monthly advisory work may need a different first step from a practice managing seasonal tax enquiries. We review those priorities before recommending new pages or calls to action.",
-          "An initial form can capture business type, requested service and contact information. Documents and detailed financial information can follow through your established onboarding process. Reporting then connects source pages and submitted enquiries with the engagement outcomes your team records."
+          "We agree what counts as an appointment request and check how it reaches your team. A request form should explain the next step and collect only the information needed for that enquiry. Your approved patient systems can handle clinical intake.",
+          "Reporting can distinguish visits to treatment pages, booking-link clicks and submitted requests using the available analytics. The practice's appointment records are needed to establish which enquiries became booked visits, helping you focus subsequent improvements on the services you want to grow."
         ]
       }
     ],
     "questions": [
-      {"question": "Can our specialist services receive their own pages?", "answer": "Yes. We prioritise services with distinct buyer questions and enough firm-specific information to support a useful page."},
-      {"question": "Can you work with a firm serving clients remotely?", "answer": "Yes. Website content can explain your real service coverage and remote working process accurately."},
-      {"question": "What information helps define the scope?", "answer": "Your service mix, ideal clients, capacity priorities, current website and the steps from first enquiry to engagement."}
-    ]
+      {
+        "question": "Can we keep our current appointment system?",
+        "answer": "We review its available links and integration options, then agree how the website should connect to it."
+      },
+      {
+        "question": "Who approves treatment descriptions?",
+        "answer": "Your practice reviews clinical copy and supplies accurate practitioner, treatment and payment information before publication."
+      },
+      {
+        "question": "What should we bring to the first review?",
+        "answer": "Your website, priority services, practice locations and the current process for handling new-patient enquiries."
+      }
+    ],
+    "spotlight": {
+      "headline": "Help your next patient take the first step.",
+      "outcomes": [
+        "Connect patient searches with the right dental service.",
+        "Make practice details and appointment options easy to find.",
+        "Turn website interest into a clear new-patient enquiry."
+      ],
+      "cta": "Discuss my dental practice",
+      "journey": {
+        "query": "family dentist accepting new patients in Long Beach",
+        "page": "Your first visit to the practice",
+        "details": [
+          "Services and new-patient information",
+          "Practice location, hours and contact details",
+          "Your approved appointment request route"
+        ],
+        "action": "Request a new-patient appointment",
+        "handoff": "Reception receives the appointment request and confirms availability through your usual process."
+      }
+    }
   },
   {
     "slug": "law-firms",
-    "name": "Law firms",
-    "title": "Law firm SEO and consultation enquiry websites",
+    "name": "Legal offices",
+    "title": "Law firm SEO, website design and AI visibility",
     "description": "Present your firm's practice areas, attorney experience and consultation process clearly with focused website design, local SEO and AI visibility work.",
-    "eyebrow": "Law firms",
-    "intro": "A prospective client wants to know whether a firm handles their type of matter and how to reach the right person. Picshaw builds clearer practice-area journeys around your attorneys, actual service coverage and approved intake process.",
+    "eyebrow": "Legal offices · Law firms",
+    "intro": "Help prospective clients understand whether your firm handles their matter and how to take the first step. Picshaw supports legal offices with clear practice-area content, local SEO, AI-search visibility and an enquiry journey built around your intake process.",
     "summary": "Help prospective clients understand practice-area fit and find a clear route into your firm's intake process.",
-    "services": ["/local-seo", "/website-redesign", "/ai-search-optimization", "/technical-seo"],
+    "services": [
+      "/local-seo",
+      "/website-redesign",
+      "/ai-search-optimization",
+      "/technical-seo"
+    ],
     "sections": [
       {
         "id": "practice-area-fit",
@@ -170,7 +206,12 @@
           "Accurate contact, office and service-coverage information.",
           "Technical checks for important pages, navigation and enquiry routes."
         ],
-        "links": [{"label": "Explore technical SEO", "href": "/technical-seo"}]
+        "links": [
+          {
+            "label": "Explore technical SEO",
+            "href": "/technical-seo"
+          }
+        ]
       },
       {
         "id": "intake-process",
@@ -182,10 +223,222 @@
       }
     ],
     "questions": [
-      {"question": "Who approves legal content?", "answer": "Your firm reviews all legal explanations, attorney details and required disclosures before they are published."},
-      {"question": "Can we retain our intake software?", "answer": "We assess its supported links and integrations, then include the agreed connection in the project scope."},
-      {"question": "Can the website support several practice areas?", "answer": "Yes. Each area should have a clear purpose, relevant team information and an appropriate contact route."}
-    ]
+      {
+        "question": "Who approves legal content?",
+        "answer": "Your firm reviews all legal explanations, attorney details and required disclosures before they are published."
+      },
+      {
+        "question": "Can we retain our intake software?",
+        "answer": "We assess its supported links and integrations, then include the agreed connection in the project scope."
+      },
+      {
+        "question": "Can the website support several practice areas?",
+        "answer": "Yes. Each area should have a clear purpose, relevant team information and an appropriate contact route."
+      }
+    ],
+    "spotlight": {
+      "headline": "Bring the right matters to your intake team.",
+      "outcomes": [
+        "Help prospective clients recognise practice-area fit.",
+        "Connect legal services with relevant attorney experience.",
+        "Give your intake team a useful first-contact request."
+      ],
+      "cta": "Discuss my legal office",
+      "journey": {
+        "query": "estate planning attorney in Los Angeles",
+        "page": "Estate planning and initial consultations",
+        "details": [
+          "Matters and jurisdictions your firm handles",
+          "Relevant attorney profiles and experience",
+          "Your approved consultation request process"
+        ],
+        "action": "Request an initial conversation",
+        "handoff": "Basic contact details and a broad matter category reach your intake team for review."
+      }
+    }
+  },
+  {
+    "slug": "accounting-firms",
+    "name": "Accounting firms",
+    "title": "Accounting firm SEO, website design and AI visibility",
+    "description": "Help the right businesses find your accounting firm through clear specialist services, useful buying information, local SEO and better enquiry journeys.",
+    "eyebrow": "Accounting firms",
+    "intro": "Show prospective clients why your firm fits their business. Picshaw connects your specialist services, website design, local SEO and AI-search visibility with a clearer route to a useful discovery call.",
+    "summary": "Show prospective clients which businesses you serve, what an engagement covers and how to start a conversation.",
+    "services": [
+      "/ai-search-optimization",
+      "/website-redesign",
+      "/local-seo",
+      "/ai-visibility-retainer"
+    ],
+    "sections": [
+      {
+        "id": "service-fit",
+        "title": "Make the firm's specialisms easy to recognise",
+        "paragraphs": [
+          "Bookkeeping, tax preparation, outsourced accounting and advisory services answer different client needs. We organise your offer so a prospect can quickly find the engagement that matches their situation, with a clear explanation of the work, the business types served and the next step.",
+          "Useful content can address searches such as accounting firm for a growing Los Angeles business or bookkeeping support for a professional practice. The page should explain relevant experience and scope using information your firm can substantiate."
+        ]
+      },
+      {
+        "id": "engagement-details",
+        "title": "Answer the questions that shape a discovery call",
+        "paragraphs": [
+          "Prospects may want to know which accounting platforms you support, how onboarding works, what their team supplies and whether work is recurring or project based. These details help a buyer assess fit before committing time to a meeting.",
+          "We can turn your existing service knowledge into concise pages, partner biographies and practical FAQs. Published fees, timelines and inclusions come from the firm and remain tied to the actual engagement offered. Your professionals review technical accounting and tax content."
+        ],
+        "bullets": [
+          "Distinct pages for materially different services and client needs.",
+          "Clear partner experience and verified professional credentials.",
+          "A discovery-call route with useful, proportionate qualification questions."
+        ],
+        "links": [
+          {
+            "label": "Explore AI-search optimization",
+            "href": "/ai-search-optimization"
+          }
+        ]
+      },
+      {
+        "id": "qualified-enquiries",
+        "title": "Focus the website on engagements you can take on",
+        "paragraphs": [
+          "Your preferred client profile and capacity should shape the enquiry journey. A firm growing its monthly advisory work may need a different first step from a practice managing seasonal tax enquiries. We review those priorities before recommending new pages or calls to action.",
+          "An initial form can capture business type, requested service and contact information. Documents and detailed financial information can follow through your established onboarding process. Reporting then connects source pages and submitted enquiries with the engagement outcomes your team records."
+        ]
+      }
+    ],
+    "questions": [
+      {
+        "question": "Can our specialist services receive their own pages?",
+        "answer": "Yes. We prioritise services with distinct buyer questions and enough firm-specific information to support a useful page."
+      },
+      {
+        "question": "Can you work with a firm serving clients remotely?",
+        "answer": "Yes. Website content can explain your real service coverage and remote working process accurately."
+      },
+      {
+        "question": "What information helps define the scope?",
+        "answer": "Your service mix, ideal clients, capacity priorities, current website and the steps from first enquiry to engagement."
+      }
+    ],
+    "spotlight": {
+      "headline": "Reach the clients your firm wants to work with.",
+      "outcomes": [
+        "Make your specialist services easier to discover.",
+        "Show prospects what an engagement involves.",
+        "Bring useful business context into the discovery call."
+      ],
+      "cta": "Discuss my accounting firm",
+      "journey": {
+        "query": "outsourced accounting for a growing Los Angeles business",
+        "page": "Outsourced accounting for growing businesses",
+        "details": [
+          "Services, client types and engagement scope",
+          "Supported platforms and onboarding steps",
+          "A focused discovery-call request"
+        ],
+        "action": "Arrange an introductory call",
+        "handoff": "Your firm receives the business type, requested service and contact details to assess fit."
+      }
+    }
+  },
+  {
+    "slug": "construction-companies",
+    "name": "Construction companies",
+    "title": "Construction company SEO, websites and AI visibility",
+    "description": "Construction company SEO, AI visibility and web design that help clients explore your projects, understand your services and send a useful project enquiry.",
+    "eyebrow": "Construction companies",
+    "intro": "Show prospective clients what you build, where you work and why your team fits their project. Picshaw brings local SEO, AI-search visibility, project-led website design and enquiry capture together around the work you want to win.",
+    "summary": "Show the work you want to win, support it with genuine project evidence and give your team useful enquiry details.",
+    "services": [
+      "/web-design-for-contractors",
+      "/local-seo",
+      "/ai-search-optimization",
+      "/google-business-profile-optimization"
+    ],
+    "sections": [
+      {
+        "id": "project-fit",
+        "title": "Make the projects you want to win easy to recognise",
+        "paragraphs": [
+          "A homeowner planning an extension, a developer comparing building contractors and a business organising a commercial fit-out have different questions. We organise your actual services around those needs, explaining the project types, locations and capabilities your team can support.",
+          "Useful pages can address searches such as home extension contractor in Los Angeles or commercial construction company in Orange County. Each page should give the visitor relevant information about your work and coverage, supported by details your company can substantiate."
+        ],
+        "bullets": [
+          "Clear service pages for different types of construction work.",
+          "Accurate service areas and practical information about your process.",
+          "Relevant project examples beside the services they demonstrate."
+        ],
+        "links": [
+          {
+            "label": "Explore local SEO",
+            "href": "/local-seo"
+          }
+        ]
+      },
+      {
+        "id": "project-portfolio",
+        "title": "Turn completed work into a useful project portfolio",
+        "paragraphs": [
+          "A project gallery becomes more useful when visitors can understand what your team actually delivered. We can structure approved photography around the type of project, scope of work and relevant construction details, helping prospective clients find examples that resemble their own plans.",
+          "Your company supplies accurate project descriptions, permissions and any credentials it wants to publish. Where suitable material exists, a focused project story can explain the initial brief, your role and the completed work. A redesign can make these examples easier to browse on mobile and connect each one to an appropriate enquiry route."
+        ],
+        "bullets": [
+          "Genuine project photography with clear scope and context.",
+          "Portfolio categories that reflect the work you want to attract.",
+          "Service and enquiry links beside relevant project examples."
+        ],
+        "links": [
+          {
+            "label": "See contractor website design",
+            "href": "/web-design-for-contractors"
+          }
+        ]
+      },
+      {
+        "id": "project-enquiries",
+        "title": "Give your team a useful brief before the first callback",
+        "paragraphs": [
+          "A project enquiry can capture the location, type of work, outline scope, preferred timing and contact details. We agree which questions help your team assess the request without making the first step unnecessarily demanding. The confirmation message should explain what happens next.",
+          "Reporting can connect service pages and portfolio visits with submitted enquiries and phone-link activity. Your records establish which requests became suitable opportunities, site visits, quotes or awarded work. Those outcomes can guide future improvements to the website and the projects it emphasises."
+        ]
+      }
+    ],
+    "questions": [
+      {
+        "question": "Can you focus on the construction projects we want to win?",
+        "answer": "Yes. We agree your priority project types, service areas and capabilities, then use those priorities to shape service pages, portfolio presentation and enquiry questions."
+      },
+      {
+        "question": "Do we need a large portfolio before improving the website?",
+        "answer": "No. A smaller selection of genuine projects can provide a useful starting point when the photography and descriptions explain the work clearly. We review the material you have and identify any gaps."
+      },
+      {
+        "question": "How does this relate to your contractor website design service?",
+        "answer": "This industry approach connects your positioning, local search visibility, project content and enquiry journey. Contractor website design addresses the site structure, presentation and functionality; it can form part of the agreed work."
+      }
+    ],
+    "spotlight": {
+      "headline": "Show your work. Start the right project conversations.",
+      "outcomes": [
+        "Attract interest in the project types you want.",
+        "Show relevant work through a useful project portfolio.",
+        "Give your team a clearer brief before the callback."
+      ],
+      "cta": "Discuss my construction company",
+      "journey": {
+        "query": "home extension contractor in Los Angeles",
+        "page": "Home extensions and residential construction",
+        "details": [
+          "Project types and genuine service coverage",
+          "Completed work with approved photography",
+          "An enquiry for location, scope and timing"
+        ],
+        "action": "Tell us about your project",
+        "handoff": "Your team receives the project outline and decides the next callback or site-visit step."
+      }
+    }
   },
   {
     "slug": "real-estate-and-mortgage",

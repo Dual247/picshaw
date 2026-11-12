@@ -10,7 +10,7 @@ const servicePaths = new Set([...services.map(service => `/${service.slug}`), '/
 const routes = new Set(['/', '/about', '/blog', ...additional, ...servicePaths, ...industries.map(industry => `/industries/${industry.slug}`), ...published.map(article => `/blog/${article.slug}`)])
 const publicContent = [...services, ...industries, ...published]
 assert.equal(services.length, 7)
-assert.equal(industries.length, 12)
+assert.equal(industries.length, 13)
 assert.equal(published.length, 4)
 for (const route of additional) assert.ok(existsSync(`app/(marketing)${route}/page.tsx`))
 assert.equal(new Set([...services, ...articles].map(item => item.slug)).size, services.length + articles.length)
