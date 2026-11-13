@@ -8,6 +8,26 @@ import { requireWorkspaceActor, deploymentWorkspaceStore } from '../supabase/wor
 import { checkDeploymentAuthAdmission, type AuthAdmission } from '../supabase/auth-admission'
 import { createDataForSeoGateway, type DataForSeoGateway } from './dataforseo-job-runtime'
 import type { WorkspaceActor } from '../supabase/workspace-runtime'
+import type { DataForSeoJob, PublicDataForSeoJob } from './dataforseo-types'
+
+// Explicit field selection prevents private provider/accounting metadata leaking
+// through either stored records or future changes to the internal model.
+function publicJob(job: DataForSeoJob | null): PublicDataForSeoJob | null {
+  if (!job) return null
+  const result = job.result
+  return {
+    jobId: job.jobId, domain: job.domain, platform: job.platform, rowLimit: job.rowLimit,
+    state: job.state, createdAt: job.createdAt, updatedAt: job.updatedAt,
+    ...(result ? { result: {
+      domain: result.domain, platform: result.platform, locationCode: result.locationCode,
+      languageCode: result.languageCode, retrievedAt: result.retrievedAt,
+      totalMatches: result.totalMatches, sampledRows: result.sampledRows,
+      items: result.items.map(item => ({ question: item.question, model: item.model,
+        observedAt: item.observedAt, citations: item.citations.map(citation => ({ url: citation.url, title: citation.title })) })),
+      limitations: [...result.limitations],
+    } } : {}),
+  }
+}
 
 type AnalysisEnvironment = PortalEnvironment & { PIC_SHAW_DATAFORSEO_ENABLED?: string }
 type Dependencies = { env?: AnalysisEnvironment; createClient?: typeof createRequestSupabaseClient; workspace?: ReturnType<typeof deploymentWorkspaceStore>; gateway?: ((actor:WorkspaceActor,workspace:{id:string;site:string})=>DataForSeoGateway|null); admit?: AuthAdmission }
@@ -70,7 +90,7 @@ export async function handleDataForSeoJob(request: NextRequest, action:'submit'|
     const currentActor = await requireWorkspaceActor(client, config.url, deps.env)
     const currentWorkspace = await workspace(currentActor, null)
     if (currentActor.id !== actor.id || currentActor.sessionId !== actor.sessionId || currentWorkspace?.id !== selected.id) return finish({ error: 'Access changed. Sign in and try again.' }, 401)
-    return finish({ enabled: true, job })
+    return finish({ enabled: true, job: publicJob(job) })
   } catch (error) {
     const code = error && typeof error === 'object' && 'code' in error ? error.code : null
     if (code === '42501' && error instanceof Error && error.message === 'Workspace access denied') return finish({ error: 'Workspace access is no longer available.' }, 403)
