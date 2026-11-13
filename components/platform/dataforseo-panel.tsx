@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import type { DataForSeoJob, MentionEvidence } from '../../lib/platform/dataforseo-types'
+import type { PublicDataForSeoJob as DataForSeoJob, PublicMentionEvidence as MentionEvidence } from '../../lib/platform/dataforseo-types'
 
 export type DataForSeoTransport = {
   // Adapter must enforce authenticated workspace access and no-store responses.

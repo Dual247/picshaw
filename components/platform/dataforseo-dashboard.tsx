@@ -2,7 +2,7 @@
 import Link from 'next/link'
 import {useEffect,useRef,useState} from 'react'
 import {DataForSeoPanel,type DataForSeoTransport} from './dataforseo-panel'
-import type {DataForSeoJob} from '../../lib/platform/dataforseo-types'
+import type {PublicDataForSeoJob as DataForSeoJob} from '../../lib/platform/dataforseo-types'
 const transport:DataForSeoTransport={
   submit:input=>post('submit',input),
   read:jobId=>post('read',{jobId}),

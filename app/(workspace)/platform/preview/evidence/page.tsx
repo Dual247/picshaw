@@ -1,9 +1,9 @@
 import Link from 'next/link'
 import { PortalHeader } from '@/components/platform/portal-header'
 import { DataForSeoEvidence } from '@/components/platform/dataforseo-panel'
-import type { MentionEvidence } from '@/lib/platform/dataforseo-types'
+import type { PublicMentionEvidence as MentionEvidence } from '@/lib/platform/dataforseo-types'
 const evidence: MentionEvidence = {
-  source:'dataforseo-llm-mentions',domain:'willow-dental.example',platform:'google',locationCode:2840,languageCode:'en',retrievedAt:'2026-11-12T09:00:00Z',providerTaskId:'fictional-preview-only',actualCostUsd:0,totalMatches:6,sampledRows:6,
+  domain:'willow-dental.example',platform:'google',locationCode:2840,languageCode:'en',retrievedAt:'2026-11-12T09:00:00Z',totalMatches:6,sampledRows:6,
   limitations:['Entirely fictional demonstration. No provider or search engine was contacted.','This sample demonstrates the explorer controls, not actual visibility or market share.'],
   items:[
     {question:'What should I look for when choosing a family dentist?',model:'Example model A',observedAt:'2026-11-10T12:00:00Z',citations:[{title:'Family dentistry guide',url:'https://willow-dental.example/family-dentistry'},{title:'Choosing dental care',url:'https://dental-guide.example/choosing-care'}]},
