@@ -55,7 +55,7 @@ for (const [file, factory, prefix, tlsImport, max, connectTimeout, queryTimeout,
   assert.equal(new X509Certificate(options.ssl.ca).fingerprint256, '80:70:25:AD:50:D4:ED:21:9D:2C:9C:7D:29:9C:00:4F:82:4E:B0:0C:F7:F6:5A:FE:F6:07:D0:7B:72:E6:CA:FA')
   for (const [key, value] of Object.entries({ prepare: false, max, max_pipeline: 1, connect_timeout: connectTimeout, queue_timeout: connectTimeout, query_timeout: queryTimeout, cancel_timeout: 1, idle_timeout: 10, max_lifetime: 60, fetch_types: false, debug: false })) assert.equal(options[key], value, `${prefix}.${key}`)
   assert.equal(options.onnotice('PRIVATE_PROVIDER_NOTICE'), undefined)
-  if (prefix === 'GSC') {
+  if (prefix === 'GSC' || prefix === 'REPORTS') {
     const payload = { nested: { value: 'Synthetic only' }, rows: [1, 2], empty: null }
     let queries = 0
     const capture = load(file, { ...deps, postgres: { default: () => (strings, ...values) => {
@@ -65,7 +65,8 @@ for (const [file, factory, prefix, tlsImport, max, connectTimeout, queryTimeout,
       return { signal: async () => [{ result: { ok: true } }] }
     } } })[factory](env)
     const actor = { id: 'synthetic-user', sessionId: 'synthetic-session', expiresAt: 9999999999 }
-    await capture.store(actor, 'synthetic-workspace', 'status', payload)
+    if (prefix === 'GSC') await capture.store(actor, 'synthetic-workspace', 'status', payload)
+    else await capture.store({ actor, organizationId: 'synthetic-workspace' }, 'status', payload)
     assert.equal(queries, 1)
     console.log(`PASS ${prefix.toLowerCase()} serialized payload remains an object at the database boundary`)
   }

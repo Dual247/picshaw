@@ -19,7 +19,7 @@ export function createDeploymentReports(env: Record<string, string | undefined> 
     query_timeout: 5, cancel_timeout: 1, idle_timeout: 10, max_lifetime: 60, fetch_types: false, onnotice: () => {}, debug: false })
   const store: ReportStore = async ({ actor, organizationId }, operation, payload) => {
     const rows = await sql`select picshaw_reports_private.operation(${actor.id}::uuid,${actor.sessionId}::uuid,${actor.expiresAt}::bigint,
-      ${organizationId}::uuid,${operation}::text,${JSON.stringify(payload)}::jsonb) as result`.signal(AbortSignal.timeout(6000))
+      ${organizationId}::uuid,${operation}::text,${JSON.stringify(payload)}::text::jsonb) as result`.signal(AbortSignal.timeout(6000))
     if (rows.length !== 1) throw Error('Report unavailable')
     return rows[0].result
   }
