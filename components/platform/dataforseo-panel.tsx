@@ -100,19 +100,19 @@ export function DataForSeoPanelSession({ domain, transport }: DataForSeoPanelPro
     }
   }
 
-  return <section className="space-y-5 rounded-2xl border border-slate-700 bg-slate-900 p-6 text-slate-100" aria-label="AI visibility evidence">
+  return <section className="portal-card portal-ai-panel space-y-5" aria-label="AI visibility evidence">
     <h2 className="text-xl font-semibold">AI visibility evidence</h2>
-    <p>DataForSEO database observations for <strong>{domain}</strong>. United States · English. This is a sample of source citations, not a visibility score or a live test of every answer.</p>
-    <label className="block space-y-2"><span>AI platform</span><select className="block rounded-lg border border-slate-600 bg-slate-950 p-2" value={platform} disabled={busy || !!job || revoked} onChange={event => { setPlatform(event.target.value as 'google' | 'chat_gpt'); setConsent(false); setEvidence(null) }}><option value="google">Google AI Overview</option><option value="chat_gpt">ChatGPT</option></select></label>
+    <p>AI citation research for <strong>{domain}</strong>. United States · English. This is a sample of source citations, not a visibility score or a live test of every answer.</p>
+    <label className="block space-y-2"><span>AI platform</span><select className="portal-input portal-ai-select" value={platform} disabled={busy || !!job || revoked} onChange={event => { setPlatform(event.target.value as 'google' | 'chat_gpt'); setConsent(false); setEvidence(null) }}><option value="google">Google AI Overview</option><option value="chat_gpt">ChatGPT</option></select></label>
     <p>Up to 20 records per job. A provider request may incur a charge. An unknown outcome must not be retried.</p>
     <label className="flex items-start gap-3"><input className="mt-1" type="checkbox" checked={consent} disabled={busy || !!job || revoked} onChange={event => setConsent(event.target.checked)} /><span>I authorize sending the public domain <strong>{domain}</strong> to <strong>DataForSEO</strong> for this {platform === 'google' ? 'Google AI Overview' : 'ChatGPT'} US-English lookup.</span></label>
     <div className="flex flex-wrap gap-3">
-      <button type="button" className="rounded-lg bg-cyan-300 px-4 py-2 text-slate-950 disabled:opacity-40" disabled={!consent || busy || !!job || revoked} onClick={() => request('submit')}>Request AI evidence</button>
-      <button type="button" className="rounded-lg border px-4 py-2 disabled:opacity-40" disabled={!job || busy || revoked} onClick={() => request('read')}>Refresh status</button>
-      {transport.latest && <button type="button" className="rounded-lg border px-4 py-2 disabled:opacity-40" disabled={!!job || busy || revoked} onClick={() => request('latest')}>Load saved result</button>}
-      <button type="button" className="rounded-lg border px-4 py-2 disabled:opacity-40" disabled={(!job && !busy) || revoked} onClick={() => { clearWaiting(); setMessage('Local waiting stopped and evidence cleared. This does not cancel provider work or any charge. Refresh status reads the same job; it does not submit another.') }}>Stop waiting locally</button>
+      <button type="button" className="portal-button disabled:opacity-40" disabled={!consent || busy || !!job || revoked} onClick={() => request('submit')}>Request AI evidence</button>
+      <button type="button" className="portal-button secondary disabled:opacity-40" disabled={!job || busy || revoked} onClick={() => request('read')}>Refresh status</button>
+      {transport.latest && <button type="button" className="portal-button secondary disabled:opacity-40" disabled={!!job || busy || revoked} onClick={() => request('latest')}>Load saved result</button>}
+      <button type="button" className="portal-button secondary disabled:opacity-40" disabled={(!job && !busy) || revoked} onClick={() => { clearWaiting(); setMessage('Local waiting stopped and evidence cleared. This does not cancel provider work or any charge. Refresh status reads the same job; it does not submit another.') }}>Stop waiting locally</button>
     </div>
-    {job && (job.state === 'completed' || job.state === 'failed') && <button type="button" className="rounded-lg border px-4 py-2 disabled:opacity-40" disabled={busy || revoked} onClick={() => {
+    {job && (job.state === 'completed' || job.state === 'failed') && <button type="button" className="portal-button secondary disabled:opacity-40" disabled={busy || revoked} onClick={() => {
       if (guard.current.busy || guard.current.revoked || !guard.current.alive || !job || !['completed', 'failed'].includes(job.state)) return
       clearWaiting(); guard.current.jobId = null; setJob(null); setConsent(false)
       setMessage('Choose a platform and provide fresh consent before requesting a new lookup. Nothing has been submitted.')
@@ -123,18 +123,79 @@ export function DataForSeoPanelSession({ domain, transport }: DataForSeoPanelPro
   </section>
 }
 
-export function DataForSeoEvidence({ evidence }: { evidence: MentionEvidence }) {
-  return <div className="space-y-4">
-    <p>Retrieved at: <time>{evidence.retrievedAt}</time> (collection time, not answer time).</p>
-    <p>Records returned: {evidence.sampledRows}. Matching records reported by provider: {evidence.totalMatches}.</p>
-    {!evidence.items.length && <p>No matching records were returned. This does not establish zero AI visibility.</p>}
-    <ol className="space-y-4">{evidence.items.map((item, index) => <li key={index} className="space-y-2 rounded-lg border border-slate-700 p-4">
-      <p className="font-semibold">{item.question}</p><p>Model: {item.model ?? 'Not reported'}</p>
-      <p>Observed at (provider answer time): {item.observedAt ?? 'Not reported'}</p>
-      <p>Source citations (plain text, not verified recommendations):</p>
-      <ul className="space-y-1 break-words">{item.citations.map((citation, citationIndex) => <li key={citationIndex}>{citation.title ? `${citation.title}: ` : ''}{citation.url}</li>)}</ul>
-    </li>)}</ol>
-    <ul className="list-disc space-y-2 pl-5">{evidence.limitations.map((limitation, index) => <li key={index}>{limitation}</li>)}</ul>
-    <p>No visibility score, ranking, lead estimate or traffic forecast has been inferred.</p>
+type EvidenceRow = MentionEvidence['items'][number]
+export function citationHost(value: string): string | null {
+  try { const url = new URL(value); return ['http:', 'https:'].includes(url.protocol) && !url.username && !url.password ? url.hostname.toLowerCase().replace(/^www\./, '') : null } catch { return null }
+}
+export function summarizeEvidence(evidence: MentionEvidence) {
+  const sources = new Map<string, { domain: string; observations: number; citations: number; owned: boolean }>()
+  const models = new Set<string>()
+  let citationCount = 0, datedRows = 0
+  for (const row of evidence.items) {
+    if (row.model) models.add(row.model)
+    if (row.observedAt && Number.isFinite(Date.parse(row.observedAt))) datedRows++
+    const seen = new Set<string>()
+    for (const citation of row.citations) {
+      citationCount++
+      const host = citationHost(citation.url)
+      if (!host) continue
+      const entry = sources.get(host) ?? { domain: host, observations: 0, citations: 0, owned: host === evidence.domain || host.endsWith(`.${evidence.domain}`) }
+      entry.citations++; if (!seen.has(host)) entry.observations++
+      seen.add(host); sources.set(host, entry)
+    }
+  }
+  return { sources: [...sources.values()].sort((a,b) => b.observations-a.observations || a.domain.localeCompare(b.domain)), models: [...models].sort(), citationCount, datedRows }
+}
+export function filterEvidenceRows(rows: EvidenceRow[], query: string, model: string, source: string) {
+  const term = query.trim().toLowerCase()
+  return rows.filter(row => (model === 'all' || (row.model ?? 'Not reported') === model) &&
+    (source === 'all' || row.citations.some(citation => citationHost(citation.url) === source)) &&
+    (!term || [row.question, row.model ?? '', ...row.citations.flatMap(citation => [citation.title ?? '', citation.url])].some(value => value.toLowerCase().includes(term))))
+}
+export function evidenceCsv(evidence: MentionEvidence, rows: EvidenceRow[]) {
+  const cell = (value: string) => `"${(/^[\s]*[=+@-]/.test(value) ? `'${value}` : value).replace(/"/g, '""')}"`
+  const records = [['Domain','Platform','Question','Model','Observed at','Retrieved at','Citation title','Citation URL','Scope']]
+  for (const row of rows) for (const citation of row.citations.length ? row.citations : [{title:null,url:''}]) records.push([evidence.domain,evidence.platform,row.question,row.model ?? 'Not reported',row.observedAt ?? 'Not reported',evidence.retrievedAt,citation.title ?? '',citation.url,'Database observation sample; not a live prompt test or visibility score'])
+  return records.map(row => row.map(cell).join(',')).join('\r\n')
+}
+export function DataForSeoEvidence({ evidence, sample = false }: { evidence: MentionEvidence; sample?: boolean }) {
+  const [query,setQuery] = useState('')
+  const [model,setModel] = useState('all')
+  const [source,setSource] = useState('all')
+  const [view,setView] = useState<'observations'|'sources'>('observations')
+  const [exportMessage,setExportMessage] = useState('')
+  const summary = summarizeEvidence(evidence)
+  const rows = filterEvidenceRows(evidence.items,query,model,source)
+  const filteredSummary = summarizeEvidence({...evidence,items:rows})
+  const platform = evidence.platform === 'google' ? 'Google AI Overview' : 'ChatGPT'
+  function resetFilters() { setQuery('');setModel('all');setSource('all');setExportMessage('') }
+  function download() {
+    if (!rows.length) return
+    try {
+      const url = URL.createObjectURL(new Blob(['\uFEFF'+evidenceCsv(evidence,rows)],{type:'text/csv;charset=utf-8;'}))
+      const link = document.createElement('a');link.href=url;link.download='picshaw-citation-observations.csv';link.click()
+      setTimeout(()=>URL.revokeObjectURL(url),1000)
+      setExportMessage(`CSV prepared with ${rows.length} filtered observations. It contains source URLs, not a visibility score.`)
+    } catch { setExportMessage('The CSV could not be prepared. Please try again in this browser.') }
+  }
+  return <div className="visibility-workspace">
+    <header className="visibility-heading"><div><p className="portal-eyebrow">PICSHAW INTELLIGENCE</p><h2>Inside your AI citations</h2><p>{evidence.domain} <span aria-hidden="true">/</span> {platform} <span aria-hidden="true">/</span> United States · English</p></div><span className="portal-badge green">{sample ? 'Fictional sample' : 'Saved evidence'}</span></header>
+    <div className="visibility-snapshot"><span>Retrieved at: <time>{evidence.retrievedAt}</time></span><span>Collection time, not answer time</span></div>
+    <section className="visibility-kpis" aria-label="Saved snapshot summary">{[
+      ['Observations in snapshot',String(evidence.items.length),'Returned records, not tracked prompts'],
+      ['Matching records',String(evidence.totalMatches),'Reported database matches, not total answers'],
+      ['Source domains',String(summary.sources.length),'Distinct valid domains in returned citations'],
+      ['Citations in snapshot',String(summary.citationCount),'Includes repeat citations across records'],
+    ].map(([label,value,note])=><article className="portal-card visibility-kpi" key={label}><h3>{label}</h3><strong>{value}</strong><p>{note}</p></article>)}</section>
+    <div className="visibility-analysis-grid">
+      <section className="portal-card visibility-source-chart" aria-labelledby="citation-domains-heading"><div className="portal-section-heading"><h3 id="citation-domains-heading">Most cited domains in this snapshot</h3><span>Up to 6 domains</span></div><p>Number of returned observations citing each domain. One observation can cite several domains.</p>{summary.sources.length ? <ol>{summary.sources.slice(0,6).map(item=><li key={item.domain}><div><button type="button" onClick={()=>{setSource(item.domain);setView('observations')}} title={`Filter observations citing ${item.domain}`}>{item.domain}</button><span>{item.owned ? 'Your domain' : 'Other source'}</span><strong>{item.observations}</strong></div><div className="visibility-bar-track"><span style={{width:`${evidence.items.length ? item.observations/evidence.items.length*100 : 0}%`}} /></div></li>)}</ol> : <div className="visibility-empty">No valid citation domains in this snapshot.</div>}</section>
+      <aside className="portal-card visibility-coverage"><p className="portal-eyebrow">READ THIS SNAPSHOT CORRECTLY</p><h3>A source sample.<br/>Not a market score.</h3><dl><div><dt>Returned records</dt><dd>{evidence.sampledRows}</dd></div><div><dt>Records with an answer date</dt><dd>{summary.datedRows} / {evidence.items.length}</dd></div><div><dt>Reported model names</dt><dd>{summary.models.length}</dd></div></dl><p>No visibility score, ranking, lead estimate or traffic forecast has been inferred.</p><details><summary>Methodology and coverage</summary><p>Database matches are not a controlled set of live buyer-question tests. Counts describe this saved sample only. No comparable historical series is available here.</p><ul>{evidence.limitations.map((limitation,index)=><li key={index}>{limitation}</li>)}</ul></details></aside>
+    </div>
+    <section className="portal-card visibility-explorer" aria-labelledby="evidence-explorer-heading"><div className="visibility-explorer-title"><div><h3 id="evidence-explorer-heading">Explore the evidence</h3><p>Search questions, models and citation URLs. Filters apply only to this saved snapshot.</p></div><button type="button" className="portal-button secondary small" onClick={download} disabled={!rows.length}>Export filtered CSV</button></div>
+      <div className="visibility-filters"><label><span>Search evidence</span><input className="portal-input" type="search" value={query} maxLength={200} placeholder="Question, source or keyword" onChange={event=>{setQuery(event.target.value);setExportMessage('')}}/></label><label><span>Model</span><select className="portal-input" value={model} onChange={event=>{setModel(event.target.value);setExportMessage('')}}><option value="all">All models</option>{[...summary.models,...(evidence.items.some(row=>!row.model)?['Not reported']:[])].map(value=><option key={value} value={value}>{value}</option>)}</select></label><label><span>Source domain</span><select className="portal-input" value={source} onChange={event=>{setSource(event.target.value);setExportMessage('')}}><option value="all">All sources</option>{summary.sources.map(item=><option key={item.domain} value={item.domain}>{item.domain}</option>)}</select></label><button type="button" className="portal-text-link" onClick={resetFilters} disabled={!query&&model==='all'&&source==='all'}>Reset filters</button></div>
+      <div className="visibility-tabs"><div role="group" aria-label="Evidence view"><button type="button" aria-pressed={view==='observations'} onClick={()=>setView('observations')}>Observations</button><button type="button" aria-pressed={view==='sources'} onClick={()=>setView('sources')}>Sources</button></div><p role="status">Showing {rows.length} of {evidence.items.length} observations</p></div>
+      {exportMessage && <p className="portal-fine" role="status">{exportMessage}</p>}
+      {!evidence.items.length ? <div className="visibility-empty"><h4>No matching records returned</h4><p>No matching records were returned. This does not establish zero AI visibility. Try another platform or revisit when a new snapshot is available.</p></div> : !rows.length ? <div className="visibility-empty"><h4>No observations match these filters</h4><p>Your saved snapshot still contains {evidence.items.length} observations.</p><button type="button" className="portal-button secondary" onClick={resetFilters}>Clear filters</button></div> : view === 'observations' ? <ol className="visibility-observations">{rows.map((row,index)=><li key={index}><details><summary><span className="visibility-row-index">{String(index+1).padStart(2,'0')}</span><span className="visibility-question">{row.question}<small>{row.model ?? 'Model not reported'} · {row.observedAt ?? 'Answer date not reported'}</small></span><span className="portal-badge">{row.citations.length} citations</span><span className="visibility-expand" aria-hidden="true">+</span></summary><div className="visibility-observation-detail"><dl><div><dt>Model</dt><dd>{row.model ?? 'Not reported'}</dd></div><div><dt>Observed at (provider answer time)</dt><dd>{row.observedAt ?? 'Not reported'}</dd></div></dl><h4>Source citations</h4><p>Source URLs are shown as evidence, not verified recommendations.</p>{row.citations.length ? <ul>{row.citations.map((citation,citationIndex)=><li key={citationIndex}><span>{citation.title ?? 'Untitled source'}</span><code>{citation.url}</code></li>)}</ul> : <p>No source citations were returned for this observation.</p>}</div></details></li>)}</ol> : <div className="visibility-table-scroll"><table className="visibility-source-table"><caption>Source domains within the filtered observations. Counts can overlap.</caption><thead><tr><th scope="col">Source domain</th><th scope="col">Relationship</th><th scope="col">Observations</th><th scope="col">Citations</th></tr></thead><tbody>{filteredSummary.sources.map(item=><tr key={item.domain}><th scope="row"><button type="button" className="portal-text-link" onClick={()=>{setSource(item.domain);setView('observations')}}>{item.domain}</button></th><td>{item.owned?'Your domain':'Other source'}</td><td>{item.observations}</td><td>{item.citations}</td></tr>)}</tbody></table>{!filteredSummary.sources.length&&<p className="visibility-empty">These observations contain no valid source domains.</p>}</div>}
+    </section>
   </div>
 }
