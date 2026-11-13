@@ -261,11 +261,13 @@ await test('only SDK recovery type selects fixed reset-password destination', as
   const r = await callback('?code=mock&next=https://evil.example.com'); assert.equal(r.headers.get('location'), 'https://app.picshaw.com/platform/reset-password'); privateResponse(r)
   assert.equal((await callback('?code=mock', { ...env, PIC_SHAW_AUTH_SESSION_ENABLED: 'false' })).headers.get('location'), 'https://app.picshaw.com/platform')
 })
-await test('session check refreshes via verified getUser and returns no identity or tokens', async () => {
+await test('session check displays only its verified account email and no private metadata or tokens', async () => {
   methodResults.getUser = { data: { user: verifiedUser }, error: null }
   methodCookies.getUser = [[{ name: 'session.0', value: 'rotated-mock', options: { path: '/', httpOnly: true, secure: true, sameSite: 'lax' } }]]
   const r = await post('session'); assert.equal(r.status, 200); privateResponse(r)
-  const body = await r.text(); assert.match(body, /signed-in/); assert.doesNotMatch(body, /private@example|00000000|rotated-mock|admin|access_token/)
+  const body = await r.json()
+  assert.deepEqual(body, { state: 'signed-in', message: `Signed in as ${verifiedUser.email}. Workspace access is separate.` })
+  assert.doesNotMatch(JSON.stringify(body), /00000000|rotated-mock|admin|access_token/)
   assert.equal(r.cookies.get('session.0').value, 'rotated-mock'); assert.equal(calls[0][0], 'getUser'); assert.equal(calls.length, 1)
 })
 await test('missing or rejected sessions differ from temporary verification failures', async () => {
