@@ -71,7 +71,9 @@ async function post(action, jar = new Map(), body = {}, headers = {}) {
   }), action, { env })
   assert.match(response.headers.get('cache-control'), /private.*no-store/)
   assert.equal(response.headers.get('referrer-policy'), 'no-referrer')
-  assert.doesNotMatch(await response.clone().text(), /fixture-refresh|fixture-signature|fixture-[12]@|access_token|code_verifier/)
+  const responseText = await response.clone().text()
+  assert.doesNotMatch(responseText, /fixture-refresh|fixture-signature|access_token|code_verifier/)
+  if (action !== 'session' || !response.ok) assert.doesNotMatch(responseText, /fixture-[12]@/)
   applyResponse(jar, response)
   return response
 }
@@ -117,6 +119,8 @@ try {
     }
     const result = await Promise.all([post('session', first), post('session', second)])
     assert.ok(result.every(response => response.status === 200))
+    assert.equal((await result[0].json()).message, `Signed in as ${one.user.email}. Workspace access is separate.`)
+    assert.equal((await result[1].json()).message, `Signed in as ${two.user.email}. Workspace access is separate.`)
     assert.notEqual(first.get(key), second.get(key)); assert.equal(calls.length, 2)
     assert.equal((await post('session')).status, 401); assert.equal(calls.length, 2)
   })
