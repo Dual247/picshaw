@@ -42,7 +42,9 @@ export function createDataForSeoGateway(actor:WorkspaceActor, workspace:{id:stri
       if(!uuid.test(value.lease)||typeof value.domain!=='string'||!['google','chat_gpt'].includes(value.platform)||value.rowLimit!==20)throw Error('Job unavailable')
       return value
     },
-    complete:async(jobId,lease,evidence)=>{await sql`select picshaw_dataforseo_private.complete_job(${actor.id}::uuid,${actor.sessionId}::uuid,${workspace.id}::uuid,${jobId}::text,${lease}::uuid,${JSON.stringify(evidence)}::jsonb)`.signal(AbortSignal.timeout(4000))},
+    // Bind serialized JSON as text: postgres.js otherwise JSON-encodes the string
+    // again when PostgreSQL infers a jsonb parameter, producing a JSON string.
+    complete:async(jobId,lease,evidence)=>{await sql`select picshaw_dataforseo_private.complete_job(${actor.id}::uuid,${actor.sessionId}::uuid,${workspace.id}::uuid,${jobId}::text,${lease}::uuid,${JSON.stringify(evidence)}::text::jsonb)`.signal(AbortSignal.timeout(4000))},
     fail:async(jobId,lease,reason)=>{await sql`select picshaw_dataforseo_private.fail_job(${actor.id}::uuid,${actor.sessionId}::uuid,${workspace.id}::uuid,${jobId}::text,${lease}::uuid,${reason}::text)`.signal(AbortSignal.timeout(4000))},
     read:async jobId=>{
       const rows=await sql`select picshaw_dataforseo_private.read_job(${actor.id}::uuid,${actor.sessionId}::uuid,${actor.expiresAt}::bigint,${workspace.id}::uuid,${jobId}::text) as value`.signal(AbortSignal.timeout(4000))

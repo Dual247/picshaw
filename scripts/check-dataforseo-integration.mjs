@@ -9,7 +9,9 @@ const db=new PGlite(),A='10000000-0000-4000-8000-000000000001',S='10000000-0000-
 const J='30000000-0000-4000-8000-000000000001',J2='30000000-0000-4000-8000-000000000002',J3='30000000-0000-4000-8000-000000000003'
 const exp=Math.floor(Date.now()/1000)+3600
 let paid=0,revoke=false
-const sql=(strings,...values)=>({signal:()=>db.query(strings.reduce((out,part,index)=>out+(index?'$'+index:'')+part,''),values).then(r=>r.rows)})
+// Match postgres.js's JSON parameter serializer, not just PGlite raw bindings.
+// A pre-stringified value inferred as jsonb is encoded again; text::jsonb avoids it.
+const sql=(strings,...values)=>({signal:()=>db.query(strings.reduce((out,part,index)=>out+(index?'$'+index:'')+part,''),values.map((value,index)=>strings[index+1].trimStart().startsWith('::jsonb')?JSON.stringify(value):value)).then(r=>r.rows)})
 async function provider(url,init){paid++;assert.equal(url,'https://api.dataforseo.com/v3/ai_optimization/llm_mentions/search_mentions/live');const data=JSON.parse(init.body)[0];assert.equal(data.limit,20);assert.equal(data.target[0].domain,'example.com');if(revoke){await db.exec('set role postgres');await db.query('update public.organization_memberships set revoked_at=clock_timestamp() where user_id=$1',[A]);await db.exec('set role picshaw_dataforseo')}
  return new Response(JSON.stringify({status_code:20000,tasks_error:0,tasks_count:1,cost:.1,tasks:[{status_code:20000,id:'synthetic-provider-task',cost:.1,data,result:[{items_count:0,total_count:0,items:[]}]}]}),{headers:{'content-type':'application/json'}})
 }

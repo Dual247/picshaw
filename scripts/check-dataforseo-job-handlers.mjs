@@ -6,7 +6,7 @@ import {NextRequest,NextResponse} from 'next/server.js'
 const exports={};let paid=0,reads=0,auth=true,revoked=false,permission=null
 const actor={id:'actor',sessionId:'session',expiresAt:9999999999}
 const jobId='11111111-1111-4111-8111-111111111111'
-const makeJob=()=>({jobId,domain:'example.com',platform:'google',rowLimit:20,state:'completed',createdAt:'2026-11-12'})
+const makeJob=()=>({jobId,domain:'example.com',platform:'google',rowLimit:20,state:'completed',createdAt:'2026-11-12',privateJobSecret:'HIDDEN',result:{source:'dataforseo-llm-mentions',providerTaskId:'PRIVATE_TASK',actualCostUsd:.12,domain:'example.com',platform:'google',locationCode:2840,languageCode:'en',retrievedAt:'2026-11-12',totalMatches:1,sampledRows:1,privateExtra:'HIDDEN',items:[{question:'Example question',model:'Example model',observedAt:null,privateItem:'HIDDEN',citations:[{url:'https://example.com/',title:'Example',privateCitation:'HIDDEN'}]}],limitations:['Database sample only']}})
 const modules={
  'server-only':{},'next/server':{NextRequest,NextResponse},
  '../supabase/server':{AUTH_RESPONSE_HEADERS:{'Cache-Control':'private, no-store'},createRequestSupabaseClient:()=>({})},
@@ -24,7 +24,8 @@ for(const body of [{...submit,domain:'attacker.com'},{...submit,consent:false},{
 assert.equal(paid,0)
 auth=false;assert.equal((await exports.handleDataForSeoJob(req(submit),'submit',deps)).status,401);auth=true
 const response=await exports.handleDataForSeoJob(req(submit),'submit',deps);assert.equal(response.status,200);assert.match(response.headers.get('cache-control'),/no-store/);assert.equal(paid,1)
-for(const [action,body] of [['read',{jobId}],['latest',{platform:'google'}]]){const r=await exports.handleDataForSeoJob(req(body),action,deps);assert.equal(r.status,200)}
+const exposed=await response.json();assert.equal(exposed.job.result.items[0].question,'Example question');assert.equal(exposed.job.result.sampledRows,1);assert.doesNotMatch(JSON.stringify(exposed),/providerTaskId|actualCostUsd|dataforseo-llm-mentions|PRIVATE_TASK|HIDDEN|privateJobSecret|privateExtra|privateItem|privateCitation/);assert.deepEqual(Object.keys(exposed.job.result).sort(),['domain','items','languageCode','limitations','locationCode','platform','retrievedAt','sampledRows','totalMatches'].sort())
+for(const [action,body] of [['read',{jobId}],['latest',{platform:'google'}]]){const r=await exports.handleDataForSeoJob(req(body),action,deps);assert.equal(r.status,200);assert.doesNotMatch(await r.text(),/providerTaskId|actualCostUsd|dataforseo-llm-mentions|PRIVATE_TASK|HIDDEN/)}
 assert.equal(reads,2);assert.equal(paid,1)
 assert.equal((await exports.handleDataForSeoJob(req(submit),'read',deps)).status,400)
 assert.equal((await exports.handleDataForSeoJob(req({platform:'google',domain:'other.com'}),'latest',deps)).status,400)
@@ -32,3 +33,5 @@ permission='Workspace access denied';assert.equal((await exports.handleDataForSe
 permission='permission denied for schema private';const misconfigured=await exports.handleDataForSeoJob(req({jobId}),'read',deps);assert.equal(misconfigured.status,503);assert.doesNotMatch(await misconfigured.text(),/schema private/);permission=null
 revoked=true;const lost=await exports.handleDataForSeoJob(req(submit),'submit',deps);assert.equal(lost.status,503);assert.doesNotMatch(await lost.text(),/example.com|PRIVATE/)
 console.log('PASS durable job handler: disabled/origin/auth gates, explicit consent, server-owned workspace/domain, read/latest have no paid side effects, precise permission mapping and revoked evidence suppression. Mock-only.')
+
+console.log('PASS public evidence allowlist strips provider IDs, billing, vendor marker and nested operational extras; private persistence unchanged')
