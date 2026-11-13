@@ -113,7 +113,8 @@ for (const width of [320, 360, 375, 390, 480, 481, 600, 760]) {
     assert.equal(actions['justify-content'], 'space-between')
   } else assert.equal(header.display, 'flex')
 }
-assert.equal(declarations('.portal-header', 761).height, '100px', 'Desktop geometry unchanged')
+assert.equal(declarations('.portal-header', 761).height, '78px', 'Compact desktop workspace header')
 assert.equal(declarations('.portal-header', 1280).display, 'flex')
 console.log('PASS mobile header CSS regression at 320–760px; desktop contract unchanged')
+
 

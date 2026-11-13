@@ -2,7 +2,7 @@
 import Link from 'next/link'
 import {useEffect,useRef,useState} from 'react'
 import {DataForSeoPanel,type DataForSeoTransport} from './dataforseo-panel'
-import type {DataForSeoJob} from '../../lib/platform/dataforseo-types'
+import type {PublicDataForSeoJob as DataForSeoJob} from '../../lib/platform/dataforseo-types'
 const transport:DataForSeoTransport={
   submit:input=>post('submit',input),
   read:jobId=>post('read',{jobId}),
@@ -22,7 +22,7 @@ async function postLatest(platform:'google'|'chat_gpt'):Promise<DataForSeoJob|nu
 }
 export function DataForSeoDashboard(){
   const [workspace,setWorkspace]=useState<{domain:string;scope:string}|null>(null)
-  const [message,setMessage]=useState('Checking private workspace access. This does not call DataForSEO.')
+  const [message,setMessage]=useState('Checking private workspace access. No external lookup is started.')
   const [busy,setBusy]=useState(false)
   const guard=useRef({alive:false,epoch:0,busy:false,controller:null as AbortController|null})
   function clear(){guard.current.epoch++;guard.current.controller?.abort();guard.current.busy=false;setBusy(false);setWorkspace(null)}

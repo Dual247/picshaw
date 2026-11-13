@@ -8,7 +8,7 @@ const source = readFileSync('components/platform/dataforseo-panel.tsx', 'utf8')
 function load(react, jsx, globals = {}) {
   const exports = {}
   const code = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, jsx: ts.JsxEmit.ReactJSX } }).outputText
-  vm.runInNewContext(code, { exports, ...globals, require(name) { if (name === 'react') return react; if (name === 'react/jsx-runtime') return jsx; throw Error(`Unexpected dependency ${name}`) } })
+  vm.runInNewContext(code, { exports, URL, ...globals, require(name) { if (name === 'react') return react; if (name === 'react/jsx-runtime') return jsx; throw Error(`Unexpected dependency ${name}`) } })
   return exports
 }
 const element = (type, props, key) => ({ type, props, key })
@@ -145,3 +145,29 @@ assert.ok(!malicious.includes('<script>')); assert.ok(!malicious.includes('<img'
 assert.ok(!source.includes('fetch(')); assert.ok(!source.includes('localStorage')); assert.ok(!source.includes('sessionStorage')); assert.ok(!source.includes('dataforseo-provider'))
 console.log('PASS offline mocked UI: consent, no autofetch, duplicate clicks, all five job states, read-only refresh, unknown outcomes, cancellation, stale replies, unmount, logout, hidden page, domain/session keys, escaping and zero-record semantics.')
 console.log('PASS real React static evidence rendering. Not browser, production or live-provider verification.')
+
+// Derived analytics describe returned evidence only, with no market-score inference.
+const sample = {...evidence,totalMatches:30,sampledRows:3,items:[
+ {question:'Family care',model:'M1',observedAt:'2026-11-01',citations:[{title:'Care',url:'https://example.com/care'},{title:'Same domain repeated',url:'https://www.example.com/info'},{title:'Other',url:'https://other.example/a'}]},
+ {question:'Emergency',model:'M2',observedAt:null,citations:[{title:'Subdomain',url:'https://care.example.com/a'},{title:'Not owned',url:'https://notexample.com/a'}]},
+ {question:'=unsafe formula',model:null,observedAt:'invalid-date',citations:[{title:'Unsafe scheme',url:'javascript:alert(1)'},{title:'Credentials',url:'https://secret:pass@example.com/'}]},
+]}
+const stats=real.summarizeEvidence(sample)
+assert.equal(stats.sources.length,4)
+assert.equal(stats.citationCount,7)
+assert.equal(stats.datedRows,1)
+assert.equal(stats.sources.find(row=>row.domain==='example.com').observations,1,'Duplicate domain citation counted once per observation')
+assert.equal(stats.sources.find(row=>row.domain==='example.com').citations,2)
+assert.equal(stats.sources.find(row=>row.domain==='care.example.com').owned,true)
+assert.equal(stats.sources.find(row=>row.domain==='notexample.com').owned,false)
+assert.equal(real.filterEvidenceRows(sample.items,'family','all','all').length,1)
+assert.equal(real.filterEvidenceRows(sample.items,'','M2','care.example.com').length,1)
+assert.equal(real.filterEvidenceRows(sample.items,'','M1','care.example.com').length,0)
+assert.equal(real.filterEvidenceRows(sample.items,'','Not reported','all').length,1)
+const csv=real.evidenceCsv(sample,sample.items)
+assert.ok(csv.includes("'=unsafe formula"),'Spreadsheet formula starts are neutralized')
+assert.ok(!csv.includes('provider-id'))
+assert.ok(!csv.includes('actualCostUsd'))
+assert.ok(csv.includes('not a live prompt test or visibility score'))
+assert.ok(render(sample).includes('Explore the evidence'))
+console.log('PASS sample-only counts, source deduplication, ownership boundary, filters, safe CSV and no secret metadata export.')
