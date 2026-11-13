@@ -7,6 +7,8 @@ export type PortalAccessEnvironment = {
   PIC_SHAW_PILOT_USER_B_ID?: string
   PIC_SHAW_PILOT_OWNER_EMAIL?: string
   PIC_SHAW_PILOT_OWNER_ID?: string
+  PIC_SHAW_PILOT_GOOGLE_EMAIL?: string
+  PIC_SHAW_PILOT_GOOGLE_ID?: string
 }
 const pilotEmails = ['hello+portal-test-a@picshaw.com', 'hello+portal-test-b@picshaw.com'] as const
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
@@ -18,6 +20,8 @@ export function readPortalAccess(env: PortalAccessEnvironment = {
   PIC_SHAW_PILOT_USER_B_ID: process.env.PIC_SHAW_PILOT_USER_B_ID,
   PIC_SHAW_PILOT_OWNER_EMAIL: process.env.PIC_SHAW_PILOT_OWNER_EMAIL,
   PIC_SHAW_PILOT_OWNER_ID: process.env.PIC_SHAW_PILOT_OWNER_ID,
+  PIC_SHAW_PILOT_GOOGLE_EMAIL: process.env.PIC_SHAW_PILOT_GOOGLE_EMAIL,
+  PIC_SHAW_PILOT_GOOGLE_ID: process.env.PIC_SHAW_PILOT_GOOGLE_ID,
 }) {
   const mode = env.PIC_SHAW_PORTAL_ACCESS_MODE === 'pilot' ? 'pilot' :
     env.PIC_SHAW_PORTAL_ACCESS_MODE === 'public' ? 'public' : 'closed'
@@ -31,7 +35,16 @@ export function readPortalAccess(env: PortalAccessEnvironment = {
     /^[a-z0-9][a-z0-9._%+-]*@[a-z0-9](?:[a-z0-9.-]*[a-z0-9])?\.[a-z]{2,}$/.test(email) &&
     !pilotEmails.some(value => value === email) ? email : null
   const owner = ownerEmail ? { email: ownerEmail, id: pinned && typeof ownerId === 'string' && uuid.test(ownerId) && !ids.includes(ownerId) ? ownerId : null } : null
-  return { mode, ids: pinned ? ids : null, owner } as const
+  // A separate exact Google identity preserves the existing owner and test pins.
+  // Registration may finish before an independent operator pins the Auth UUID.
+  const googleEmail = env.PIC_SHAW_PILOT_GOOGLE_EMAIL
+  const googleId = env.PIC_SHAW_PILOT_GOOGLE_ID?.toLowerCase()
+  const validGoogleEmail = typeof googleEmail === 'string' && googleEmail.length <= 254 &&
+    /^[a-z0-9][a-z0-9._%+-]*@[a-z0-9](?:[a-z0-9.-]*[a-z0-9])?\.[a-z]{2,}$/.test(googleEmail) &&
+    !pilotEmails.some(value => value === googleEmail) && googleEmail !== ownerEmail
+  const google = validGoogleEmail ? { email: googleEmail, id: pinned && typeof googleId === 'string' &&
+    uuid.test(googleId) && !ids.includes(googleId) && googleId !== ownerId ? googleId : null } : null
+  return { mode, ids: pinned ? ids : null, owner, google } as const
 }
 
 /** Exact addresses only. No domains, aliases, suffix matching or mutable metadata. */
@@ -66,17 +79,26 @@ export async function requireVerifiedActor(client: Pick<SupabaseClient, 'auth'>)
   }
 }
 
+/** getUser returns server-verified identities; client metadata is never authority. */
+function hasVerifiedGoogleIdentity(user: NonNullable<Awaited<ReturnType<SupabaseClient['auth']['getUser']>>['data']['user']>, email: string) {
+  return Array.isArray(user.identities) && user.identities.some(identity =>
+    identity.provider === 'google' && identity.user_id === user.id &&
+    identity.identity_data?.email === email && identity.identity_data?.email_verified === true)
+}
+
 /** Portal admission is additional to identity; logout retains identity-only checks. */
 export function verifiedPortalActorFromResponse(
   result: Awaited<ReturnType<SupabaseClient['auth']['getUser']>>, env?: PortalAccessEnvironment,
 ): { id: string } {
   const actor = verifiedActorFromResponse(result)
-  const { mode, ids, owner } = readPortalAccess(env)
+  const { mode, ids, owner, google } = readPortalAccess(env)
   if (mode === 'public') return actor
   const user = result.data.user!
   const index = pilotEmails.findIndex(email => email === user.email)
   const pinnedIdentity = index >= 0 ? ids?.[index] === actor.id.toLowerCase() :
-    owner !== null && owner.email === user.email && owner.id !== null && owner.id === actor.id.toLowerCase()
+    (owner !== null && owner.email === user.email && owner.id !== null && owner.id === actor.id.toLowerCase()) ||
+    (google !== null && google.email === user.email && google.id !== null && google.id === actor.id.toLowerCase() &&
+      hasVerifiedGoogleIdentity(user, google.email))
   if (mode !== 'pilot' || !ids || !pinnedIdentity ||
       typeof user.email_confirmed_at !== 'string' || !Number.isFinite(Date.parse(user.email_confirmed_at))) {
     throw new AuthenticationRequiredError()
@@ -93,8 +115,10 @@ export async function requirePortalActor(client: Pick<SupabaseClient, 'auth'>, e
 export function pendingOwnerFromResponse(result: Awaited<ReturnType<SupabaseClient['auth']['getUser']>>, env?: PortalAccessEnvironment): boolean {
   try {
     verifiedActorFromResponse(result)
-    const { mode, ids, owner } = readPortalAccess(env), user = result.data.user!
-    return mode === 'pilot' && ids !== null && owner !== null && owner.id === null && owner.email === user.email &&
+    const { mode, ids, owner, google } = readPortalAccess(env), user = result.data.user!
+    const pending = (owner !== null && owner.id === null && owner.email === user.email) ||
+      (google !== null && google.id === null && google.email === user.email && hasVerifiedGoogleIdentity(user, google.email))
+    return mode === 'pilot' && ids !== null && pending &&
       typeof user.email_confirmed_at === 'string' && Number.isFinite(Date.parse(user.email_confirmed_at))
   } catch { return false }
 }

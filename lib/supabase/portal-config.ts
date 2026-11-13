@@ -28,12 +28,14 @@ export function readPortalConfig(env: PortalEnvironment = {
   PIC_SHAW_PILOT_USER_B_ID: process.env.PIC_SHAW_PILOT_USER_B_ID,
   PIC_SHAW_PILOT_OWNER_EMAIL: process.env.PIC_SHAW_PILOT_OWNER_EMAIL,
   PIC_SHAW_PILOT_OWNER_ID: process.env.PIC_SHAW_PILOT_OWNER_ID,
+  PIC_SHAW_PILOT_GOOGLE_EMAIL: process.env.PIC_SHAW_PILOT_GOOGLE_EMAIL,
+  PIC_SHAW_PILOT_GOOGLE_ID: process.env.PIC_SHAW_PILOT_GOOGLE_ID,
 }) {
   if (env.VERCEL_ENV !== 'production' || env.PIC_SHAW_AUTH_ORIGIN !== PORTAL_ORIGIN) {
     throw new Error('Authentication is disabled on this deployment.')
   }
   const supabase = readSupabaseConfig(env)
-  const { mode } = readPortalAccess(env)
+  const { mode, ids, google } = readPortalAccess(env)
   const origin = new URL(env.PIC_SHAW_AUTH_ORIGIN || '')
   if (origin.protocol !== 'https:' || origin.username || origin.password || origin.port ||
       origin.pathname !== '/' || origin.search || origin.hash || origin.hostname === 'localhost' ||
@@ -47,7 +49,7 @@ export function readPortalConfig(env: PortalEnvironment = {
     accessMode: mode,
     sessionEnabled: env.PIC_SHAW_AUTH_SESSION_ENABLED === 'true',
     enabled: {
-      google: mode === 'public' && env.PIC_SHAW_AUTH_GOOGLE_ENABLED === 'true',
+      google: (mode === 'public' || (mode === 'pilot' && ids !== null && google !== null)) && env.PIC_SHAW_AUTH_GOOGLE_ENABLED === 'true',
       apple: mode === 'public' && env.PIC_SHAW_AUTH_APPLE_ENABLED === 'true',
       email: mode !== 'closed' && env.PIC_SHAW_AUTH_EMAIL_ENABLED === 'true',
     },

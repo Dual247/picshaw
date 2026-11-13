@@ -29,8 +29,9 @@ const portal = load('lib/supabase/portal-config.ts', { './config': config, './au
 const cookie = (name, value) => ({ name, value, options: { secure: true, httpOnly: true, sameSite: 'lax', path: '/' } })
 function createClient(adapter) {
   created++
-  return { auth: Object.fromEntries(['getClaims', 'getUser', 'signInWithPassword', 'signUp', 'resetPasswordForEmail', 'exchangeCodeForSession', 'updateUser', 'signOut'].map(name => [name, async () => {
+  return { auth: Object.fromEntries(['signInWithOAuth', 'getClaims', 'getUser', 'signInWithPassword', 'signUp', 'resetPasswordForEmail', 'exchangeCodeForSession', 'updateUser', 'signOut'].map(name => [name, async () => {
     calls.push(name)
+    if (name === 'signInWithOAuth') return { data: { url: project + '/auth/v1/authorize?provider=google' }, error: null }
     if (name === 'getClaims') return { data: { claims: { sub: currentUser.id, session_id: '20000000-0000-4000-8000-000000000001', exp: Math.floor(Date.now() / 1000) + 3600,
       role: 'authenticated', is_anonymous: false, iss: `${project}/auth/v1`, aud: 'authenticated' } }, error: null }
     if (name === 'getUser' && getUserThrows) throw Error('synthetic identity network failure')
@@ -228,4 +229,49 @@ await test('callback discards exchanged cookies if fresh identity verification t
   assert.equal(result.cookies.get('__Host-picshaw-auth.1').maxAge,0)
   assert.equal(result.cookies.get('__Host-picshaw-auth.8').maxAge,0)
 })
+
+
+await test('Google pilot bootstrap is explicit, exact and preserves prior owner and test users', async () => {
+  const googleId='10000000-0000-4000-8000-000000000004', ownerId='10000000-0000-4000-8000-000000000003'
+  const pending={...env,PIC_SHAW_PILOT_OWNER_EMAIL:'existing@example.com',PIC_SHAW_PILOT_OWNER_ID:ownerId,PIC_SHAW_PILOT_GOOGLE_EMAIL:'hello@picshaw.com'}
+  assert.equal(portal.authAvailability(pending).google,true)
+  assert.equal((await post('google',{},pending)).status,200)
+  assert.ok(calls.includes('signInWithOAuth'))
+  assert.equal((await post('apple',{},pending)).status,503)
+  assert.equal(portal.authAvailability(pending).apple,false)
+  assert.equal(portal.publicPortalReady(pending),false)
+  assert.equal(auth.portalEmailAllowed('hello@picshaw.com',pending),false,'Google configuration does not authorize email signup/recovery')
+  const ready={...pending,PIC_SHAW_PILOT_GOOGLE_ID:googleId}
+  const googleUser={id:googleId,email:'hello@picshaw.com',email_confirmed_at:'2026-01-01T00:00:00Z',is_anonymous:false,identities:[{provider:'google',user_id:googleId,identity_data:{email:'hello@picshaw.com',email_verified:true}}]}
+  assert.throws(()=>auth.verifiedPortalActorFromResponse({data:{user:googleUser},error:null},pending))
+  assert.equal(auth.verifiedPortalActorFromResponse({data:{user:googleUser},error:null},ready).id,googleId)
+  for(const user of [...users,{...googleUser,id:ownerId,email:'existing@example.com'}]) assert.equal(auth.verifiedPortalActorFromResponse({data:{user},error:null},ready).id,user.id)
+  for(const user of [{...googleUser,id:idA},{...googleUser,id:ownerId},{...googleUser,email:'other@picshaw.com'},{...googleUser,email:'hello@picshaw.com.evil.test'},{...googleUser,email:'HELLO@picshaw.com'},{...googleUser,email_confirmed_at:null},{...googleUser,is_anonymous:true}]) assert.throws(()=>auth.verifiedPortalActorFromResponse({data:{user},error:null},ready))
+  for(const email of ['@picshaw.com','*@picshaw.com','hello@picshaw.com ',emails[0],'existing@example.com']) assert.equal(portal.authAvailability({...ready,PIC_SHAW_PILOT_GOOGLE_EMAIL:email}).google,false)
+  for(const id of [idA,idB,ownerId,'bad']) assert.throws(()=>auth.verifiedPortalActorFromResponse({data:{user:googleUser},error:null},{...ready,PIC_SHAW_PILOT_GOOGLE_ID:id}))
+  assert.equal(portal.authAvailability({...ready,PIC_SHAW_PILOT_USER_A_ID:undefined}).google,false)
+  assert.equal(portal.authAvailability({...ready,PIC_SHAW_AUTH_GOOGLE_ENABLED:'false'}).google,false)
+  assert.equal(portal.authAvailability({...ready,PIC_SHAW_PORTAL_ACCESS_MODE:'closed'}).google,false)
+  currentUser=googleUser
+  for(const identities of [undefined,[],[{provider:'email',user_id:googleId,identity_data:{email:'hello@picshaw.com',email_verified:true}}],[{provider:'google',user_id:idA,identity_data:{email:'hello@picshaw.com',email_verified:true}}],[{provider:'google',user_id:googleId,identity_data:{email:'other@picshaw.com',email_verified:true}}],[{provider:'google',user_id:googleId,identity_data:{email:'hello@picshaw.com',email_verified:false}}]]) {
+    const response={data:{user:{...googleUser,identities}},error:null}
+    assert.throws(()=>auth.verifiedPortalActorFromResponse(response,ready))
+    assert.equal(auth.pendingOwnerFromResponse(response,pending),false)
+  }
+  const callback= settings => handlers.handleAuthCallback(new NextRequest(`${origin}/platform/auth/callback?code=synthetic`,{headers:{host:'app.picshaw.com'}}),{env:settings})
+  let response=await callback(pending)
+  assert.equal(response.headers.get('location'),`${origin}/platform/sign-in?notice=access-pending`)
+  assert.ok(calls.includes('signOut'))
+  assert.ok(response.cookies.get('__Host-picshaw-auth.0').value==='')
+  response=await callback(ready)
+  assert.equal(response.headers.get('location'),`${origin}/platform`)
+  currentUser={...googleUser,email:'other@picshaw.com'}
+  response=await callback(ready)
+  assert.equal(response.headers.get('location'),`${origin}/platform/sign-in?error=callback`)
+  currentUser=googleUser;signOutFailure=true
+  response=await callback(pending)
+  assert.equal(response.status,503)
+  assert.equal(response.headers.get('location'),null)
+})
+
 console.log(`${tests} restricted pilot checks passed. Synthetic SDK/accounts only; upstream Auth signup and Data API policies require independent hosted verification.`)

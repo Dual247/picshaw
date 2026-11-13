@@ -11,7 +11,8 @@ send email, change hosted settings, provision credentials or activate a deployme
 - `pilot` permits email initiation only for the exact reviewed addresses
   `hello+portal-test-a@picshaw.com` and `hello+portal-test-b@picshaw.com`. No wildcard,
   domain match, extra alias, case folding or user metadata can enlarge this list.
-  Google/Apple sign-in remain disabled even if their flags are mistakenly true.
+  Google/Apple sign-in remain disabled with provider flags alone. The separately
+  approved Google identity flow below is the only pilot OAuth exception.
 - `public` is a separate, deliberate future launch decision. Do not set it until
   live acceptance and launch approval are complete. Provider flags still apply.
 
@@ -63,3 +64,33 @@ denial, closed defaults, recovery/callback/session behavior, retained logout, un
 origin/admission guards and all three data-handler boundaries. Existing public-mode
 tests now opt into public explicitly rather than assuming missing configuration is
 open. Actual approved-account browser tests remain required.
+
+## Separately approved Google pilot identity
+
+An explicitly configured `PIC_SHAW_PILOT_GOOGLE_EMAIL` and enabled Google provider
+allow Google initiation in pilot mode only when both existing test UUID pins are
+valid. This is an exact lowercase mailbox, not a domain rule. The existing owner
+email/UUID and two test identities remain unchanged. Apple remains disabled.
+No setting here changes public marketing readiness or upstream Supabase policies.
+
+The first Google authentication can create the upstream Auth identity. Both pending
+and admitted Google-slot checks require a server-returned Google identity with the
+same Auth user ID, exact configured email and a true email-verified claim. Until an
+operator independently verifies and pins `PIC_SHAW_PILOT_GOOGLE_ID`, the exact
+confirmed account is signed out locally, exchanged cookies are discarded, and the
+callback shows access-pending. A sign-out failure fails closed. No automatic
+first-user enrollment or workspace grant occurs. The operator must obtain required
+approval before the persistent-access grant. Pin only the verified exact email's
+Auth UUID, not a client-provided ID or OAuth response alone. Other mailboxes, aliases,
+domain matches, unconfirmed email and conflicting UUIDs never grant pilot access.
+
+This does not restrict upstream Google account creation to that mailbox; the
+application callback and all workspace/data handlers enforce the admission boundary.
+
+Deployment-specific reviewed hook SQL is retained privately, outside the public repository.
+Apply through the approved hosted migration workflow, then separately enable the
+before-user-created hook and read back its configured URI. Creating the function
+alone does not activate it. Existing users/sessions/linking are not changed by this
+hook. The exact Google/test/owner pairs are fixed; reject every other new signup.
+Pure PostgreSQL 17 checks cover 47 allowed/denied/malformed cases and restricted
+EXECUTE privileges; hosted invocation and activation still require verification.
