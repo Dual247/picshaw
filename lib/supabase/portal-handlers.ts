@@ -123,7 +123,12 @@ export async function handleAuthPost(request: NextRequest, action: string, depen
           context.discardAuth()
           return context.finish({ state: 'signed-out', message: 'Your session is unavailable for this portal. Please sign in with an approved account.' }, 401)
         }
-        return context.finish({ state: 'signed-in', message: 'Your account session is active. Workspace access is separate.' })
+        // Display only this request's server-verified account after portal admission.
+        // Never use submitted fields, cookie claims or mutable profile metadata.
+        const email = result.data.user?.email
+        return context.finish({ state: 'signed-in', message: validEmail(email)
+          ? `Signed in as ${email}. Workspace access is separate.`
+          : 'Your account session is active. Workspace access is separate.' })
       } catch { return context.finish({ state: 'unknown', error: 'We could not verify your session right now. Please retry; this does not mean you have been signed out.' }, 503) }
     }
     if (action === 'sign-out' || action === 'sign-out-all') {

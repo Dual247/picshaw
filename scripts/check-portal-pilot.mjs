@@ -87,7 +87,12 @@ await test('fresh server-confirmed email AND matching pinned ID admit both pilot
     currentUser = users[index]
     const signedIn = await post('sign-in', credentials(emails[index]))
     assert.equal(signedIn.status, 200); assert.equal((await signedIn.json()).state, 'signed-in')
-    assert.equal((await post('session')).status, 200)
+    const session = await post('session', { email: 'injected@example.com' })
+    assert.equal(session.status, 200)
+    assert.match(session.headers.get('cache-control'), /no-store/)
+    const body = await session.json()
+    assert.equal(body.message, `Signed in as ${emails[index]}. Workspace access is separate.`)
+    assert.doesNotMatch(JSON.stringify(body), /injected@example.com/)
   }
   assert.equal(calls.filter(name => name === 'getUser').length, 4)
 })
