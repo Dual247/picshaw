@@ -1,0 +1,171 @@
+{
+  "schemaVersion": 1,
+  "repository": "Dual247/picshaw",
+  "operationsBranch": "preview/picshaw-outbound",
+  "timeZone": "America/Los_Angeles",
+  "updatedOn": "2026-11-18",
+  "visibility": "private_operational_source_never_publish",
+  "automation": {
+    "id": "Automation_a9af91448de4819186c712faa03069f1",
+    "status": "created",
+    "firstRunLocalDate": "2026-11-19",
+    "approximateLocalTime": "09:00",
+    "timeZone": "America/Los_Angeles",
+    "scope": "At least five new qualified LA/Orange County prospect packages each day, with saved Gmail drafts only.",
+    "independentOf": "Existing 20-per-day outreach task; do not replace, alter, duplicate or count its work."
+  },
+  "dailyPolicy": {
+    "minimumNewPackages": 5,
+    "idempotencyKey": "picshaw-preview-five:<YYYY-MM-DD in America/Los_Angeles>",
+    "completionRequires": [
+      "new qualified and deduplicated business",
+      "verified branded live preview with all-path server expiry",
+      "saved concise personalized Gmail draft",
+      "recorded source facts, lifecycle, deployment and draft IDs"
+    ],
+    "maximumPreviewLifetimeHours": 168,
+    "sendEmailAuthorized": false,
+    "scheduleEmailAuthorized": false,
+    "reportShortfalls": true
+  },
+  "dailyRunRecordExample": {
+    "id": "picshaw-preview-five:YYYY-MM-DD",
+    "localDate": "YYYY-MM-DD",
+    "timeZone": "America/Los_Angeles",
+    "status": "in_progress | completed | partial | blocked",
+    "startedAt": "ISO 8601 UTC",
+    "finishedAt": null,
+    "minimumRequired": 5,
+    "reservedProspectIds": [],
+    "completedProspectIds": [],
+    "completedCount": 0,
+    "shortfallCount": 5,
+    "blockers": []
+  },
+  "dailyRuns": [],
+  "prospects": [
+    {
+      "id": "expo-collision",
+      "slug": "expo-collision",
+      "routeSlug": "expo",
+      "company": "EXPO Collision Center",
+      "companyDomain": "expocc.com",
+      "canonicalBusinessKey": "expocc.com|expo-collision-center|137-oregon-st-el-segundo-ca-90245",
+      "geography": {
+        "city": "El Segundo",
+        "county": "Los Angeles",
+        "state": "CA"
+      },
+      "contact": {
+        "name": "Shane Arfai",
+        "email": "shane@expocc.com",
+        "fallbackEmail": "info@expocc.com"
+      },
+      "address": "137 Oregon St, El Segundo, CA 90245",
+      "phone": "+1-310-615-0155",
+      "recordKind": "bootstrap_seed",
+      "countsTowardDailyTarget": false,
+      "dailyRunId": null,
+      "status": "email_sent_preview_active_guard_verified",
+      "firstPublishedAt": "2026-11-18T20:54:47.759Z",
+      "firstPublishedAtEpochMs": 1795035287759,
+      "expiresAt": "2026-11-25T20:54:47.759Z",
+      "expiresAtEpochMs": 1795640087759,
+      "maximumLifetimeHours": 168,
+      "timeZone": "America/Los_Angeles",
+      "teamId": "team_152cnGnh8Y1LacMEU6gvr5FJ",
+      "projectId": "prj_PdAD4CmZGjeRSbFYS3wZbklalgIR",
+      "projectName": "picshaw-expo-preview",
+      "rootDirectory": "client-previews/expo-collision",
+      "brandedUrl": "https://www.picshaw.com/previews/expo/",
+      "originUrl": "https://picshaw-expo-preview.vercel.app/",
+      "routing": {
+        "projectId": "prj_xMMQcSaM02M5xmSqPdMZGuB5PPVj",
+        "routeIds": [
+          "picshaw-expo-preview-trailing-slash",
+          "picshaw-expo-preview-proxy"
+        ],
+        "verifiedVersionId": "801d07a1-bcd5-42c9-abf5-c180888363db"
+      },
+      "source": {
+        "repository": "Dual247/picshaw",
+        "branch": "preview/expo-collision-20261118",
+        "commit": "e0ed3cb821fd59286efc1242cf997065cbbab53b",
+        "lifecyclePath": "client-previews/expo-collision/preview-lifecycle.json",
+        "assetProvenancePath": "client-previews/expo-collision/docs/provenance.json"
+      },
+      "deployment": {
+        "id": "dpl_FpPohKGcCyXA1TknN6jVaBeGT8Eq",
+        "status": "READY",
+        "guardStatus": "verified",
+        "verificationReportedBy": "parent task /root; exact wall-clock verification time not recorded",
+        "evidence": {
+          "brandedRoot": 200,
+          "brandedCss": 200,
+          "brandedImage": 200,
+          "primaryOrigin": 200,
+          "stableAliases": {
+            "testedCount": 2,
+            "status": 200
+          },
+          "dynamicExpiryHeader": "2026-11-25T20:54:47.759Z",
+          "cacheControlContains": "no-store",
+          "brandedPost": 405,
+          "originalUnguardedImmutableDeployment": "Vercel login redirect; no Expo content served",
+          "mainHomepageAndPortal": "200; original response byte lengths preserved"
+        },
+        "verifiedOn": "2026-11-18"
+      },
+      "email": {
+        "provider": "gmail",
+        "draftId": null,
+        "historicalDraftId": "r-945900869455328611",
+        "historicalDraftMessageId": "1a1f0722a4957366",
+        "historicalDraftStatus": "No longer available; original draft lookup returned 404 after the user sent the email.",
+        "sentMessageId": "1a1f07f2cdcf0ff2",
+        "threadId": "1a1f0722a4957366",
+        "to": "shane@expocc.com",
+        "subject": "A website idea for Expo",
+        "status": "sent",
+        "sentAt": "2026-11-18T13:10:28-08:00",
+        "sentBy": "user",
+        "sendAuthorized": false,
+        "evidence": "Parent task /root confirmed Gmail SENT message; the user sent it independently.",
+        "doNotRecreateDraft": true
+      },
+      "sourceFacts": [
+        {
+          "fact": "EXPO Collision Center is located at 137 Oregon St, El Segundo, CA 90245; telephone (310) 615-0155; general email info@expocc.com.",
+          "sourceUrl": "https://www.expocc.com/",
+          "observedOn": "2026-11-18"
+        },
+        {
+          "fact": "The business states more than 30 years of experience and offers collision repair, dent removal, frame and unibody repair, paint matching, towing, free estimates and insurance communication assistance.",
+          "sourceUrl": "https://www.expocc.com/",
+          "observedOn": "2026-11-18"
+        },
+        {
+          "fact": "The existing website already includes an estimate request with up to four photos; no verified completed-project gallery was found.",
+          "sourceUrl": "https://www.expocc.com/",
+          "observedOn": "2026-11-18"
+        },
+        {
+          "fact": "Current-site automotive and customer-service images are illustrative; the preview hero is generated concept imagery. None is presented as a real Expo project or premises.",
+          "sourcePath": "client-previews/expo-collision/docs/provenance.json",
+          "observedOn": "2026-11-18"
+        }
+      ],
+      "cleanup": {
+        "status": "not_due",
+        "routeRemovalAuthorizedOnlyAfter": "2026-11-25T20:54:47.759Z",
+        "retainSourceAndProject": true
+      },
+      "notes": [
+        "Existing Expo package is a bootstrap example and must never count toward a new daily batch.",
+        "First publication and expiry values are immutable across redeployments.",
+        "The user independently sent the Expo email. Do not recreate the draft. Automated email sending and scheduling remain unauthorized."
+      ],
+      "emailStatus": "sent"
+    }
+  ]
+}
