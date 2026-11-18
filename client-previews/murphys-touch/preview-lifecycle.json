@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "slug": "murphys-touch",
+  "company": "Murphy's Touch",
+  "companyDomain": "murphystouchla.com",
+  "contact": {
+    "name": "Paul Murphy",
+    "role": "Owner",
+    "email": "paul@murphystouchla.com",
+    "phone": "310-268-8285"
+  },
+  "firstPublishedAt": "2026-11-18T21:51:11.000Z",
+  "firstPublishedAtEpochMs": 1795038671000,
+  "expiresAt": "2026-11-25T21:51:11.000Z",
+  "expiresAtEpochMs": 1795643471000,
+  "maximumLifetimeHours": 168,
+  "timeZone": "America/Los_Angeles",
+  "teamId": "team_152cnGnh8Y1LacMEU6gvr5FJ",
+  "projectId": "prj_7BftOcmw6dCLzHZoFFwdlBiAygCp",
+  "projectName": "picshaw-murphys-touch-preview",
+  "repository": "Dual247/picshaw",
+  "branch": "preview/picshaw-outbound",
+  "rootDirectory": "client-previews/murphys-touch",
+  "brandedUrl": "https://www.picshaw.com/previews/murphys-touch/",
+  "originUrl": "https://picshaw-murphys-touch-preview.vercel.app/",
+  "routing": {
+    "projectId": "prj_xMMQcSaM02M5xmSqPdMZGuB5PPVj",
+    "routeIds": [
+      "picshaw-murphys-touch-preview-trailing-slash",
+      "picshaw-murphys-touch-preview-proxy"
+    ]
+  },
+  "expirationPolicy": "Server-enforced HTTP 410 on every request at or after expiresAt. The publication window was fixed before first production deployment; existing deadlines must never be extended by redeployment."
+}

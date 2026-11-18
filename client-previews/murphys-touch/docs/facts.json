@@ -1,0 +1,111 @@
+{
+  "business": "Murphy's Touch",
+  "decision_maker": {
+    "name": "Paul Murphy",
+    "role": "Owner",
+    "email": "paul@murphystouchla.com"
+  },
+  "observed_date": "2026-11-18",
+  "primary_sources": [
+    "https://www.murphystouchla.com/",
+    "https://www.murphystouch.com/"
+  ],
+  "la": {
+    "website": "https://www.murphystouchla.com/",
+    "phone": "310-268-8285",
+    "service_area": [
+      "Greater Los Angeles",
+      "Ojai",
+      "Santa Barbara",
+      "Orange County",
+      "San Diego",
+      "Palm Springs"
+    ],
+    "source_heading_observation": "Live web retrieval begins MURPHY'S TOUCH test.",
+    "address_note": "Current official pages retrieved do not establish a workshop street address; do not publish one from an old third-party listing."
+  },
+  "desert": {
+    "website": "https://www.murphystouch.com/",
+    "identity": "Murphy's Touch - Desert Communities",
+    "phone": "760-656-4593",
+    "email": "paul@murphystouchla.com",
+    "service_area": [
+      "Palm Springs",
+      "Cathedral City",
+      "Palm Desert",
+      "La Quinta",
+      "Indio",
+      "other Desert Communities"
+    ],
+    "distinct_from_la": true
+  },
+  "paul_background": {
+    "third_generation_restorer": true,
+    "apprenticeship_started_at_age": 16,
+    "hometown": "Farnham, Surrey, England",
+    "england_to_los_angeles_year": 1982,
+    "business_started_year": 1987,
+    "source": "https://www.murphystouchla.com/",
+    "copy_caution": "Use founded in1987 or third-generation; existing25+/30+/40-year phrases on site are inconsistent or outdated."
+  },
+  "services": {
+    "general": [
+      "Antique restoration",
+      "Cabinet making and custom furniture",
+      "Stripping, staining, waxing, French polishing, lacquers and varnishes",
+      "General repair, gluing, touch-up and color matching",
+      "Mobile work on furniture and built-in cabinetry/paneling",
+      "Training and consulting"
+    ],
+    "hospitality": [
+      "Onsite restoration of existing hotel/restaurant furniture during soft remodels",
+      "Scratches, watermarks, burn marks and wear repairs",
+      "Shipping and installation damage repair alongside construction/installation teams",
+      "Color change, matching and correction using low-odor water-based products",
+      "Custom and specialty furniture creation"
+    ],
+    "la_additional": [
+      "Fire, smoke and water damage repair/restoration",
+      "Replacement quality wood pieces from inventory"
+    ]
+  },
+  "hospitality_proof": {
+    "published_testimonial": {
+      "attribution": "Robert B. / Downtown LA Hotel Chief Engineer",
+      "context": "Testimonial says Paul repaired and restored worn casework during renovation of a394-room DowntownLA hotel. Does not establish that every room was restored.",
+      "short_quote": "I could not tell where the damage was before!",
+      "date_label": "March26,2026",
+      "platform_label_on_site": "Verified Yelp Review",
+      "original_platform_independently_verified": false,
+      "source": "https://www.murphystouchla.com/",
+      "hotel_name_verified": false,
+      "image_relationship_verified": false
+    },
+    "other_attributions_on_site": [
+      "Karum Din / Santa Monica Hotel Manager",
+      "Jeroen Quint / JRK Properties",
+      "Emily Boyce / Hotel GM"
+    ],
+    "copy_caution": "Describe as a testimonial published on Murphy's site. Do not invent hotel names, exact scope, current clients, quantified savings or images of the project."
+  },
+  "existing_enquiry_features": [
+    "Phone and email contacts",
+    "LA page includes a BOOK NOW section in retrieved content; functionality not tested",
+    "Desert site offers free no-obligation estimates; do not automatically assert identical LA quotation terms without confirmation"
+  ],
+  "recommended_preview_focus": [
+    "Distinct path for hotels/restaurants and residential antiques",
+    "Bring Paul's British craft background and since1987 foundation forward",
+    "Lead hospitality story with casework/onsite touchups and the attributed394-room testimonial",
+    "Clear photo-enquiry concept for scope/location/timing; no live submissions from preview",
+    "Use neutral service illustrations and real portrait; gallery requires original project captions before final publication"
+  ],
+  "limits": [
+    "No analytics or ranking data measured",
+    "No independent verification of the original Yelp/Google testimonial pages",
+    "No actual before/after photo pairs established",
+    "Origin HTML requests returned502/503, but official pages accessible through web retrieval and imageCDN downloads succeeded",
+    "No current-site separate logo image identified; use typographic wordmark rather than invented badge",
+    "Current-site service photos are not verified completed projects"
+  ]
+}
