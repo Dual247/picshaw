@@ -1,0 +1,148 @@
+{
+  "verifiedAt": "2026-11-18T21:43:00.809574+00:00",
+  "checks": [
+    {
+      "label": "brandedRoot",
+      "url": "https://www.picshaw.com/previews/second-city-plumbing/",
+      "method": "GET",
+      "status": 200,
+      "bytes": 15357,
+      "expiry": "2026-11-25T21:39:03.000Z",
+      "cache": "private, no-store, no-cache, max-age=0, must-revalidate",
+      "robots": "noindex, nofollow, noarchive",
+      "location": null,
+      "heroPresent": true
+    },
+    {
+      "label": "brandedCss",
+      "url": "https://www.picshaw.com/previews/second-city-plumbing/style.css",
+      "method": "GET",
+      "status": 200,
+      "bytes": 33336,
+      "expiry": "2026-11-25T21:39:03.000Z",
+      "cache": "private, no-store, no-cache, max-age=0, must-revalidate",
+      "robots": "noindex, nofollow, noarchive",
+      "location": null,
+      "heroPresent": false
+    },
+    {
+      "label": "brandedImage",
+      "url": "https://www.picshaw.com/previews/second-city-plumbing/assets/sc-truck.webp",
+      "method": "GET",
+      "status": 200,
+      "bytes": 24654,
+      "expiry": "2026-11-25T21:39:03.000Z",
+      "cache": "private, no-store, no-cache, max-age=0, must-revalidate",
+      "robots": "noindex, nofollow, noarchive",
+      "location": null,
+      "heroPresent": false
+    },
+    {
+      "label": "brandedScript",
+      "url": "https://www.picshaw.com/previews/second-city-plumbing/app.js",
+      "method": "GET",
+      "status": 200,
+      "bytes": 9673,
+      "expiry": "2026-11-25T21:39:03.000Z",
+      "cache": "private, no-store, no-cache, max-age=0, must-revalidate",
+      "robots": "noindex, nofollow, noarchive",
+      "location": null,
+      "heroPresent": false
+    },
+    {
+      "label": "brandedPost",
+      "url": "https://www.picshaw.com/previews/second-city-plumbing/",
+      "method": "POST",
+      "status": 405,
+      "bytes": 18,
+      "expiry": "2026-11-25T21:39:03.000Z",
+      "cache": "private, no-store, no-cache, max-age=0, must-revalidate",
+      "robots": "noindex, nofollow, noarchive",
+      "location": null,
+      "heroPresent": false
+    },
+    {
+      "label": "origin",
+      "url": "https://picshaw-second-city-preview.vercel.app/",
+      "method": "GET",
+      "status": 200,
+      "bytes": 15357,
+      "expiry": "2026-11-25T21:39:03.000Z",
+      "cache": "private, no-store, no-cache, max-age=0, must-revalidate",
+      "robots": "noindex, nofollow, noarchive",
+      "location": null,
+      "heroPresent": true
+    },
+    {
+      "label": "stableTeamAlias",
+      "url": "https://picshaw-second-city-preview-ash-patels-projects.vercel.app/",
+      "method": "GET",
+      "status": 200,
+      "bytes": 15357,
+      "expiry": "2026-11-25T21:39:03.000Z",
+      "cache": "private, no-store, no-cache, max-age=0, must-revalidate",
+      "robots": "noindex, nofollow, noarchive",
+      "location": null,
+      "heroPresent": true
+    },
+    {
+      "label": "stableBranchAlias",
+      "url": "https://picshaw-second-city-preview-git-prev-b60a45-ash-patels-projects.vercel.app/",
+      "method": "GET",
+      "status": 200,
+      "bytes": 15357,
+      "expiry": "2026-11-25T21:39:03.000Z",
+      "cache": "private, no-store, no-cache, max-age=0, must-revalidate",
+      "robots": "noindex, nofollow, noarchive",
+      "location": null,
+      "heroPresent": true
+    },
+    {
+      "label": "immutable",
+      "url": "https://picshaw-second-city-preview-giq4qstr3-ash-patels-projects.vercel.app/",
+      "method": "GET",
+      "status": 302,
+      "bytes": 263,
+      "expiry": null,
+      "cache": "no-store, max-age=0",
+      "robots": "noindex",
+      "location": "Vercel sign-in redirect (transient URL omitted)",
+      "heroPresent": false
+    },
+    {
+      "label": "picshawHome",
+      "url": "https://www.picshaw.com/",
+      "method": "GET",
+      "status": 200,
+      "bytes": 90037,
+      "expiry": null,
+      "cache": "public, max-age=0, must-revalidate",
+      "robots": null,
+      "location": null,
+      "heroPresent": false
+    },
+    {
+      "label": "expoPreview",
+      "url": "https://www.picshaw.com/previews/expo/",
+      "method": "GET",
+      "status": 200,
+      "bytes": 16141,
+      "expiry": "2026-11-25T20:54:47.759Z",
+      "cache": "private, no-store, no-cache, max-age=0, must-revalidate",
+      "robots": "noindex, nofollow, noarchive",
+      "location": null,
+      "heroPresent": false
+    }
+  ],
+  "browserChecks": [
+    "Desktop hero and services checked",
+    "Mobile viewport375px equals document width375px",
+    "Mobile menu open/close verified",
+    "Service selection updates quote type",
+    "Demo submit confirms and clears all fields"
+  ],
+  "expiryTests": {
+    "passed": 4,
+    "cutoff": "2026-11-25T21:39:03.000Z"
+  }
+}

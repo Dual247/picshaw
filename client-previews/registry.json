@@ -166,6 +166,147 @@
         "The user independently sent the Expo email. Do not recreate the draft. Automated email sending and scheduling remain unauthorized."
       ],
       "emailStatus": "sent"
+    },
+    {
+      "id": "second-city-plumbing",
+      "slug": "second-city-plumbing",
+      "routeSlug": "second-city-plumbing",
+      "company": "Second City Plumbing",
+      "companyDomain": "scplumbing.com",
+      "canonicalBusinessKey": "scplumbing.com|second-city-plumbing|3107387094",
+      "geography": {
+        "city": "El Segundo",
+        "county": "Los Angeles",
+        "state": "CA",
+        "serviceArea": "West LA and South Bay"
+      },
+      "contact": {
+        "name": "Mike Erland",
+        "role": "Owner",
+        "email": "rland345@gmail.com",
+        "fallbackEmail": "support@scplumbing.com"
+      },
+      "phone": "+1-310-738-7094",
+      "recordKind": "user_supplied_manual",
+      "manualBatchDate": "2026-11-18",
+      "manualSequence": 2,
+      "countsTowardDailyTarget": false,
+      "dailyRunId": null,
+      "status": "draft_saved_preview_active_guard_verified",
+      "firstPublishedAt": "2026-11-18T21:39:03.000Z",
+      "firstPublishedAtEpochMs": 1795037943000,
+      "expiresAt": "2026-11-25T21:39:03.000Z",
+      "expiresAtEpochMs": 1795642743000,
+      "maximumLifetimeHours": 168,
+      "timeZone": "America/Los_Angeles",
+      "teamId": "team_152cnGnh8Y1LacMEU6gvr5FJ",
+      "projectId": "prj_Xkcd55dgABreLiDRMBZdUpco377e",
+      "projectName": "picshaw-second-city-preview",
+      "rootDirectory": "client-previews/second-city-plumbing",
+      "brandedUrl": "https://www.picshaw.com/previews/second-city-plumbing/",
+      "originUrl": "https://picshaw-second-city-preview.vercel.app/",
+      "routing": {
+        "projectId": "prj_xMMQcSaM02M5xmSqPdMZGuB5PPVj",
+        "routeIds": [
+          "picshaw-second-city-preview-trailing-slash",
+          "picshaw-second-city-preview-proxy"
+        ],
+        "verifiedVersionId": "927a7e8d-93a6-4e57-9702-a21835da8c7a"
+      },
+      "source": {
+        "repository": "Dual247/picshaw",
+        "branch": "preview/picshaw-outbound",
+        "commit": "8fc5b64ff167b7ded0245be0418ef31f06930567",
+        "lifecyclePath": "client-previews/second-city-plumbing/preview-lifecycle.json",
+        "assetProvenancePath": "client-previews/second-city-plumbing/docs/provenance.json",
+        "verificationPath": "client-previews/second-city-plumbing/docs/verification.json"
+      },
+      "deployment": {
+        "id": "dpl_7uQJVPu74LcNavcfYqXo4a9bfaXu",
+        "status": "READY",
+        "guardStatus": "verified",
+        "verifiedAt": "2026-11-18T21:43:00.809574+00:00",
+        "evidence": {
+          "brandedRoot": 200,
+          "brandedCss": 200,
+          "brandedImage": 200,
+          "brandedScript": 200,
+          "primaryOrigin": 200,
+          "stableAliases": {
+            "testedCount": 2,
+            "status": 200
+          },
+          "dynamicExpiryHeader": "2026-11-25T21:39:03.000Z",
+          "cacheControlContains": "no-store",
+          "brandedPost": 405,
+          "immutableDeployment": "302 Vercel sign-in redirect; no company content served",
+          "mainHomepageAndExpoPreview": "200; original response byte lengths preserved"
+        },
+        "browserChecks": [
+          "Desktop hero and services checked",
+          "Mobile viewport375px equals document width375px",
+          "Mobile menu open/close verified",
+          "Service selection updates quote type",
+          "Demo submit confirms and clears all fields"
+        ],
+        "expiryTests": {
+          "passed": 4,
+          "cutoff": "2026-11-25T21:39:03.000Z"
+        }
+      },
+      "email": {
+        "provider": "gmail",
+        "draftId": "r-1802871847822963518",
+        "draftMessageId": "1a1f09d388c1ebb1",
+        "threadId": "1a1f09d388c1ebb1",
+        "from": "hello@picshaw.com",
+        "to": "rland345@gmail.com",
+        "subject": "A website idea for Second City Plumbing",
+        "status": "draft",
+        "savedAt": "2026-11-18T21:43:18.000Z",
+        "sendAuthorized": false,
+        "doNotRecreateDraft": true
+      },
+      "sourceFacts": [
+        {
+          "fact": "Official website describes residential and commercial plumbing, HOA/realtor work, 24/7 emergency service and West LA/South Bay service areas.",
+          "sourceUrl": "https://scplumbing.com/",
+          "observedOn": "2026-11-18"
+        },
+        {
+          "fact": "Hydrojetting and gas-line service links resolve to pages with navigation/footer but no service-specific description.",
+          "sourceUrls": [
+            "https://scplumbing.com/service/international-shipping/",
+            "https://scplumbing.com/service/customer-support/"
+          ],
+          "observedOn": "2026-11-18"
+        },
+        {
+          "fact": "Mike Erland is listed as owner by Noritz; the El Segundo Chamber publishes rland345@gmail.com as his business contact.",
+          "sourceUrls": [
+            "https://contractorfinder.noritz.com/contractors/second-city-plumbing-38663-el-segundo-ca",
+            "https://www.elsegundochamber.org/autowebsite/cw_msss.htm"
+          ],
+          "observedOn": "2026-11-18"
+        },
+        {
+          "fact": "The existing website already offers a quote form with photo uploads. No claim of a missing form was made; this preview demonstrates a clearer form.",
+          "sourceUrl": "https://scplumbing.com/",
+          "observedOn": "2026-11-18"
+        }
+      ],
+      "cleanup": {
+        "status": "not_due",
+        "routeRemovalAuthorizedOnlyAfter": "2026-11-25T21:39:03.000Z",
+        "retainSourceAndProject": true
+      },
+      "notes": [
+        "User supplied this as the second manual prospect of today; do not count it toward the next automated five-new-prospect run.",
+        "No measured rankings, traffic, DataForSEO data or guaranteed AI placements are claimed.",
+        "Publication and expiry timestamps are immutable across redeployments.",
+        "Email draft only. The user sends manually. Do not schedule or send."
+      ],
+      "emailStatus": "draft"
     }
   ]
 }
