@@ -1,0 +1,49 @@
+{
+  "assets": [
+    {
+      "filename": "expo-logo.png",
+      "source_url": "https://www.expocc.com/logo.png",
+      "source_page": "https://www.expocc.com/",
+      "caption": "EXPO Collision Center wordmark from existing website",
+      "authentic_project_photo": false
+    },
+    {
+      "filename": "expo-quality.png",
+      "source_url": "https://www.expocc.com/assets/img/quality.png",
+      "source_page": "https://www.expocc.com/",
+      "caption": "Gold vehicle headlight detail; illustrative imagery used on existing website, not verified completed repair",
+      "authentic_project_photo": false
+    },
+    {
+      "filename": "expo-service.png",
+      "source_url": "https://www.expocc.com/assets/img/service.png",
+      "source_page": "https://www.expocc.com/",
+      "caption": "Keys handoff; illustrative imagery used on existing website, not a verified staff photo",
+      "authentic_project_photo": false
+    },
+    {
+      "filename": "expo-integrity.png",
+      "source_url": "https://www.expocc.com/assets/img/integrity.png",
+      "source_page": "https://www.expocc.com/",
+      "caption": "Handshake; illustrative imagery used on existing website, not verified customer photograph",
+      "authentic_project_photo": false
+    },
+    {
+      "filename": "expo-car-top.png",
+      "source_url": "https://www.expocc.com/assets/img/car-top.png",
+      "source_page": "https://www.expocc.com/",
+      "caption": "Top-down car graphic used on existing website",
+      "authentic_project_photo": false
+    },
+    {
+      "filename": "illustrative-hero.webp",
+      "source": "Generated for this concept using imagegen",
+      "caption": "Illustrative vehicle photography; not a real Expo project or premises"
+    }
+  ],
+  "note": "No genuine project gallery could be verified. The existing gallery link targets a commented-out template section. Never present current illustrative imagery as completed EXPO work.",
+  "fonts": {
+    "Barlow Condensed": "https://github.com/google/fonts/tree/main/ofl/barlowcondensed",
+    "DM Sans": "https://github.com/google/fonts/tree/main/ofl/dmsans"
+  }
+}

@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta name="referrer" content="no-referrer">
+  <meta name="description" content="A website concept for Expo Collision Center in El Segundo, prepared by Picshaw. Preview only.">
+  <meta http-equiv="Content-Security-Policy" content="form-action 'none'; connect-src 'none'; base-uri 'self'; object-src 'none'">
+  <meta property="og:title" content="Expo Collision Center — a website concept by Picshaw">
+  <meta property="og:description" content="A new direction for Expo's website. Collision repair, paintwork and a clearer first step.">
+  <meta name="theme-color" content="#171b1e">
+  <title>Expo Collision Center | Website concept by Picshaw</title>
+  <link rel="stylesheet" href="./assets/fonts.css">
+  <link rel="stylesheet" href="./style.css">
+  <script src="./app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="concept-bar"><span>Website concept for Expo Collision Center</span><a href="#about-concept">Made by Picshaw</a></div>
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="#main" aria-label="Expo Collision Center concept homepage"><img src="./assets/expo-logo.png" alt="EXPO Collision Center" width="917" height="92"></a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav"><span>Menu</span><i aria-hidden="true"></i></button>
+      <nav id="main-nav" class="main-nav" aria-label="Main navigation">
+        <a href="#services">What we do</a><a href="#approach">Our approach</a><a href="#questions">Your questions</a>
+        <a class="nav-phone" href="tel:+13106150155">(310) 615-0155</a>
+        <a class="button button-yellow button-small" href="#estimate">Free estimate</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" aria-labelledby="hero-heading">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="location-pin" aria-hidden="true"></span>El Segundo, California</p>
+          <h1 id="hero-heading">THE ROAD AHEAD<br>STARTS <em>HERE.</em></h1>
+          <p class="hero-intro">Collision repair. Careful paintwork.<br>A little less stress after an accident.</p>
+          <p class="hero-detail">Bring your car back to its best with an experienced local team—and help with the insurance paperwork.</p>
+          <div class="hero-actions"><a href="#estimate" class="button button-yellow">Start a free estimate</a><a class="quiet-link" href="#services">Explore our services</a></div>
+          <div class="hero-location"><span aria-hidden="true">⌖</span>137 Oregon Street, El Segundo</div>
+        </div>
+        <div class="hero-visual">
+          <img class="hero-photo" src="./assets/illustrative-hero.webp" alt="Illustrative automotive detail photography for the website concept" width="1536" height="1024" fetchpriority="high">
+          <div class="hero-photo-overlay"></div>
+          <div class="image-caption"><span class="caption-rule"></span><p>IT’S THE DETAILS<br>THAT MAKE THE DIFFERENCE.</p></div>
+          <span class="illustration-note">Illustrative photography</span>
+          <div class="hero-badge"><strong>EXPO</strong><span>COLLISION<br>CENTER</span></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="proof-strip"><div class="container proof-grid"><div><strong>30+</strong><span>years of experience</span></div><div><svg aria-hidden="true" viewBox="0 0 32 32"><path d="M8 3h16v26H8zM12 10h8m-8 6h8m-8 6h4"/></svg><span>Free, straightforward<br>estimates</span></div><div><svg aria-hidden="true" viewBox="0 0 32 32"><path d="m16 3 11 5v8c0 7-11 13-11 13S5 23 5 16V8zM11 15l4 4 7-8"/></svg><span>Help communicating<br>with your insurer</span></div><div><svg aria-hidden="true" viewBox="0 0 32 32"><path d="M16 29S5 18 5 11a11 11 0 0 1 22 0c0 7-11 18-11 18Z"/><circle cx="16" cy="11" r="4"/></svg><span>Your local shop<br>in El Segundo</span></div></div></div>
+
+    <section class="section services-section" id="services" aria-labelledby="services-heading">
+      <div class="container">
+        <div class="section-heading"><div><p class="eyebrow dark">GOOD WORK. DOWN TO THE DETAIL.</p><h2 id="services-heading">BIG REPAIR.<br>SMALL SCRATCH.<br><span>SAME ATTENTION.</span></h2></div><p>From body damage to the final paint match, the right repair starts with understanding what your car needs.</p></div>
+        <div class="service-layout">
+          <div class="service-tabs" role="tablist" aria-label="Explore repair services" aria-orientation="vertical">
+            <button class="service-tab is-active" type="button" role="tab" id="tab-collision" aria-selected="true" aria-controls="service-panel" data-service="collision"><span>Collision repair</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></button>
+            <button class="service-tab" type="button" role="tab" id="tab-paint" aria-selected="false" aria-controls="service-panel" tabindex="-1" data-service="paint"><span>Paint & bodywork</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></button>
+            <button class="service-tab" type="button" role="tab" id="tab-frame" aria-selected="false" aria-controls="service-panel" tabindex="-1" data-service="frame"><span>Frame & unibody</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></button>
+            <button class="service-tab" type="button" role="tab" id="tab-support" aria-selected="false" aria-controls="service-panel" tabindex="-1" data-service="support"><span>Insurance & towing</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></button>
+          </div>
+          <div class="service-detail" id="service-panel" role="tabpanel" aria-labelledby="tab-collision" tabindex="0">
+            <div class="service-detail-copy"><span class="service-kicker" id="service-kicker">A CLEARER WAY FORWARD</span><h3 id="service-title">Let’s put the damage<br>behind you.</h3><p id="service-description">Body damage can be more than a cosmetic problem. Start with an estimate, then understand the repair your vehicle needs.</p><ul class="check-list" id="service-points"><li>Collision and dent repair</li><li>Body straightening</li><li>A clear repair estimate</li></ul><a id="service-cta" class="text-cta" href="#estimate">Ask about collision repair</a></div>
+            <div class="service-detail-image"><img src="./assets/expo-quality.png" alt="Gold vehicle headlight, an illustrative image from Expo’s current website" width="600" height="605" loading="lazy"><span>Image from Expo’s current website</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="approach-section" id="approach" aria-labelledby="approach-heading">
+      <div class="container approach-grid">
+        <div class="approach-image"><img src="./assets/expo-service.png" alt="Illustrative handover of car keys, from Expo’s current website" width="600" height="605" loading="lazy"><div class="image-label">THE FINISH LINE?<br><strong>YOUR KEYS BACK.</strong></div></div>
+        <div class="approach-copy"><p class="eyebrow dark">PEOPLE FIRST. ALWAYS.</p><h2 id="approach-heading">CAR REPAIR<br>WITHOUT THE<br><span>RUNAROUND.</span></h2><p>You have enough to think about after an accident. Expo helps explain the repair and handles communication with your insurance company.</p><p>It starts with a simple conversation. Tell us what happened, share a few photos, and take the next step with a clearer picture.</p><a href="#estimate" class="button button-dark">Let’s start with your car</a></div>
+      </div>
+    </section>
+
+    <section class="process-section section" aria-labelledby="process-heading"><div class="container"><div class="process-head"><p class="eyebrow dark">YOUR REPAIR, MADE CLEARER</p><h2 id="process-heading">FIRST PHOTOS.<br>THEN A PLAN.</h2></div><div class="process-grid"><article><div class="process-icon"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M4 10h6l3-4h6l3 4h6v17H4Z"/><circle cx="16" cy="18" r="6"/></svg></div><h3>Show us the damage.</h3><p>Start with photos and a few details about your car. Or speak to the team directly.</p></article><article><div class="process-icon"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M8 3h16v26H8zM12 10h8m-8 6h8m-8 6h5"/></svg></div><h3>Know your next step.</h3><p>Review the estimate and what needs an in-person look. Ask us about insurance and towing.</p></article><article><div class="process-icon"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24V14l4-8h18l4 8v10H3ZM5 14h22M8 20h3m10 0h3M6 24v4m20-4v4"/></svg></div><h3>Get moving again.</h3><p>From body repairs to paint matching, our team brings care to the work that follows.</p></article></div></div></section>
+
+    <section class="estimate-section" id="estimate" aria-labelledby="estimate-heading"><div class="container estimate-layout"><div class="estimate-intro"><p class="eyebrow">A SMALL FIRST STEP</p><h2 id="estimate-heading">LET’S TAKE<br>A LOOK.</h2><p>Not sure what your car needs?<br>That’s a good place to start.</p><div class="phone-block"><span>Prefer a conversation?</span><a href="tel:+13106150155">(310) 615-0155</a></div><div class="estimate-note"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 3 7v6c0 5 9 9 9 9s9-4 9-9V7Z"/><path d="m8 12 3 3 5-6"/></svg><p>Photo estimates are a starting point. Your vehicle may need an in-person assessment.</p></div></div>
+      <div class="estimate-card"><div class="form-topline"><span class="eyebrow dark">YOUR FREE ESTIMATE</span><span class="demo-pill">Preview form</span></div>
+        <form id="estimate-form" autocomplete="off">
+          <p class="form-notice">Try the form with sample details. Nothing will be sent or saved.</p>
+          <fieldset class="form-field"><legend>What can we help with?</legend><div class="repair-options"><label class="repair-option"><input type="radio" name="repair" value="Collision repair" checked><span>Collision repair</span></label><label class="repair-option"><input type="radio" name="repair" value="Paint & bodywork"><span>Paint & bodywork</span></label><label class="repair-option"><input type="radio" name="repair" value="Frame & alignment"><span>Frame & alignment</span></label><label class="repair-option"><input type="radio" name="repair" value="Not sure yet"><span>Not sure yet</span></label></div></fieldset>
+          <div class="form-row"><div class="form-field"><label for="vehicle">Your car</label><input id="vehicle" name="vehicle" placeholder="e.g. 2021 Honda Civic" maxlength="100" required></div><div class="form-field"><label for="damage">Where is the damage?</label><select id="damage" name="damage"><option value="Not sure">Not sure</option><option>Front</option><option>Rear</option><option>Driver’s side</option><option>Passenger’s side</option><option>Multiple areas</option></select></div></div>
+          <div class="form-field"><label class="upload-label" for="photos"><svg viewBox="0 0 28 28" aria-hidden="true"><path d="M3 9h6l2-3h6l2 3h6v16H3Z"/><circle cx="14" cy="16" r="5"/></svg><span><strong>Add a few photos</strong><small>Optional · up to 4 images · stay on your device</small></span><input id="photos" type="file" accept="image/jpeg,image/png,image/webp" multiple aria-label="Choose up to four optional sample damage photos"></label><p id="photo-error" class="field-error" role="alert"></p><div id="photo-previews" class="photo-previews" aria-live="polite"></div></div>
+          <div class="form-row"><div class="form-field"><label for="first-name">First name</label><input id="first-name" name="first-name" placeholder="Alex" maxlength="60" required></div><div class="form-field"><label for="email">Email</label><input id="email" name="email" type="email" placeholder="alex@example.com" maxlength="150" required></div></div>
+          <button type="submit" class="button button-dark form-submit">Preview my estimate request</button>
+          <p class="form-bottom-note">Demo only. This is not the live Expo website.</p>
+        </form>
+        <div id="form-success" class="form-success" hidden role="status" aria-live="polite"><span class="success-check" aria-hidden="true">✓</span><h3>That’s all it takes<br>to get started.</h3><p>This was a demonstration. <strong>No enquiry was sent.</strong> Your sample details and photos have been cleared.</p><button class="button button-dark" type="button" id="try-again">Try the form again</button></div>
+      </div>
+    </div></section>
+
+    <section class="section faq-section" id="questions" aria-labelledby="faq-heading"><div class="container faq-layout"><div><p class="eyebrow dark">A FEW THINGS YOU MAY BE WONDERING</p><h2 id="faq-heading">GOOD QUESTIONS.<br><span>CLEAR ANSWERS.</span></h2></div><div class="faq-list"><details><summary>Can I start with photos of the damage?<span aria-hidden="true"></span></summary><p>Yes. Expo’s existing website accepts up to four photos with an estimate request. Photos help start the conversation; a complete assessment may require a visit.</p></details><details><summary>Can you help with my insurance company?<span aria-hidden="true"></span></summary><p>Expo handles communication with insurance companies as part of its repair service. Talk to the team about your claim and what information they need.</p></details><details><summary>Do you handle small dents and paint damage?<span aria-hidden="true"></span></summary><p>Expo’s services include dent removal, bodywork, paint matching and collision repairs. Share what you’ve noticed so the team can advise on the next step.</p></details><details><summary>What if I need towing?<span aria-hidden="true"></span></summary><p>Expo lists towing among its services. Call (310) 615-0155 to discuss your vehicle and the available arrangements.</p></details><details><summary>Where can I find you?<span aria-hidden="true"></span></summary><p>137 Oregon Street, El Segundo, CA 90245. Please call the team to confirm a suitable time to visit.</p></details></div></div></section>
+
+    <section class="visit-section"><div class="container visit-grid"><div><p class="eyebrow">YOUR LOCAL COLLISION CENTER</p><h2>RIGHT HERE<br>IN <em>EL SEGUNDO.</em></h2></div><div class="visit-contact"><p>137 Oregon Street<br>El Segundo, CA 90245</p><a href="tel:+13106150155">(310) 615-0155</a><a class="visit-email" href="mailto:info@expocc.com">info@expocc.com</a><a class="button button-yellow" target="_blank" rel="noopener noreferrer" href="https://www.google.com/maps/search/?api=1&amp;query=137+Oregon+St+El+Segundo+CA+90245">Get directions</a></div></div></section>
+  </main>
+
+  <footer id="about-concept"><div class="container footer-top"><a class="brand footer-brand" href="#main"><img src="./assets/expo-logo.png" alt="EXPO Collision Center" width="917" height="92" loading="lazy"></a><span>Care for your car. Clarity for you.</span><a href="#main" class="back-top">Back to top</a></div><div class="container footer-bottom"><p>Website concept by <strong>Picshaw</strong>. Prepared for Expo Collision Center’s review.</p><details><summary>About this preview</summary><p>This is an unofficial design concept, not Expo’s live website. Business details and existing imagery come from <a href="https://www.expocc.com/" target="_blank" rel="noopener noreferrer">expocc.com</a>. Hero photography is illustrative and does not depict Expo’s premises or completed work. Proposed copy is for review. The demo form does not send or store information.</p></details></div></footer>
+  <div class="mobile-cta"><a class="button button-yellow" href="#estimate">Start a free estimate</a><a class="mobile-call" href="tel:+13106150155" aria-label="Call Expo Collision Center"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 3 4 1 1 5-2 2c2 3 3 4 6 5l2-2 5 1 1 4c-1 3-4 3-7 2C8 18 4 14 2 7c-1-3 0-4 3-4Z"/></svg></a></div>
+</body>
+</html>
