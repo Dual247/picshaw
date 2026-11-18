@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "slug": "expo-collision",
+  "company": "EXPO Collision Center",
+  "companyDomain": "expocc.com",
+  "contact": {
+    "name": "Shane Arfai",
+    "email": "shane@expocc.com",
+    "fallbackEmail": "info@expocc.com"
+  },
+  "firstPublishedAt": "2026-11-18T20:54:47.759Z",
+  "firstPublishedAtEpochMs": 1795035287759,
+  "expiresAt": "2026-11-25T20:54:47.759Z",
+  "expiresAtEpochMs": 1795640087759,
+  "maximumLifetimeHours": 168,
+  "timeZone": "America/Los_Angeles",
+  "teamId": "team_152cnGnh8Y1LacMEU6gvr5FJ",
+  "projectId": "prj_PdAD4CmZGjeRSbFYS3wZbklalgIR",
+  "projectName": "picshaw-expo-preview",
+  "repository": "Dual247/picshaw",
+  "branch": "preview/expo-collision-20261118",
+  "rootDirectory": "client-previews/expo-collision",
+  "brandedUrl": "https://www.picshaw.com/previews/expo/",
+  "originUrl": "https://picshaw-expo-preview.vercel.app/",
+  "routing": {
+    "projectId": "prj_xMMQcSaM02M5xmSqPdMZGuB5PPVj",
+    "routeIds": [
+      "picshaw-expo-preview-trailing-slash",
+      "picshaw-expo-preview-proxy"
+    ]
+  },
+  "expirationPolicy": "Server-enforced HTTP 410 on every request at or after expiresAt. Existing deadlines must never be extended by redeployment."
+}
