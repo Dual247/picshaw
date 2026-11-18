@@ -1,0 +1,98 @@
+[
+  {
+    "url": "https://scplumbing.com/wp-content/uploads/2019/09/logo-light-sm2.png",
+    "filename": "sc-logo.png",
+    "caption": "Current header logo",
+    "local_path": "public/assets/sc-logo.png",
+    "bytes": 24572,
+    "source_page": "https://scplumbing.com/",
+    "dimensions": {
+      "width": 288,
+      "height": 63
+    }
+  },
+  {
+    "url": "https://scplumbing.com/wp-content/uploads/2024/05/second-city-plumbing-truck.webp",
+    "filename": "sc-truck.webp",
+    "caption": "Second City Plumbing truck, published by company",
+    "local_path": "public/assets/sc-truck.webp",
+    "bytes": 24654,
+    "source_page": "https://scplumbing.com/",
+    "dimensions": {
+      "width": 750,
+      "height": 438
+    }
+  },
+  {
+    "url": "https://scplumbing.com/wp-content/uploads/2024/05/commercial-plumbing-experts.webp",
+    "filename": "sc-commercial.webp",
+    "caption": "Commercial plumbing image published by company; exact project/location unverified",
+    "local_path": "public/assets/sc-commercial.webp",
+    "bytes": 26914,
+    "source_page": "https://scplumbing.com/",
+    "dimensions": {
+      "width": 750,
+      "height": 500
+    }
+  },
+  {
+    "url": "https://scplumbing.com/wp-content/uploads/2018/08/hydrojetting.webp",
+    "filename": "sc-hydrojetting.webp",
+    "caption": "Hydrojetting service image published by company; exact project unverified",
+    "local_path": "public/assets/sc-hydrojetting.webp",
+    "bytes": 41362,
+    "source_page": "https://scplumbing.com/",
+    "dimensions": {
+      "width": 500,
+      "height": 320
+    }
+  },
+  {
+    "url": "https://scplumbing.com/wp-content/uploads/2018/08/tankless-water-heater-replacement.webp",
+    "filename": "sc-water-heater.webp",
+    "caption": "Tankless water heater service image published by company; exact project unverified",
+    "local_path": "public/assets/sc-water-heater.webp",
+    "bytes": 4178,
+    "source_page": "https://scplumbing.com/",
+    "dimensions": {
+      "width": 500,
+      "height": 320
+    }
+  },
+  {
+    "url": "https://scplumbing.com/wp-content/uploads/2018/08/sewer-line-video-inspection.webp",
+    "filename": "sc-video-inspection.webp",
+    "caption": "Sewer inspection service image published by company; exact project unverified",
+    "local_path": "public/assets/sc-video-inspection.webp",
+    "bytes": 17556,
+    "source_page": "https://scplumbing.com/",
+    "dimensions": {
+      "width": 500,
+      "height": 320
+    }
+  },
+  {
+    "filename": "sc-logo-large.png",
+    "url": "https://scplumbing.com/wp-content/uploads/2019/05/logo-light-copy.png",
+    "caption": "Second City Plumbing logo, larger original",
+    "local_path": "public/assets/sc-logo-large.png",
+    "bytes": 60758,
+    "source_page": "https://scplumbing.com/",
+    "dimensions": {
+      "width": 638,
+      "height": 140
+    }
+  },
+  {
+    "filename": "sc-coast.webp",
+    "url": "https://scplumbing.com/wp-content/uploads/2024/05/coastline_resized-min.webp",
+    "caption": "Coastal aerial used on current homepage, already darkened in source; exact location not attributed",
+    "local_path": "public/assets/sc-coast.webp",
+    "bytes": 119824,
+    "source_page": "https://scplumbing.com/",
+    "dimensions": {
+      "width": 1600,
+      "height": 1067
+    }
+  }
+]

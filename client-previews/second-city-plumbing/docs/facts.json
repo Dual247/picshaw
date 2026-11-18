@@ -1,0 +1,87 @@
+{
+  "company": "Second City Plumbing",
+  "website": "https://scplumbing.com/",
+  "observed_date": "2026-11-18",
+  "published_phone": "(310) 738-7094",
+  "published_general_email": "support@scplumbing.com",
+  "recipient": {
+    "name": "Mike Erland",
+    "role": "Owner",
+    "business_email": "rland345@gmail.com",
+    "owner_source": "https://contractorfinder.noritz.com/contractors/second-city-plumbing-38663-el-segundo-ca",
+    "email_sources": [
+      "https://www.elsegundochamber.org/autowebsite/cw_msss.htm",
+      "https://www.elsegundo.gov/home/showpublisheddocument/12507/639077867762670000"
+    ],
+    "evidence_notes": "Noritz directory opened and explicitly labels Mike Erland Owner. Chamber public listing indexed last month explicitly ties Mike Erland to rland345@gmail.com. February 2026 official city business register search result corroborates company name, same phone, same email. Chamber direct requests returned 502/503; city direct open returned 403. No email guessed."
+  },
+  "area": [
+    "West LA",
+    "South Bay",
+    "El Segundo",
+    "Manhattan Beach",
+    "Redondo Beach",
+    "Westchester",
+    "Hermosa and surrounding areas"
+  ],
+  "services": [
+    "24/7 emergency plumbing",
+    "Residential plumbing",
+    "Commercial plumbing",
+    "HOA plumbing",
+    "Hydrojetting",
+    "Sewer line video inspection",
+    "Drain line and water repipe",
+    "Tankless water heater replacement",
+    "Gas lines and leaks",
+    "Drain cleaning"
+  ],
+  "experience": "Official About and commercial copy says over 35 years of team experience; separate badge says 30+ years. Do not infer founded year.",
+  "existing_features": [
+    "Working tel:3107387094 and mailto:support@scplumbing.com links in homepage",
+    "Non-emergency photo quote form, optional file attachment up to 10 MB",
+    "HOA/commercial/residential service descriptions",
+    "24/7 emergency service messaging"
+  ],
+  "live_observations": [
+    {
+      "finding": "Hydrojetting service page has no service-specific body copy; extracted live HTML shows nav, generic footer, account template text only.",
+      "source": "https://scplumbing.com/service/international-shipping/",
+      "local_evidence": "international-shipping.html; international-shipping.txt"
+    },
+    {
+      "finding": "Gas Lines & Leaks service page has no service-specific body copy; extracted live HTML shows nav, generic footer, account template text only.",
+      "source": "https://scplumbing.com/service/customer-support/",
+      "local_evidence": "customer-support.html; customer-support.txt"
+    },
+    {
+      "finding": "Homepage service URLs use inherited logistics/template slugs.",
+      "source": "https://scplumbing.com/",
+      "local_evidence": "homepage.html"
+    },
+    {
+      "finding": "Homepage title is Second City Plumbing; no meta description and no schema.org structured data found in fetched HTML. This is an observed code finding, not proof of ranking impact.",
+      "source": "https://scplumbing.com/",
+      "local_evidence": "homepage.html"
+    },
+    {
+      "finding": "Public portfolio page shows Client CaseThemes Network, Location Miami FL, Date July 31 2018. Likely template residue, inference only.",
+      "source": "https://scplumbing.com/portfolio/glass-house/",
+      "local_evidence": "glass-house.html; glass-house.txt"
+    }
+  ],
+  "recommended_scope": [
+    "Restore substantive service pages, relevant local content and sensible URLs/redirects",
+    "Make emergency phone action and planned photo-enquiry path distinct",
+    "Give HOA/commercial work a clearer path",
+    "Clean up template residue, title/description and business structured data after confirming business details",
+    "Measure enquiries and search performance only after authorized analytics access"
+  ],
+  "limits": [
+    "No analytics, rankings or traffic measured",
+    "No verified licensing or review-rating claims",
+    "Images on official site are original source assets, but service photos are not verified completed projects",
+    "Do not claim official operator status; preview should stay noindex and identify concept by Picshaw",
+    "Current footer calls business a division of Jary LLC; do not overstate independent legal ownership from directories"
+  ]
+}
