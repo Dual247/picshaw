@@ -307,6 +307,160 @@
         "Email draft only. The user sends manually. Do not schedule or send."
       ],
       "emailStatus": "draft"
+    },
+    {
+      "schemaVersion": 1,
+      "slug": "murphys-touch",
+      "company": "Murphy's Touch",
+      "companyDomain": "murphystouchla.com",
+      "contact": {
+        "name": "Paul Murphy",
+        "role": "Owner",
+        "email": "paul@murphystouchla.com",
+        "phone": "310-268-8285"
+      },
+      "firstPublishedAt": "2026-11-18T21:51:11.000Z",
+      "firstPublishedAtEpochMs": 1795038671000,
+      "expiresAt": "2026-11-25T21:51:11.000Z",
+      "expiresAtEpochMs": 1795643471000,
+      "maximumLifetimeHours": 168,
+      "timeZone": "America/Los_Angeles",
+      "teamId": "team_152cnGnh8Y1LacMEU6gvr5FJ",
+      "projectId": "prj_7BftOcmw6dCLzHZoFFwdlBiAygCp",
+      "projectName": "picshaw-murphys-touch-preview",
+      "repository": "Dual247/picshaw",
+      "branch": "preview/picshaw-outbound",
+      "rootDirectory": "client-previews/murphys-touch",
+      "brandedUrl": "https://www.picshaw.com/previews/murphys-touch/",
+      "originUrl": "https://picshaw-murphys-touch-preview.vercel.app/",
+      "routing": {
+        "projectId": "prj_xMMQcSaM02M5xmSqPdMZGuB5PPVj",
+        "routeIds": [
+          "picshaw-murphys-touch-preview-trailing-slash",
+          "picshaw-murphys-touch-preview-proxy"
+        ],
+        "verifiedVersionId": "6bd66870-227f-4270-a4e6-741e09c417af"
+      },
+      "expirationPolicy": "Server-enforced HTTP 410 on every request at or after expiresAt. The publication window was fixed before first production deployment; existing deadlines must never be extended by redeployment.",
+      "id": "murphys-touch",
+      "routeSlug": "murphys-touch",
+      "companyDomainAliases": [
+        "murphystouch.com"
+      ],
+      "canonicalBusinessKey": "murphystouchla.com|murphys-touch|3102688285",
+      "geography": {
+        "city": "Los Angeles",
+        "state": "CA",
+        "serviceArea": "Greater LA and Southern California; separate Desert Communities website"
+      },
+      "phone": "+1-310-268-8285",
+      "recordKind": "user_supplied_warm_follow_up",
+      "manualBatchDate": "2026-11-18",
+      "manualSequence": 3,
+      "countsTowardDailyTarget": false,
+      "dailyRunId": null,
+      "status": "warm_follow_up_draft_saved_preview_active_guard_verified",
+      "source": {
+        "repository": "Dual247/picshaw",
+        "branch": "preview/picshaw-outbound",
+        "commit": "d83477bbbf206af0addf5d3a5c108ef880c741de",
+        "lifecyclePath": "client-previews/murphys-touch/preview-lifecycle.json",
+        "assetProvenancePath": "client-previews/murphys-touch/docs/provenance.json",
+        "verificationPath": "client-previews/murphys-touch/docs/verification.json"
+      },
+      "deployment": {
+        "id": "dpl_BnZrKcinPMMpVejGF8X8scqYKujB",
+        "status": "READY",
+        "guardStatus": "verified",
+        "verifiedAt": "2026-11-18T21:59:02.877794+00:00",
+        "evidence": {
+          "brandedRoot": 200,
+          "brandedCss": 200,
+          "brandedScript": 200,
+          "brandedImage": 200,
+          "primaryOrigin": 200,
+          "stableAliases": {
+            "testedCount": 2,
+            "status": 200
+          },
+          "dynamicExpiryHeader": "2026-11-25T21:51:11.000Z",
+          "cacheControlContains": "no-store",
+          "brandedPost": 405,
+          "immutableDeployment": "302 Vercel sign-in redirect; no company content served",
+          "mainHomepagePortalAndOtherPreviews": "Main homepage, portal, Expo and Second City returned HTTP200; only the two Murphy-specific routes were added."
+        },
+        "browserChecks": [
+          "Desktop hero and page hierarchy checked",
+          "Mobile viewport375px equals document width375px",
+          "Mobile menu opens and closes after navigation",
+          "Service selection changes panel and preselects enquiry type",
+          "Demo enquiry confirms and clears all4fields",
+          "Image viewer opens, advances and closes with focus restoration",
+          "Live branded URL rendered; enquiry handler enabled under production CSP"
+        ],
+        "expiryTests": {
+          "passed": 4,
+          "cutoff": "2026-11-25T21:51:11.000Z"
+        }
+      },
+      "email": {
+        "provider": "gmail",
+        "draftId": "r4840385965586719147",
+        "draftMessageId": "1a1f0abe3ef36e3b",
+        "threadId": "1a1e55e2823ed8a2",
+        "replyMessageId": "1a1e72ccc8ad7c21",
+        "from": "hello@picshaw.com",
+        "to": "paul@murphystouchla.com",
+        "subject": "Re: Hotel furniture restoration enquiries",
+        "status": "draft",
+        "savedAt": "2026-11-18T21:59:18.000Z",
+        "sendAuthorized": false,
+        "doNotRecreateDraft": true
+      },
+      "offer": {
+        "currency": "USD",
+        "monthlyWebsitePrice": 250,
+        "websiteScope": "Build, hosting, small updates and clear restoration service content as a foundation for local Google/AI visibility",
+        "relationshipToPriorProposal": "Smaller separate starting option; does not include or reprice the earlier $1,250/month, three-month visibility programme"
+      },
+      "sourceFacts": [
+        {
+          "fact": "Paul Murphy's official bio describes his apprenticeship in Farnham, Surrey, his move to Los Angeles in 1982 and founding Murphy's Touch in 1987.",
+          "sourceUrl": "https://www.murphystouchla.com/",
+          "observedOn": "2026-11-18"
+        },
+        {
+          "fact": "The business describes on-site hospitality furniture/casework repairs, refinishing, custom woodwork, antiques, training and consulting.",
+          "sourceUrls": [
+            "https://www.murphystouchla.com/",
+            "https://www.murphystouch.com/"
+          ],
+          "observedOn": "2026-11-18"
+        },
+        {
+          "fact": "A testimonial published on the official site describes casework repair during renovation of an unnamed 394-room Downtown LA hotel. Exact project scope, hotel identity and image relationship were not independently established.",
+          "sourceUrl": "https://www.murphystouchla.com/",
+          "observedOn": "2026-11-18"
+        },
+        {
+          "fact": "All sourced images are current-site service illustrations except Paul's verified named portrait. No before-and-after pairs or completed-project images were claimed.",
+          "sourcePath": "client-previews/murphys-touch/docs/provenance.json",
+          "observedOn": "2026-11-18"
+        }
+      ],
+      "cleanup": {
+        "status": "not_due",
+        "routeRemovalAuthorizedOnlyAfter": "2026-11-25T21:51:11.000Z",
+        "retainSourceAndProject": true
+      },
+      "notes": [
+        "Existing warm prospect, not a new cold lead. The two domains represent the same owner/business and must not be prospected separately.",
+        "The user asked to include their shared England-to-LA background. Gmail confirmed this point had not already been used in the thread.",
+        "Email remains a draft; sending and scheduling are not authorized.",
+        "First-publication and expiry timestamps are immutable across redeployments.",
+        "No traffic/rankings/DataForSEO or AI placement results measured or claimed."
+      ],
+      "emailStatus": "draft"
     }
   ]
 }
