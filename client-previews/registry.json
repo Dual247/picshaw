@@ -42,7 +42,29 @@
     "shortfallCount": 5,
     "blockers": []
   },
-  "dailyRuns": [],
+  "dailyRuns": [
+    {
+      "id": "picshaw-preview-five:2026-11-18",
+      "localDate": "2026-11-18",
+      "timeZone": "America/Los_Angeles",
+      "trigger": "User-requested additional batch: five dental practices",
+      "status": "in_progress",
+      "startedAt": "2026-11-18T23:59:58Z",
+      "finishedAt": null,
+      "minimumRequired": 5,
+      "reservedProspectIds": [
+        "thomas-loe-dentistry",
+        "eve-dental",
+        "stephen-giovanisci",
+        "andy-kusumo-dds",
+        "pavilion-dental-group"
+      ],
+      "completedProspectIds": [],
+      "completedCount": 0,
+      "shortfallCount": 5,
+      "blockers": []
+    }
+  ],
   "prospects": [
     {
       "id": "expo-collision",
@@ -461,6 +483,196 @@
         "No traffic/rankings/DataForSEO or AI placement results measured or claimed."
       ],
       "emailStatus": "draft"
+    },
+    {
+      "id": "thomas-loe-dentistry",
+      "slug": "thomas-loe-dentistry",
+      "routeSlug": "thomas-loe-dentistry",
+      "company": "Thomas Loe, DDS",
+      "companyDomain": "culverdentist.com",
+      "canonicalBusinessKey": "culverdentist.com|thomas-loe-dentistry|3108383177",
+      "geography": {
+        "city": "Culver City",
+        "county": "Los Angeles",
+        "state": "CA"
+      },
+      "contact": {
+        "name": "Dr. Thomas Loe",
+        "email": "culverdentist@yahoo.com"
+      },
+      "phone": "310-838-3177",
+      "address": "10320 Venice Boulevard, Culver City, CA 90232",
+      "recordKind": "user_requested_dental_batch",
+      "countsTowardDailyTarget": true,
+      "dailyRunId": "picshaw-preview-five:2026-11-18",
+      "status": "research_verified_preview_building",
+      "teamId": "team_152cnGnh8Y1LacMEU6gvr5FJ",
+      "projectId": "prj_USfFZjMjepN4vWUSxUe3dXYz7rOc",
+      "projectName": "picshaw-thomas-loe-dentistry-preview",
+      "rootDirectory": "client-previews/thomas-loe-dentistry",
+      "brandedUrl": "https://www.picshaw.com/previews/thomas-loe-dentistry/",
+      "email": {
+        "to": "culverdentist@yahoo.com",
+        "status": "not_yet_drafted",
+        "sendAuthorized": false
+      },
+      "deduplication": {
+        "checkedOn": "2026-11-18",
+        "registry": "No previous business match",
+        "gmail": "No matches for domain/email/business identity at qualification"
+      }
+    },
+    {
+      "id": "eve-dental",
+      "slug": "eve-dental",
+      "routeSlug": "eve-dental",
+      "company": "EVE Dental",
+      "companyDomain": "evedentalculvercity.com",
+      "canonicalBusinessKey": "evedentalculvercity.com|eve-dental|3103131063",
+      "geography": {
+        "city": "Culver City",
+        "county": "Los Angeles",
+        "state": "CA"
+      },
+      "contact": {
+        "name": "Dr. Eda Jokic",
+        "email": "evedentalcc@gmail.com"
+      },
+      "phone": "310-313-1063",
+      "address": "4740 Inglewood Blvd, Culver City, CA 90230",
+      "recordKind": "user_requested_dental_batch",
+      "countsTowardDailyTarget": true,
+      "dailyRunId": "picshaw-preview-five:2026-11-18",
+      "status": "research_verified_preview_building",
+      "teamId": "team_152cnGnh8Y1LacMEU6gvr5FJ",
+      "projectId": "prj_lzxf5KH23XbyVW6aLpOn3tswGwL1",
+      "projectName": "picshaw-eve-dental-preview",
+      "rootDirectory": "client-previews/eve-dental",
+      "brandedUrl": "https://www.picshaw.com/previews/eve-dental/",
+      "email": {
+        "to": "evedentalcc@gmail.com",
+        "status": "not_yet_drafted",
+        "sendAuthorized": false
+      },
+      "deduplication": {
+        "checkedOn": "2026-11-18",
+        "registry": "No previous business match",
+        "gmail": "No matches for domain/email/business identity at qualification"
+      }
+    },
+    {
+      "id": "stephen-giovanisci",
+      "slug": "stephen-giovanisci",
+      "routeSlug": "stephen-giovanisci",
+      "company": "Stephen J. Giovanisci, DDS",
+      "companyDomain": "stephengiovaniscidds.com",
+      "canonicalBusinessKey": "stephengiovaniscidds.com|stephen-giovanisci|8182481718",
+      "geography": {
+        "city": "Montrose",
+        "county": "Los Angeles",
+        "state": "CA"
+      },
+      "contact": {
+        "name": "Dr. Stephen Giovanisci",
+        "email": "StephenGiovanisci@Yahoo.com"
+      },
+      "phone": "818-248-1718",
+      "address": "2103 Montrose Ave., Suite A, Montrose, CA 91020",
+      "recordKind": "user_requested_dental_batch",
+      "countsTowardDailyTarget": true,
+      "dailyRunId": "picshaw-preview-five:2026-11-18",
+      "status": "research_verified_preview_building",
+      "teamId": "team_152cnGnh8Y1LacMEU6gvr5FJ",
+      "projectId": "prj_ZvrlwKZz0XbpFlPm0J1FsqssGFWn",
+      "projectName": "picshaw-stephen-giovanisci-preview",
+      "rootDirectory": "client-previews/stephen-giovanisci",
+      "brandedUrl": "https://www.picshaw.com/previews/stephen-giovanisci/",
+      "email": {
+        "to": "StephenGiovanisci@Yahoo.com",
+        "status": "not_yet_drafted",
+        "sendAuthorized": false
+      },
+      "deduplication": {
+        "checkedOn": "2026-11-18",
+        "registry": "No previous business match",
+        "gmail": "No matches for domain/email/business identity at qualification"
+      }
+    },
+    {
+      "id": "andy-kusumo-dds",
+      "slug": "andy-kusumo-dds",
+      "routeSlug": "andy-kusumo-dds",
+      "company": "Andy Kusumo, DDS",
+      "companyDomain": "andykusumodental.com",
+      "canonicalBusinessKey": "andykusumodental.com|andy-kusumo-dds|7143928283",
+      "geography": {
+        "city": "Anaheim",
+        "county": "Orange",
+        "state": "CA"
+      },
+      "contact": {
+        "name": "Dr. Andy Kusumo",
+        "email": "andykusumodds@gmail.com"
+      },
+      "phone": "714-392-8283",
+      "address": "501 N Brookhurst St, Suite 100, Anaheim, CA 92801",
+      "recordKind": "user_requested_dental_batch",
+      "countsTowardDailyTarget": true,
+      "dailyRunId": "picshaw-preview-five:2026-11-18",
+      "status": "research_verified_preview_building",
+      "teamId": "team_152cnGnh8Y1LacMEU6gvr5FJ",
+      "projectId": "prj_5TukfLyqNClwWAzwrbGWw7mnMh5c",
+      "projectName": "picshaw-andy-kusumo-dds-preview",
+      "rootDirectory": "client-previews/andy-kusumo-dds",
+      "brandedUrl": "https://www.picshaw.com/previews/andy-kusumo-dds/",
+      "email": {
+        "to": "andykusumodds@gmail.com",
+        "status": "not_yet_drafted",
+        "sendAuthorized": false
+      },
+      "deduplication": {
+        "checkedOn": "2026-11-18",
+        "registry": "No previous business match",
+        "gmail": "No matches for domain/email/business identity at qualification"
+      }
+    },
+    {
+      "id": "pavilion-dental-group",
+      "slug": "pavilion-dental-group",
+      "routeSlug": "pavilion-dental-group",
+      "company": "Pavilion Dental Group",
+      "companyDomain": "drksmiles.com",
+      "canonicalBusinessKey": "drksmiles.com|pavilion-dental-group|71495310002",
+      "geography": {
+        "city": "Orange",
+        "county": "Orange",
+        "state": "CA"
+      },
+      "contact": {
+        "name": "Dr. Daniel Kantarovich",
+        "email": "drk@drksmiles.com"
+      },
+      "phone": "714-953-1000 ext. 2",
+      "address": "1140 West La Veta Avenue, Suite 530, Orange, CA 92868",
+      "recordKind": "user_requested_dental_batch",
+      "countsTowardDailyTarget": true,
+      "dailyRunId": "picshaw-preview-five:2026-11-18",
+      "status": "research_verified_preview_building",
+      "teamId": "team_152cnGnh8Y1LacMEU6gvr5FJ",
+      "projectId": "prj_nxhGX36eKxxvJGhmmYT0CuelqhEg",
+      "projectName": "picshaw-pavilion-dental-group-preview",
+      "rootDirectory": "client-previews/pavilion-dental-group",
+      "brandedUrl": "https://www.picshaw.com/previews/pavilion-dental-group/",
+      "email": {
+        "to": "drk@drksmiles.com",
+        "status": "not_yet_drafted",
+        "sendAuthorized": false
+      },
+      "deduplication": {
+        "checkedOn": "2026-11-18",
+        "registry": "No previous business match",
+        "gmail": "No matches for domain/email/business identity at qualification"
+      }
     }
   ]
 }
