@@ -9,7 +9,7 @@ import proxy from '../proxy.js';
 
 const start = 1795046463000;
 const end = 1795651263000;
-const hosts = ['www.picshaw.com', 'picshaw-pavilion-dental-group-preview.vercel.app', 'picshaw-pavilion-dental-group-preview-ash-patels-projects.vercel.app', 'preview-deployment.vercel.app'];
+const hosts = ['www.picshaw.com', 'picshaw-pavilion-dental-group-previ.vercel.app', 'picshaw-pavilion-dental-group-preview-ash-patels-projects.vercel.app', 'preview-deployment.vercel.app'];
 function publicFiles(directory, prefix = '') {
   return fs.readdirSync(directory, { withFileTypes: true }).flatMap(entry => {
     const relative = path.posix.join(prefix, entry.name);

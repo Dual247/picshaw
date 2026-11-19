@@ -1,0 +1,65 @@
+{
+  "slug": "comfort-zone-dental",
+  "businessName": "Comfort Zone Dental",
+  "website": "https://www.comfortzonedental.com/",
+  "contact": {
+    "name": "Dr. David Polushkin",
+    "salutation": "Dr. Polushkin",
+    "role": "Owner and dentist",
+    "email": "comfortzonedental@yahoo.com",
+    "phone": "(818) 955-9788",
+    "phoneHref": "+18189559788",
+    "address": "3808 W Riverside Drive, Suite 508, Burbank, CA 91505",
+    "source": "https://www.comfortzonedental.com/contact"
+  },
+  "facts": [
+    {
+      "text": "The practice was established in 2004.",
+      "source": "https://www.comfortzonedental.com/about"
+    },
+    {
+      "text": "Dr. David Polushkin is a UCLA School of Dentistry graduate and practice owner.",
+      "source": "https://www.comfortzonedental.com/about"
+    },
+    {
+      "text": "Published office hours are Tuesday\u2013Thursday, 9 am\u20135 pm.",
+      "source": "https://www.comfortzonedental.com/contact"
+    }
+  ],
+  "services": [
+    "Cleanings",
+    "Tooth-colored fillings",
+    "Crowns",
+    "Bridges",
+    "Bonding",
+    "Teeth whitening",
+    "Veneers"
+  ],
+  "serviceSource": "https://www.comfortzonedental.com/",
+  "opportunities": [
+    {
+      "finding": "The main navigation lists Contact but does not provide distinct treatment paths.",
+      "proposal": "Give new visitors clear care options and an obvious request action.",
+      "source": "https://www.comfortzonedental.com/"
+    },
+    {
+      "finding": "Most named treatments appear inside the doctor biography paragraph.",
+      "proposal": "Organize general, restorative and cosmetic services into useful sections/pages for Burbank search and AI discovery.",
+      "source": "https://www.comfortzonedental.com/"
+    }
+  ],
+  "outboundHook": "Your focus on helping nervous patients feel comfortable stood out. I made a preview that brings you and that approach forward, with clearer treatment pages and a simpler first-visit path.",
+  "constraints": [
+    "No guaranteed pain-free treatment or clinical outcomes.",
+    "No fabricated reviews/ratings or medical advice.",
+    "No cosmetic transformations or patient images invented.",
+    "Only publicly listed Tuesday\u2013Thursday hours shown; other days not inferred.",
+    "Doctor portrait from official homepage; practice must review final production assets and copy.",
+    "Demo form contains no free-text medical information and no transmission/storage."
+  ],
+  "sources": [
+    "https://www.comfortzonedental.com/",
+    "https://www.comfortzonedental.com/about",
+    "https://www.comfortzonedental.com/contact"
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "slug": "comfort-zone-dental",
+  "company": "Comfort Zone Dental",
+  "companyDomain": "comfortzonedental.com",
+  "contact": {
+    "name": "Dr. David Polushkin",
+    "email": "comfortzonedental@yahoo.com"
+  },
+  "firstPublishedAt": "2026-11-19T00:01:03.000Z",
+  "firstPublishedAtEpochMs": 1795046463000,
+  "expiresAt": "2026-11-26T00:01:03.000Z",
+  "expiresAtEpochMs": 1795651263000,
+  "maximumLifetimeHours": 168,
+  "timeZone": "America/Los_Angeles",
+  "teamId": "team_152cnGnh8Y1LacMEU6gvr5FJ",
+  "projectId": "prj_eqhcgDa1T8v9RDvuiORd5BGyOymx",
+  "projectName": "picshaw-comfort-zone-preview",
+  "repository": "Dual247/picshaw",
+  "branch": "preview/picshaw-outbound",
+  "rootDirectory": "client-previews/comfort-zone-dental",
+  "brandedUrl": "https://www.picshaw.com/previews/comfort-zone-dental/",
+  "originUrl": "https://picshaw-comfort-zone-preview.vercel.app/",
+  "routing": {
+    "projectId": "prj_xMMQcSaM02M5xmSqPdMZGuB5PPVj",
+    "routeIds": [
+      "picshaw-comfort-zone-dental-preview-trailing-slash",
+      "picshaw-comfort-zone-dental-preview-proxy"
+    ]
+  },
+  "expirationPolicy": "All requests and assets return server-enforced HTTP410 at or after immutable expiresAt. Never reset publication window on redeploy."
+}

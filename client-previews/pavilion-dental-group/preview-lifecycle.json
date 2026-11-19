@@ -20,7 +20,7 @@
   "branch": "preview/picshaw-outbound",
   "rootDirectory": "client-previews/pavilion-dental-group",
   "brandedUrl": "https://www.picshaw.com/previews/pavilion-dental-group/",
-  "originUrl": "https://picshaw-pavilion-dental-group-preview.vercel.app/",
+  "originUrl": "https://picshaw-pavilion-dental-group-previ.vercel.app/",
   "routing": {
     "projectId": "prj_xMMQcSaM02M5xmSqPdMZGuB5PPVj",
     "routeIds": [
