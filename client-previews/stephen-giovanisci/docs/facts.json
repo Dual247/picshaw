@@ -1,0 +1,100 @@
+{
+  "slug": "stephen-giovanisci",
+  "businessName": "Stephen J. Giovanisci, DDS",
+  "website": "https://stephengiovaniscidds.com/",
+  "contact": {
+    "name": "Dr. Stephen Giovanisci",
+    "salutation": "Dr. Giovanisci",
+    "role": "Owner and dentist",
+    "email": "StephenGiovanisci@Yahoo.com",
+    "phone": "(818) 248-1718",
+    "phoneHref": "+18182481718",
+    "address": "2103 Montrose Ave., Suite A, Montrose, CA 91020",
+    "source": "https://stephengiovaniscidds.com/contact/"
+  },
+  "doctors": [
+    {
+      "name": "Dr. Stephen Giovanisci",
+      "credential": "DDS",
+      "facts": [
+        "USC DDS in 1987",
+        "Practising at the Montrose location since 1987",
+        "Owner since 1996"
+      ],
+      "source": "https://stephengiovaniscidds.com/about/"
+    },
+    {
+      "name": "Dr. Romola Mascarenhas",
+      "credential": "Dentist",
+      "facts": [
+        "Dental degree at University of Sydney in 1993",
+        "Practises alongside Dr. Giovanisci since 2001"
+      ],
+      "source": "https://stephengiovaniscidds.com/about/"
+    }
+  ],
+  "hours": {
+    "Monday": "8:30 am\u20135:00 pm",
+    "Tuesday": "8:30 am\u20139:00 pm",
+    "Wednesday": "8:30 am\u20135:00 pm",
+    "Thursday": "8:30 am\u20139:00 pm",
+    "Friday": "8:30 am\u20133:00 pm",
+    "Saturday": "9:00 am\u20133:00 pm",
+    "Sunday": "Not listed"
+  },
+  "services": [
+    "New patient exams",
+    "Preventive dentistry and gum treatment",
+    "Restorative dentistry",
+    "Dental implants",
+    "Cosmetic dentistry",
+    "Orthodontic care",
+    "Children\u2019s dentistry",
+    "Teeth whitening"
+  ],
+  "opportunities": [
+    {
+      "finding": "Services page repeats the main Procedures And Services title, introduction, and generic feature row before detailed treatments.",
+      "source": "https://stephengiovaniscidds.com/services/",
+      "proposal": "Group treatments into clear patient-friendly paths with a persistent request appointment action."
+    },
+    {
+      "finding": "Convenient Tuesday/Thursday evening and Saturday hours appear lower on the homepage and contact page.",
+      "source": "https://stephengiovaniscidds.com/",
+      "proposal": "Put schedule convenience and local Montrose identity near the top with the real office and doctors."
+    },
+    {
+      "finding": "Many individual treatment topics are gathered on one long services page.",
+      "source": "https://stephengiovaniscidds.com/services/",
+      "proposal": "Plan clearer useful service pages for Montrose search and AI discovery without promising rankings."
+    }
+  ],
+  "outboundHook": "Your evening and Saturday appointments stood out. I put together a preview that brings those, your Montrose roots and your team to the front.",
+  "constraints": [
+    "Do not call Dr. Giovanisci a board-certified specialist or orthodontist; official home label conflicts with ADA general practice listing.",
+    "Do not copy medical advice, treatment outcomes, reviews or ratings.",
+    "Existing site has appointment form; do not claim none exists.",
+    "Hours and services sourced from practice website, subject to clinic review before production.",
+    "24 hour emergency coverage on site is for current patients only; omit in preview.",
+    "Photo copyright/permissions should be confirmed for final client-approved production use; preview clearly labeled speculative."
+  ],
+  "sources": [
+    "https://stephengiovaniscidds.com/",
+    "https://stephengiovaniscidds.com/about/",
+    "https://stephengiovaniscidds.com/services/",
+    "https://stephengiovaniscidds.com/contact/",
+    "https://stephengiovaniscidds.com/book-appointment/"
+  ],
+  "backup": {
+    "businessName": "Comfort Zone Dental",
+    "website": "https://www.comfortzonedental.com/",
+    "owner": "Dr. David Polushkin",
+    "email": "comfortzonedental@yahoo.com",
+    "contactSource": "https://www.comfortzonedental.com/contact",
+    "aboutSource": "https://www.comfortzonedental.com/about",
+    "address": "3808 W Riverside Dr, Suite 508, Burbank, CA 91505",
+    "phone": "818-955-9788",
+    "hours": "Tuesday\u2013Thursday 9 am\u20135 pm",
+    "opportunity": "Contact-only main navigation and services only in a biography paragraph; can create clearer treatment paths and request journey."
+  }
+}

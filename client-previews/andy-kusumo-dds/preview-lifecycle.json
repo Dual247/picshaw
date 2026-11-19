@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "slug": "andy-kusumo-dds",
+  "company": "Andy Kusumo, DDS",
+  "companyDomain": "andykusumodental.com",
+  "contact": {
+    "name": "Dr. Andy Kusumo",
+    "email": "andykusumodds@gmail.com"
+  },
+  "firstPublishedAt": "2026-11-19T00:01:03.000Z",
+  "firstPublishedAtEpochMs": 1795046463000,
+  "expiresAt": "2026-11-26T00:01:03.000Z",
+  "expiresAtEpochMs": 1795651263000,
+  "maximumLifetimeHours": 168,
+  "timeZone": "America/Los_Angeles",
+  "teamId": "team_152cnGnh8Y1LacMEU6gvr5FJ",
+  "projectId": "prj_5TukfLyqNClwWAzwrbGWw7mnMh5c",
+  "projectName": "picshaw-andy-kusumo-dds-preview",
+  "repository": "Dual247/picshaw",
+  "branch": "preview/picshaw-outbound",
+  "rootDirectory": "client-previews/andy-kusumo-dds",
+  "brandedUrl": "https://www.picshaw.com/previews/andy-kusumo-dds/",
+  "originUrl": "https://picshaw-andy-kusumo-dds-preview.vercel.app/",
+  "routing": {
+    "projectId": "prj_xMMQcSaM02M5xmSqPdMZGuB5PPVj",
+    "routeIds": [
+      "picshaw-andy-kusumo-dds-preview-trailing-slash",
+      "picshaw-andy-kusumo-dds-preview-proxy"
+    ]
+  },
+  "expirationPolicy": "All requests and assets return server-enforced HTTP410 at or after immutable expiresAt. Never reset publication window on redeploy."
+}

@@ -1,0 +1,16 @@
+{
+  "assets": [
+    {
+      "file": "assets/building.jpg",
+      "url": "https://drksmiles.com/images/Saint_Josephs.jpg",
+      "context": "Official contact page labels building Pavilion Dental Group Building; original image is street view of Saint Joseph Medical Plaza. Used as location photo, not practice interior."
+    },
+    {
+      "file": "assets/dr-kantarovich.png",
+      "url": "https://drksmiles.com/images/drk_pic.png",
+      "context": "Official Meet Dr Kantarovich page explicitly identifies subject. Displayed small, no fabricated identity."
+    }
+  ],
+  "fonts": "DM Sans copied from verified Picshaw preview assets; OFL included",
+  "concept": "Unsolicited Picshaw design concept; proposed wording based on listed official pages. No patient testimonials or clinical results reused."
+}

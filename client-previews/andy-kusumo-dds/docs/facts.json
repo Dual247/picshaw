@@ -1,0 +1,43 @@
+{
+  "slug": "andy-kusumo-dds",
+  "name": "Andy Kusumo DDS",
+  "city": "Anaheim",
+  "website": "https://andykusumodental.com/",
+  "email": "andykusumodds@gmail.com",
+  "recipient": "Dr. Kusumo",
+  "contactName": "Dr. Andy Kusumo",
+  "phone": "714-392-8283",
+  "address": "501 N Brookhurst St, Suite 100, Anaheim, CA 92801",
+  "hours": {
+    "Monday": "9:15 AM\u20135 PM",
+    "Tuesday": "9 AM\u20135 PM",
+    "Wednesday": "9 AM\u201312 PM",
+    "Thursday": "9 AM\u20135 PM",
+    "Friday": "9 AM\u20135 PM",
+    "Saturday": "Closed",
+    "Sunday": "Closed"
+  },
+  "services": [
+    "Dental office; no treatment list on current official website"
+  ],
+  "evidence": [
+    {
+      "url": "https://andykusumodental.com/",
+      "ref": "turn775603120view1",
+      "supports": [
+        "Practice name, phone preferred text, email, address and all hours",
+        "Homepage contains only contact information, direction link and hours; no doctor introduction or service information"
+      ]
+    }
+  ],
+  "opportunities": [
+    "Introduce the dentist and explain confirmed treatment options rather than contact-only content",
+    "Make text-first contact prominent on mobile and connect contact, office hours and directions in one visit path",
+    "Develop accurate Anaheim treatment pages after doctor confirms scope, to support search and AI visibility"
+  ],
+  "outreachHook": "Your site says you prefer text messages, so I made that the easiest next step in a new website preview.",
+  "cautions": [
+    "No treatment list, doctor portrait or office photographs verified from current official website. Preview avoids unverified procedures, credentials, ratings, availability promises or clinical outcomes.",
+    "No traffic, ranking, conversion or AI citation audit performed."
+  ]
+}

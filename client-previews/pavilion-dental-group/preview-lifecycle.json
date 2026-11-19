@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "slug": "pavilion-dental-group",
+  "company": "Pavilion Dental Group",
+  "companyDomain": "drksmiles.com",
+  "contact": {
+    "name": "Dr. Daniel Kantarovich",
+    "email": "drk@drksmiles.com"
+  },
+  "firstPublishedAt": "2026-11-19T00:01:03.000Z",
+  "firstPublishedAtEpochMs": 1795046463000,
+  "expiresAt": "2026-11-26T00:01:03.000Z",
+  "expiresAtEpochMs": 1795651263000,
+  "maximumLifetimeHours": 168,
+  "timeZone": "America/Los_Angeles",
+  "teamId": "team_152cnGnh8Y1LacMEU6gvr5FJ",
+  "projectId": "prj_nxhGX36eKxxvJGhmmYT0CuelqhEg",
+  "projectName": "picshaw-pavilion-dental-group-preview",
+  "repository": "Dual247/picshaw",
+  "branch": "preview/picshaw-outbound",
+  "rootDirectory": "client-previews/pavilion-dental-group",
+  "brandedUrl": "https://www.picshaw.com/previews/pavilion-dental-group/",
+  "originUrl": "https://picshaw-pavilion-dental-group-preview.vercel.app/",
+  "routing": {
+    "projectId": "prj_xMMQcSaM02M5xmSqPdMZGuB5PPVj",
+    "routeIds": [
+      "picshaw-pavilion-dental-group-preview-trailing-slash",
+      "picshaw-pavilion-dental-group-preview-proxy"
+    ]
+  },
+  "expirationPolicy": "All requests and assets return server-enforced HTTP410 at or after immutable expiresAt. Never reset publication window on redeploy."
+}

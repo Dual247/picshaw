@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "slug": "eve-dental",
+  "company": "EVE Dental",
+  "companyDomain": "evedentalculvercity.com",
+  "contact": {
+    "name": "Dr. Eda Jokic",
+    "email": "evedentalcc@gmail.com"
+  },
+  "firstPublishedAt": "2026-11-19T00:01:03.000Z",
+  "firstPublishedAtEpochMs": 1795046463000,
+  "expiresAt": "2026-11-26T00:01:03.000Z",
+  "expiresAtEpochMs": 1795651263000,
+  "maximumLifetimeHours": 168,
+  "timeZone": "America/Los_Angeles",
+  "teamId": "team_152cnGnh8Y1LacMEU6gvr5FJ",
+  "projectId": "prj_lzxf5KH23XbyVW6aLpOn3tswGwL1",
+  "projectName": "picshaw-eve-dental-preview",
+  "repository": "Dual247/picshaw",
+  "branch": "preview/picshaw-outbound",
+  "rootDirectory": "client-previews/eve-dental",
+  "brandedUrl": "https://www.picshaw.com/previews/eve-dental/",
+  "originUrl": "https://picshaw-eve-dental-preview.vercel.app/",
+  "routing": {
+    "projectId": "prj_xMMQcSaM02M5xmSqPdMZGuB5PPVj",
+    "routeIds": [
+      "picshaw-eve-dental-preview-trailing-slash",
+      "picshaw-eve-dental-preview-proxy"
+    ]
+  },
+  "expirationPolicy": "All requests and assets return server-enforced HTTP410 at or after immutable expiresAt. Never reset publication window on redeploy."
+}

@@ -1,0 +1,72 @@
+{
+  "slug": "thomas-loe-dentistry",
+  "businessName": "Thomas Loe, DDS",
+  "dentist": "Dr. Thomas Loe",
+  "city": "Culver City",
+  "website": "https://www.culverdentist.com/",
+  "email": "culverdentist@yahoo.com",
+  "emailSource": "https://www.culverdentist.com/",
+  "phone": "(310) 838-3177",
+  "address": "10320 Venice Boulevard, Culver City, CA 90232",
+  "hours": "Monday, Tuesday, Wednesday and Friday: 8 am\u20134 pm. After hours by appointment for dental emergencies.",
+  "facts": [
+    "Family practice founded by Dr. Frederick Loe in 1957, continued by his son Thomas Loe.",
+    "Thomas Loe graduated from USC School of Dentistry.",
+    "Practice welcomes new patients; office speaks Spanish.",
+    "Published services include examinations/cleanings, fillings, crowns, implant crowns, bridges, dentures, bonding, veneers and whitening.",
+    "Practice lists most PPO insurance; coverage should be confirmed with office."
+  ],
+  "opportunities": [
+    "Lead with the distinctive two-generation Culver City story, currently on the Our Practice page.",
+    "Unify the contact route: Contact Us displays loethomas@gmail.com / 310-251-7828 while the same page footer and homepage show culverdentist@yahoo.com / 310-838-3177.",
+    "Make new-patient details, office hours and a clear appointment request easier to scan; existing site uses generic contact form."
+  ],
+  "sources": [
+    {
+      "url": "https://www.culverdentist.com/",
+      "ref": "turn590482552view0",
+      "supports": "office contact, services, current homepage"
+    },
+    {
+      "url": "https://www.culverdentist.com/our-practice",
+      "ref": "turn390677854view0",
+      "supports": "1957 family history, USC, staff, new patients"
+    },
+    {
+      "url": "https://www.culverdentist.com/contact-us",
+      "ref": "turn590482552view1",
+      "supports": "two sets of contact details on same page"
+    },
+    {
+      "url": "https://www.culverdentist.com/our-services",
+      "ref": "turn390677854view1",
+      "supports": "listed treatment categories"
+    },
+    {
+      "url": "https://www.culverdentist.com/patient-information",
+      "ref": "turn616109400search10",
+      "supports": "new patient forms and most PPO insurance"
+    }
+  ],
+  "assets": [
+    {
+      "file": "assets/loe-portrait.jpg",
+      "source": "https://static.wixstatic.com/media/f4ca89_f365ff89e6f448649d538a01c599521d~mv2.jpg",
+      "page": "https://www.culverdentist.com/",
+      "caption": "Dr. Thomas Loe, photograph from current practice website"
+    },
+    {
+      "file": "assets/loe-lab.jpg",
+      "source": "https://static.wixstatic.com/media/f4ca89_306cc64cb3d74a4a87eb87db7f5925ad~mv2.jpg",
+      "page": "https://www.culverdentist.com/our-services",
+      "caption": "Dr. Loe and Gabriel in the lab, identified by current website image title"
+    },
+    {
+      "file": "assets/loe-history.jpg",
+      "source": "https://static.wixstatic.com/media/f4ca89_e1ac6d267b6d45a9b5b74c1c1af3e4e9~mv2.jpg",
+      "page": "https://www.culverdentist.com/our-practice",
+      "caption": "1957 brochure from practice history page"
+    }
+  ],
+  "emailHook": "Your family has cared for Culver City since 1957. I put together a website idea that brings that story forward and makes the first appointment easier to find."
+}

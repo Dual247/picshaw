@@ -1,0 +1,24 @@
+{
+  "reviewedAt": "2026-11-18",
+  "assetUse": "Clearly marked temporary Picshaw concept. Current-site images, not independently verified treatment outcomes. No stock patient or fabricated outcome images.",
+  "assets": [
+    {
+      "file": "assets/loe-portrait.jpg",
+      "source": "https://static.wixstatic.com/media/f4ca89_f365ff89e6f448649d538a01c599521d~mv2.jpg",
+      "page": "https://www.culverdentist.com/",
+      "caption": "Dr. Thomas Loe, photograph from current practice website"
+    },
+    {
+      "file": "assets/loe-lab.jpg",
+      "source": "https://static.wixstatic.com/media/f4ca89_306cc64cb3d74a4a87eb87db7f5925ad~mv2.jpg",
+      "page": "https://www.culverdentist.com/our-services",
+      "caption": "Dr. Loe and Gabriel in the lab, identified by current website image title"
+    },
+    {
+      "file": "assets/loe-history.jpg",
+      "source": "https://static.wixstatic.com/media/f4ca89_e1ac6d267b6d45a9b5b74c1c1af3e4e9~mv2.jpg",
+      "page": "https://www.culverdentist.com/our-practice",
+      "caption": "1957 brochure from practice history page"
+    }
+  ]
+}

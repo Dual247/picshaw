@@ -1,0 +1,55 @@
+[
+  {
+    "file": "doctor-giovanisci.jpg",
+    "url": "https://stephengiovaniscidds.com/wp-content/uploads/2018/10/Dr-Giovanisci.jpg",
+    "originalSize": [
+      400,
+      302
+    ],
+    "outputBytes": 25243,
+    "imageSize": [
+      400,
+      302
+    ]
+  },
+  {
+    "file": "doctor-mascarenhas.jpg",
+    "url": "https://stephengiovaniscidds.com/wp-content/uploads/2018/10/Dr-M.jpg",
+    "originalSize": [
+      400,
+      302
+    ],
+    "outputBytes": 28428,
+    "imageSize": [
+      400,
+      302
+    ]
+  },
+  {
+    "file": "reception.jpg",
+    "url": "https://stephengiovaniscidds.com/wp-content/uploads/2018/11/office_sm.jpg",
+    "originalSize": [
+      576,
+      423
+    ],
+    "outputBytes": 73964,
+    "imageSize": [
+      576,
+      423
+    ],
+    "note": "Office reception, not team photo."
+  },
+  {
+    "file": "office.jpg",
+    "url": "https://stephengiovaniscidds.com/wp-content/uploads/2018/11/office_about.jpg",
+    "originalSize": [
+      1447,
+      665
+    ],
+    "outputBytes": 154209,
+    "imageSize": [
+      1447,
+      665
+    ]
+  }
+]

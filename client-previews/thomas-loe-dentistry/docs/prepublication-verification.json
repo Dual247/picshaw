@@ -1,0 +1,21 @@
+{
+  "status": "passed",
+  "expiry": {
+    "testsPassed": 4,
+    "fixedCutoff": "2026-11-26T00:01:03.000Z",
+    "nodeVersion": "24.22.3",
+    "scope": "All public files and aliases, exact boundary, methods, bypass attempts and live middleware clock logic"
+  },
+  "javascriptSyntax": "passed",
+  "desktopVisual": "Hero, typography, actual photography or non-photographic concept and hierarchy inspected",
+  "mobile": {
+    "frameWidth": 375,
+    "usableViewportWidth": 360,
+    "documentWidth": 360,
+    "horizontalOverflow": false,
+    "navigationOpenAndLinkClose": "passed",
+    "serviceOrVisitTabSelection": "passed",
+    "demoSubmit": "success displayed; sample input values cleared; no network or storage in reviewed script"
+  },
+  "unverified": "Live origin, branded proxy and alias HTTP checks are pending deployment."
+}

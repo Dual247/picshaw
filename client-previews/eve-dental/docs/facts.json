@@ -1,0 +1,55 @@
+{
+  "slug": "eve-dental",
+  "businessName": "EVE Dental",
+  "dentist": "Dr. Eda Jokic",
+  "city": "Culver City",
+  "website": "https://evedentalculvercity.com/",
+  "email": "evedentalcc@gmail.com",
+  "emailSource": "https://evedentalculvercity.com/contact",
+  "phone": "(310) 313-1063",
+  "address": "4740 Inglewood Blvd, Culver City, CA 90230",
+  "hours": "Monday\u2013Friday: 9 am\u20136 pm. Saturday\u2013Sunday closed.",
+  "facts": [
+    "Dr. Eda Jokic is the dentist named on official site; NYU DDS graduated 2014.",
+    "Born in Tirana, Albania and completed dental studies in Bulgaria before further training in the US.",
+    "Official biography lists general and cosmetic dentistry, implants, Invisalign and surgery.",
+    "Biography states fluent Albanian, Serbian and Bulgarian, proficient Italian and Spanish.",
+    "Current homepage says walk-ins welcome during regular business hours."
+  ],
+  "opportunities": [
+    "Homepage hero still describes emergency-only COVID-era care and preparing to resume normal business hours, alongside walk-in messaging.",
+    "Large navigation contains dozens of treatments and generic education links; clearer patient pathways could help visitors find relevant care.",
+    "Give Dr. Jokic and practical visit information more prominence, with a simple call/request route."
+  ],
+  "sources": [
+    {
+      "url": "https://evedentalculvercity.com/",
+      "ref": "turn590482552view2",
+      "supports": "legacy COVID reopening homepage text, services and contact"
+    },
+    {
+      "url": "https://evedentalculvercity.com/meet-the-doctor",
+      "ref": "turn390677854view3",
+      "supports": "doctor identity, portrait and training"
+    },
+    {
+      "url": "https://evedentalculvercity.com/contact",
+      "ref": "turn390677854view2",
+      "supports": "address, phone and hours"
+    },
+    {
+      "url": "https://evedentalculvercity.com/contact",
+      "ref": "turn115954402search3",
+      "supports": "public evedentalcc@gmail.com email; also directly verified in site JSON-LD and decoded mail link"
+    }
+  ],
+  "assets": [
+    {
+      "file": "assets/eve-portrait.jpg",
+      "source": "https://evedentalculvercity.com/storage/app/media/encinitas/emethasanidds-picture-head.png",
+      "page": "https://evedentalculvercity.com/meet-the-doctor",
+      "caption": "Dr. Eda Jokic portrait displayed and identified by official site; original source is 325\u00d7350px"
+    }
+  ],
+  "emailHook": "I noticed EVE Dental\u2019s homepage still includes reopening messages from the COVID period. I made a fresh website preview with your current care, your story and booking details easier to find."
+}

@@ -1,0 +1,66 @@
+{
+  "slug": "pavilion-dental-group",
+  "name": "Pavilion Dental Group",
+  "city": "Orange",
+  "website": "https://drksmiles.com/",
+  "email": "drk@drksmiles.com",
+  "recipient": "Dr. Kantarovich",
+  "contactName": "Dr. Daniel Kantarovich",
+  "phone": "714-953-1000 ext. 2",
+  "address": "1140 West La Veta Avenue, Suite 530, Orange, CA 92868",
+  "hours": null,
+  "services": [
+    "Prosthodontics",
+    "Dental implants",
+    "Crowns",
+    "Dentures",
+    "Porcelain veneers",
+    "Cosmetic bonding",
+    "Teeth whitening",
+    "Invisalign"
+  ],
+  "evidence": [
+    {
+      "url": "https://drksmiles.com/",
+      "ref": "turn686354352view3",
+      "supports": [
+        "Practice name, contact email, phone, address, treatments",
+        "Fixed 1000px image-based template and extensive treatment menu"
+      ]
+    },
+    {
+      "url": "https://drksmiles.com/meet-dr-kantarovich",
+      "ref": "turn772335829view0",
+      "supports": [
+        "Dr. Daniel Kantarovich, prosthodontist, DDS and Advanced Prosthodontic Residency at Ohio State",
+        "Actual labeled doctor portrait"
+      ]
+    },
+    {
+      "url": "https://drksmiles.com/our-laboratory",
+      "ref": "turn628098325view0",
+      "supports": [
+        "Own in-house laboratory and Master Dental Technician"
+      ]
+    },
+    {
+      "url": "https://drksmiles.com/contact",
+      "ref": "turn772335829view1",
+      "supports": [
+        "Address, extension2, building photograph",
+        "drk@drksmiles.com repeated sitewide; alternate dkantar@aol.com"
+      ]
+    }
+  ],
+  "opportunities": [
+    "Bring the in-house lab and prosthodontic focus onto the homepage instead of burying them behind a dense treatment menu",
+    "Replace image-based headings and fixed-width composition with accessible text and mobile-friendly pathways",
+    "Give implants, restorative and aesthetic enquiries clear service pathways and simpler contact options"
+  ],
+  "outreachHook": "Your in-house lab is a strong reason to choose your practice, but it is easy to miss on the current site. I built a preview that brings it forward.",
+  "cautions": [
+    "Office hours were not published in inspected official pages, so preview asks visitors to contact the office.",
+    "No fabricated review scores, clinical outcomes, patient photos or patient records.",
+    "No traffic, ranking or AI citation metrics measured."
+  ]
+}
