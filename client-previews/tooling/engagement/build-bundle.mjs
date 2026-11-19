@@ -1,0 +1,12 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+const dir=path.dirname(fileURLToPath(import.meta.url));
+const [slug,routeSlug,expiry,out]=process.argv.slice(2);
+if(!slug || !routeSlug || !Number.isSafeInteger(Number(expiry)) || !out)throw Error('Usage: node build-bundle.mjs slug routeSlug expiryEpoch output.js');
+const canonicalPath=routeSlug.startsWith('/')?routeSlug:`/previews/${routeSlug}/`;
+if(!/^[a-z0-9-]+$/.test(slug)||!new RegExp('^/previews/(?:[a-z0-9-]+/)?'+slug+'/$').test(canonicalPath))throw Error('Invalid explicit canonical path');
+let code='\n;(()=>{\n';
+for(const f of ['engagement.js','transport.js'])code+=fs.readFileSync(path.join(dir,f),'utf8').replace('export function','function')+'\n';
+code+=`const slug=${JSON.stringify(slug)};\nconst qa=location.hostname==='www.picshaw.com' && location.pathname===${JSON.stringify(canonicalPath)} && new URLSearchParams(location.search).get('picshaw_qa')==='1';\ninstallEngagementTracker({window,document,slug,path:${JSON.stringify(canonicalPath)},expiresAt:${Number(expiry)},qa,emit:createVercelSink({fetchImpl:window.fetch.bind(window),slug,path:${JSON.stringify(canonicalPath)},qa})});\n})();\n`;
+fs.writeFileSync(out,code);

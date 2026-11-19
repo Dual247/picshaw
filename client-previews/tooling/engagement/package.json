@@ -1,0 +1,1 @@
+{"name":"picshaw-preview-engagement-tooling","private":true,"type":"module","scripts":{"test":"node --test *.test.js"},"engines":{"node":">=24"}}

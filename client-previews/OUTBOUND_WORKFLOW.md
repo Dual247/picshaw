@@ -64,6 +64,29 @@ Every preview requires the tested server gate:
 
 Run **`npm ci --ignore-scripts`** and **`npm test`** with Node 24. Keep `@vercel/functions` pinned with its lockfile. Tests must cover the exact inclusive cutoff, every actual public file, aliases, HEAD/method behavior, traversal attempts, no-store headers and deployed middleware logic. Do not skip a failed gate. Preserve the fixed constants for all later tests and redeploys.
 
+## 4a. Required engagement instrumentation for every future preview
+
+Ash approved production engagement tracking and its inclusion in **all future Picshaw outbound previews**, regardless of industry or batch. This adds measurement only; it does not authorize contact, sending, scheduling, automatic follow-ups, changes to campaign wording, or renewal of previews.
+
+After fixing the immutable lifecycle and completing the local-only demo UI, use the versioned tooling in `client-previews/tooling/engagement/`:
+
+```sh
+node --test client-previews/tooling/engagement/*.test.js
+node client-previews/tooling/engagement/install.mjs client-previews/<slug>
+node client-previews/tooling/engagement/install.mjs client-previews/<slug> --check
+(cd client-previews/<slug> && npm ci --ignore-scripts && npm test)
+```
+
+The installer validates but never edits lifecycle or server-gate files; it generates a separate local script, a brief visible disclosure and opt-out link, and allows only `https://www.picshaw.com/_vercel/insights/event` in CSP `connect-src`. It refuses unknown CSPs, existing in-app trackers and mismatched canonical route/slug mappings. Resolve those explicitly rather than weakening the guard. Preserve the original publication and expiry bytes on every reinstall. The script is covered by the existing all-path server expiry gate.
+
+Only trusted intentional `cta`, `navigation`, `service_tab` and `demo_submit` interactions are measured, once per category per document. No page-load, hover, prefetch or scroll events. Events contain only the company slug, fixed canonical path and category, plus the collector's minimal protocol fields. Do not add names, email addresses, form contents, hrefs, DOM text, identifiers, full URLs/query strings, cookies, local/session storage, SDK identity or session replay. The transport omits credentials and referrer, but network infrastructure still receives ordinary request metadata; do not claim it is impossible to identify a visitor. Engagement is not proof of the prospect's identity or buying intent.
+
+Honor GPC, DNT and `?picshaw_no_track=1`. Suppress production tracking on hidden/prerendered documents, automated browsers, direct origins, unrelated paths, expired previews and any `picshaw_qa` query. Keep the visible opt-out available on mobile and desktop; the URL opt-out applies to the current page, not a persistent preference. QA uses `?picshaw_qa=1` and emits only `picshaw_preview_qa`, never `picshaw_preview_engaged`; it still honors privacy signals. Do not bypass those signals to obtain test data.
+
+Before marking the package verified, perform the README's browser QA and collector checks using the canonical branded URL. A successful build or HTTP 200 from the collector alone is not proof of analytics ingestion. Record exact source/bundle/deployment, canonical route, unchanged deadline, browser checks, QA event name/category and observed ingestion evidence outside `public/`. Exclude QA from engagement reporting. If ingestion cannot be verified, record the blocker and do not silently claim tracking is working.
+
+Keep tooling, tests and operational evidence outside `public/`. Do not publish or promote the operations branch as the main marketing site. Before moving its remote ref, verify linked projects' Git auto-deploy settings: an operations-branch push must not unexpectedly deploy other previews or main-site changes. If that cannot be established, retain a patch/unreferenced commit and coordinate the controlled publication; do not change unrelated project settings to bypass this check.
+
 ## 5. Deploy and verify the complete package
 
 Use a separate Vercel project for each prospect, with root directory `client-previews/<slug>`, Node 24, install command `npm ci --ignore-scripts`, empty build command for this buildless template, and output directory `public`. Commit to the operations branch with an expected-head lease, then deploy the recorded exact commit. Do not merge or edit main.
