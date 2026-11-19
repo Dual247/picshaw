@@ -48,9 +48,9 @@
       "localDate": "2026-11-18",
       "timeZone": "America/Los_Angeles",
       "trigger": "User-requested additional batch: five dental practices",
-      "status": "in_progress",
+      "status": "completed",
       "startedAt": "2026-11-18T23:59:58Z",
-      "finishedAt": null,
+      "finishedAt": "2026-11-19T00:17:16Z",
       "minimumRequired": 5,
       "reservedProspectIds": [
         "eve-dental",
@@ -59,9 +59,15 @@
         "pavilion-dental-group",
         "comfort-zone-dental"
       ],
-      "completedProspectIds": [],
-      "completedCount": 0,
-      "shortfallCount": 5,
+      "completedProspectIds": [
+        "eve-dental",
+        "stephen-giovanisci",
+        "andy-kusumo-dds",
+        "pavilion-dental-group",
+        "comfort-zone-dental"
+      ],
+      "completedCount": 5,
+      "shortfallCount": 0,
       "blockers": [],
       "excludedProspectIds": [
         "thomas-loe-dentistry"
@@ -581,22 +587,136 @@
       "recordKind": "user_requested_dental_batch",
       "countsTowardDailyTarget": true,
       "dailyRunId": "picshaw-preview-five:2026-11-18",
-      "status": "research_verified_preview_building",
+      "status": "draft_saved_preview_active_guard_verified",
       "teamId": "team_152cnGnh8Y1LacMEU6gvr5FJ",
       "projectId": "prj_lzxf5KH23XbyVW6aLpOn3tswGwL1",
       "projectName": "picshaw-eve-dental-preview",
       "rootDirectory": "client-previews/eve-dental",
       "brandedUrl": "https://www.picshaw.com/previews/eve-dental/",
       "email": {
+        "provider": "gmail",
+        "draftId": "r-3967993114896196595",
+        "draftMessageId": "1a1f12972c0cb47d",
+        "threadId": "1a1f12972c0cb47d",
+        "from": "hello@picshaw.com",
         "to": "evedentalcc@gmail.com",
-        "status": "not_yet_drafted",
-        "sendAuthorized": false
+        "subject": "A fresh website idea for EVE Dental",
+        "status": "draft",
+        "savedAt": "2026-11-19T00:16:27.000Z",
+        "displayUrl": "https://mail.google.com/mail/u/?authuser=hello%40picshaw.com#all/1a1f12972c0cb47d",
+        "sendAuthorized": false,
+        "doNotRecreateDraft": true
       },
       "deduplication": {
         "checkedOn": "2026-11-18",
         "registry": "No previous business match",
         "gmail": "No matches for domain/email/business identity at qualification"
-      }
+      },
+      "schemaVersion": 1,
+      "firstPublishedAt": "2026-11-19T00:01:03.000Z",
+      "firstPublishedAtEpochMs": 1795046463000,
+      "expiresAt": "2026-11-26T00:01:03.000Z",
+      "expiresAtEpochMs": 1795651263000,
+      "maximumLifetimeHours": 168,
+      "timeZone": "America/Los_Angeles",
+      "repository": "Dual247/picshaw",
+      "branch": "preview/picshaw-outbound",
+      "originUrl": "https://picshaw-eve-dental-preview.vercel.app/",
+      "routing": {
+        "projectId": "prj_xMMQcSaM02M5xmSqPdMZGuB5PPVj",
+        "routeIds": [
+          "picshaw-eve-dental-preview-trailing-slash",
+          "picshaw-eve-dental-preview-proxy"
+        ],
+        "verifiedVersionId": "740ffeb3-4705-4bb2-b16c-ac9a2efbbc4d"
+      },
+      "expirationPolicy": "All requests and assets return server-enforced HTTP410 at or after immutable expiresAt. Never reset publication window on redeploy.",
+      "emailStatus": "draft",
+      "source": {
+        "repository": "Dual247/picshaw",
+        "branch": "preview/picshaw-outbound",
+        "commit": "9b716b877563eccb0063b52d9246740cef41fd64",
+        "lifecyclePath": "client-previews/eve-dental/preview-lifecycle.json",
+        "assetProvenancePath": "client-previews/eve-dental/docs/provenance.json",
+        "verificationPath": "client-previews/eve-dental/docs/verification.json"
+      },
+      "deployment": {
+        "id": "dpl_4zDJ51u1aYhg7SEeacJSqfVk1t3Q",
+        "status": "READY",
+        "sourceCommit": "9b716b877563eccb0063b52d9246740cef41fd64",
+        "guardStatus": "verified",
+        "verifiedAt": "2026-11-19T00:15:29.522953+00:00",
+        "origin": "https://picshaw-eve-dental-preview.vercel.app/",
+        "stableAliases": [
+          "picshaw-eve-dental-preview.vercel.app",
+          "picshaw-eve-dental-preview-ash-patels-projects.vercel.app",
+          "picshaw-eve-dental-preview-git-previ-62f608-ash-patels-projects.vercel.app"
+        ],
+        "immutableUrl": "https://picshaw-eve-dental-preview-8umdu5jni-ash-patels-projects.vercel.app/",
+        "evidence": {
+          "brandedRoot": 200,
+          "brandedCss": 200,
+          "brandedScript": 200,
+          "brandedAsset": 200,
+          "primaryOrigin": 200,
+          "stableAliases": {
+            "testedCount": 3,
+            "status": 200
+          },
+          "dynamicExpiryHeader": "2026-11-26T00:01:03.000Z",
+          "cacheControlContains": "no-store",
+          "brandedPost": 405,
+          "originPost": 405,
+          "immutableDeployment": "302 Vercel authentication redirect; no preview content served",
+          "existingRoutes": "Homepage, portal, Expo, Second City and Murphy previews returned200; ten new route additions only"
+        },
+        "browserChecks": {
+          "desktop": "passed",
+          "mobile": {
+            "frameWidth": 375,
+            "usableViewportWidth": 360,
+            "documentWidth": 360,
+            "horizontalOverflow": false,
+            "navigationOpenAndLinkClose": "passed",
+            "serviceOrVisitTabSelection": "passed",
+            "demoSubmit": "success displayed; sample input values cleared; no network or storage in reviewed script"
+          },
+          "production": "Verified branded URL, heading and JavaScript initialization under live CSP"
+        },
+        "expiryTests": {
+          "passed": 4,
+          "cutoff": "2026-11-26T00:01:03.000Z"
+        }
+      },
+      "sourceFacts": [
+        {
+          "fact": "The current homepage still includes COVID-era reopening/emergency messaging and extensive treatment navigation.",
+          "sourceUrl": "https://evedentalculvercity.com/",
+          "observedOn": "2026-11-18"
+        },
+        {
+          "fact": "Official contact page lists 4740 Inglewood Blvd, Culver City, 310-313-1063 and weekday 9am–6pm hours; public email also verified in site JSON-LD.",
+          "sourceUrl": "https://evedentalculvercity.com/contact",
+          "observedOn": "2026-11-18"
+        }
+      ],
+      "offer": {
+        "currency": "USD",
+        "monthlyWebsitePrice": 250,
+        "scope": "Website build, hosting, small updates and clear local/service content as foundations for Google and AI discovery"
+      },
+      "cleanup": {
+        "status": "not_due",
+        "routeRemovalAuthorizedOnlyAfter": "2026-11-26T00:01:03.000Z",
+        "retainSourceAndProject": true
+      },
+      "notes": [
+        "User-requested new dental prospect. Duplicates checked against registry and Gmail including known business/email aliases before drafting.",
+        "No measured traffic, rankings or guaranteed AI recommendations claimed.",
+        "All preview forms are demonstrations: no transmission, storage or actual booking.",
+        "Original publication and cutoff timestamps are immutable across redeployments.",
+        "Email is a saved draft; sending and scheduling are not authorized."
+      ]
     },
     {
       "id": "stephen-giovanisci",
@@ -619,22 +739,141 @@
       "recordKind": "user_requested_dental_batch",
       "countsTowardDailyTarget": true,
       "dailyRunId": "picshaw-preview-five:2026-11-18",
-      "status": "research_verified_preview_building",
+      "status": "draft_saved_preview_active_guard_verified",
       "teamId": "team_152cnGnh8Y1LacMEU6gvr5FJ",
       "projectId": "prj_ZvrlwKZz0XbpFlPm0J1FsqssGFWn",
       "projectName": "picshaw-stephen-giovanisci-preview",
       "rootDirectory": "client-previews/stephen-giovanisci",
       "brandedUrl": "https://www.picshaw.com/previews/stephen-giovanisci/",
       "email": {
+        "provider": "gmail",
+        "draftId": "r5842085024580358885",
+        "draftMessageId": "1a1f129750c5b531",
+        "threadId": "1a1f129750c5b531",
+        "from": "hello@picshaw.com",
         "to": "StephenGiovanisci@Yahoo.com",
-        "status": "not_yet_drafted",
-        "sendAuthorized": false
+        "subject": "A website idea for your Montrose practice",
+        "status": "draft",
+        "savedAt": "2026-11-19T00:16:28.000Z",
+        "displayUrl": "https://mail.google.com/mail/u/?authuser=hello%40picshaw.com#all/1a1f129750c5b531",
+        "sendAuthorized": false,
+        "doNotRecreateDraft": true
       },
       "deduplication": {
         "checkedOn": "2026-11-18",
         "registry": "No previous business match",
         "gmail": "No matches for domain/email/business identity at qualification"
-      }
+      },
+      "schemaVersion": 1,
+      "firstPublishedAt": "2026-11-19T00:01:03.000Z",
+      "firstPublishedAtEpochMs": 1795046463000,
+      "expiresAt": "2026-11-26T00:01:03.000Z",
+      "expiresAtEpochMs": 1795651263000,
+      "maximumLifetimeHours": 168,
+      "timeZone": "America/Los_Angeles",
+      "repository": "Dual247/picshaw",
+      "branch": "preview/picshaw-outbound",
+      "originUrl": "https://picshaw-stephen-giovanisci-preview.vercel.app/",
+      "routing": {
+        "projectId": "prj_xMMQcSaM02M5xmSqPdMZGuB5PPVj",
+        "routeIds": [
+          "picshaw-stephen-giovanisci-preview-trailing-slash",
+          "picshaw-stephen-giovanisci-preview-proxy"
+        ],
+        "verifiedVersionId": "740ffeb3-4705-4bb2-b16c-ac9a2efbbc4d"
+      },
+      "expirationPolicy": "All requests and assets return server-enforced HTTP410 at or after immutable expiresAt. Never reset publication window on redeploy.",
+      "emailStatus": "draft",
+      "source": {
+        "repository": "Dual247/picshaw",
+        "branch": "preview/picshaw-outbound",
+        "commit": "9b716b877563eccb0063b52d9246740cef41fd64",
+        "lifecyclePath": "client-previews/stephen-giovanisci/preview-lifecycle.json",
+        "assetProvenancePath": "client-previews/stephen-giovanisci/docs/asset-provenance.json",
+        "verificationPath": "client-previews/stephen-giovanisci/docs/verification.json"
+      },
+      "deployment": {
+        "id": "dpl_31ZPqTihbydnAnvw7h5wfEbKo3H5",
+        "status": "READY",
+        "sourceCommit": "9b716b877563eccb0063b52d9246740cef41fd64",
+        "guardStatus": "verified",
+        "verifiedAt": "2026-11-19T00:15:29.522953+00:00",
+        "origin": "https://picshaw-stephen-giovanisci-preview.vercel.app/",
+        "stableAliases": [
+          "picshaw-stephen-giovanisci-preview.vercel.app",
+          "picshaw-stephen-giovanisci-preview-ash-patels-projects.vercel.app",
+          "picshaw-stephen-giovanisci-previ-git-cff98f-ash-patels-projects.vercel.app"
+        ],
+        "immutableUrl": "https://picshaw-stephen-giovanisci-preview-n552z0vxs.vercel.app/",
+        "evidence": {
+          "brandedRoot": 200,
+          "brandedCss": 200,
+          "brandedScript": 200,
+          "brandedAsset": 200,
+          "primaryOrigin": 200,
+          "stableAliases": {
+            "testedCount": 3,
+            "status": 200
+          },
+          "dynamicExpiryHeader": "2026-11-26T00:01:03.000Z",
+          "cacheControlContains": "no-store",
+          "brandedPost": 405,
+          "originPost": 405,
+          "immutableDeployment": "302 Vercel authentication redirect; no preview content served",
+          "existingRoutes": "Homepage, portal, Expo, Second City and Murphy previews returned200; ten new route additions only"
+        },
+        "browserChecks": {
+          "desktop": "passed",
+          "mobile": {
+            "frameWidth": 375,
+            "usableViewportWidth": 360,
+            "documentWidth": 360,
+            "horizontalOverflow": false,
+            "navigationOpenAndLinkClose": "passed",
+            "serviceOrVisitTabSelection": "passed",
+            "demoSubmit": "success displayed; sample input values cleared; no network or storage in reviewed script"
+          },
+          "production": "Verified branded URL, heading and JavaScript initialization under live CSP"
+        },
+        "expiryTests": {
+          "passed": 4,
+          "cutoff": "2026-11-26T00:01:03.000Z"
+        }
+      },
+      "sourceFacts": [
+        {
+          "fact": "The homepage publishes Tuesday/Thursday evening and Saturday hours at the Montrose practice.",
+          "sourceUrl": "https://stephengiovaniscidds.com/",
+          "observedOn": "2026-11-18"
+        },
+        {
+          "fact": "The services page repeats its introductory heading/paragraph and gathers treatments on a long page.",
+          "sourceUrl": "https://stephengiovaniscidds.com/services/",
+          "observedOn": "2026-11-18"
+        },
+        {
+          "fact": "Dr. Giovanisci has practiced at the Montrose location since1987 and alongside Dr. Mascarenhas since2001.",
+          "sourceUrl": "https://stephengiovaniscidds.com/about/",
+          "observedOn": "2026-11-18"
+        }
+      ],
+      "offer": {
+        "currency": "USD",
+        "monthlyWebsitePrice": 250,
+        "scope": "Website build, hosting, small updates and clear local/service content as foundations for Google and AI discovery"
+      },
+      "cleanup": {
+        "status": "not_due",
+        "routeRemovalAuthorizedOnlyAfter": "2026-11-26T00:01:03.000Z",
+        "retainSourceAndProject": true
+      },
+      "notes": [
+        "User-requested new dental prospect. Duplicates checked against registry and Gmail including known business/email aliases before drafting.",
+        "No measured traffic, rankings or guaranteed AI recommendations claimed.",
+        "All preview forms are demonstrations: no transmission, storage or actual booking.",
+        "Original publication and cutoff timestamps are immutable across redeployments.",
+        "Email is a saved draft; sending and scheduling are not authorized."
+      ]
     },
     {
       "id": "andy-kusumo-dds",
@@ -657,22 +896,136 @@
       "recordKind": "user_requested_dental_batch",
       "countsTowardDailyTarget": true,
       "dailyRunId": "picshaw-preview-five:2026-11-18",
-      "status": "research_verified_preview_building",
+      "status": "draft_saved_preview_active_guard_verified",
       "teamId": "team_152cnGnh8Y1LacMEU6gvr5FJ",
       "projectId": "prj_5TukfLyqNClwWAzwrbGWw7mnMh5c",
       "projectName": "picshaw-andy-kusumo-dds-preview",
       "rootDirectory": "client-previews/andy-kusumo-dds",
       "brandedUrl": "https://www.picshaw.com/previews/andy-kusumo-dds/",
       "email": {
+        "provider": "gmail",
+        "draftId": "r7934137100019612646",
+        "draftMessageId": "1a1f12976267d467",
+        "threadId": "1a1f12976267d467",
+        "from": "hello@picshaw.com",
         "to": "andykusumodds@gmail.com",
-        "status": "not_yet_drafted",
-        "sendAuthorized": false
+        "subject": "A website idea built around texting your office",
+        "status": "draft",
+        "savedAt": "2026-11-19T00:16:28.000Z",
+        "displayUrl": "https://mail.google.com/mail/u/?authuser=hello%40picshaw.com#all/1a1f12976267d467",
+        "sendAuthorized": false,
+        "doNotRecreateDraft": true
       },
       "deduplication": {
         "checkedOn": "2026-11-18",
         "registry": "No previous business match",
         "gmail": "No matches for domain/email/business identity at qualification"
-      }
+      },
+      "schemaVersion": 1,
+      "firstPublishedAt": "2026-11-19T00:01:03.000Z",
+      "firstPublishedAtEpochMs": 1795046463000,
+      "expiresAt": "2026-11-26T00:01:03.000Z",
+      "expiresAtEpochMs": 1795651263000,
+      "maximumLifetimeHours": 168,
+      "timeZone": "America/Los_Angeles",
+      "repository": "Dual247/picshaw",
+      "branch": "preview/picshaw-outbound",
+      "originUrl": "https://picshaw-andy-kusumo-dds-preview.vercel.app/",
+      "routing": {
+        "projectId": "prj_xMMQcSaM02M5xmSqPdMZGuB5PPVj",
+        "routeIds": [
+          "picshaw-andy-kusumo-dds-preview-trailing-slash",
+          "picshaw-andy-kusumo-dds-preview-proxy"
+        ],
+        "verifiedVersionId": "740ffeb3-4705-4bb2-b16c-ac9a2efbbc4d"
+      },
+      "expirationPolicy": "All requests and assets return server-enforced HTTP410 at or after immutable expiresAt. Never reset publication window on redeploy.",
+      "emailStatus": "draft",
+      "source": {
+        "repository": "Dual247/picshaw",
+        "branch": "preview/picshaw-outbound",
+        "commit": "9b716b877563eccb0063b52d9246740cef41fd64",
+        "lifecyclePath": "client-previews/andy-kusumo-dds/preview-lifecycle.json",
+        "assetProvenancePath": "client-previews/andy-kusumo-dds/docs/provenance.json",
+        "verificationPath": "client-previews/andy-kusumo-dds/docs/verification.json"
+      },
+      "deployment": {
+        "id": "dpl_E2dNYpXL7aMtJY1gdXDhXntztjtB",
+        "status": "READY",
+        "sourceCommit": "9b716b877563eccb0063b52d9246740cef41fd64",
+        "guardStatus": "verified",
+        "verifiedAt": "2026-11-19T00:15:29.522953+00:00",
+        "origin": "https://picshaw-andy-kusumo-dds-preview.vercel.app/",
+        "stableAliases": [
+          "picshaw-andy-kusumo-dds-preview.vercel.app",
+          "picshaw-andy-kusumo-dds-preview-ash-patels-projects.vercel.app",
+          "picshaw-andy-kusumo-dds-preview-git-4f92ac-ash-patels-projects.vercel.app"
+        ],
+        "immutableUrl": "https://picshaw-andy-kusumo-dds-preview-qvbfze3rd-ash-patels-projects.vercel.app/",
+        "evidence": {
+          "brandedRoot": 200,
+          "brandedCss": 200,
+          "brandedScript": 200,
+          "brandedAsset": 200,
+          "primaryOrigin": 200,
+          "stableAliases": {
+            "testedCount": 3,
+            "status": 200
+          },
+          "dynamicExpiryHeader": "2026-11-26T00:01:03.000Z",
+          "cacheControlContains": "no-store",
+          "brandedPost": 405,
+          "originPost": 405,
+          "immutableDeployment": "302 Vercel authentication redirect; no preview content served",
+          "existingRoutes": "Homepage, portal, Expo, Second City and Murphy previews returned200; ten new route additions only"
+        },
+        "browserChecks": {
+          "desktop": "passed",
+          "mobile": {
+            "frameWidth": 375,
+            "usableViewportWidth": 360,
+            "documentWidth": 360,
+            "horizontalOverflow": false,
+            "navigationOpenAndLinkClose": "passed",
+            "serviceOrVisitTabSelection": "passed",
+            "demoSubmit": "success displayed; sample input values cleared; no network or storage in reviewed script"
+          },
+          "production": "Verified branded URL, heading and JavaScript initialization under live CSP"
+        },
+        "expiryTests": {
+          "passed": 4,
+          "cutoff": "2026-11-26T00:01:03.000Z"
+        }
+      },
+      "sourceFacts": [
+        {
+          "fact": "The homepage is limited to practice name, contact, directions and hours, and explicitly prefers text messages. Public email is andykusumodds@gmail.com.",
+          "sourceUrl": "https://andykusumodental.com/",
+          "observedOn": "2026-11-18"
+        },
+        {
+          "fact": "No treatment list or verified owner/office photography was found on the official site. Preview uses typography and visit information, with no invented treatments or photographs.",
+          "sourceUrl": "https://andykusumodental.com/",
+          "observedOn": "2026-11-18"
+        }
+      ],
+      "offer": {
+        "currency": "USD",
+        "monthlyWebsitePrice": 250,
+        "scope": "Website build, hosting, small updates and clear local/service content as foundations for Google and AI discovery"
+      },
+      "cleanup": {
+        "status": "not_due",
+        "routeRemovalAuthorizedOnlyAfter": "2026-11-26T00:01:03.000Z",
+        "retainSourceAndProject": true
+      },
+      "notes": [
+        "User-requested new dental prospect. Duplicates checked against registry and Gmail including known business/email aliases before drafting.",
+        "No measured traffic, rankings or guaranteed AI recommendations claimed.",
+        "All preview forms are demonstrations: no transmission, storage or actual booking.",
+        "Original publication and cutoff timestamps are immutable across redeployments.",
+        "Email is a saved draft; sending and scheduling are not authorized."
+      ]
     },
     {
       "id": "pavilion-dental-group",
@@ -695,22 +1048,141 @@
       "recordKind": "user_requested_dental_batch",
       "countsTowardDailyTarget": true,
       "dailyRunId": "picshaw-preview-five:2026-11-18",
-      "status": "research_verified_preview_building",
+      "status": "draft_saved_preview_active_guard_verified",
       "teamId": "team_152cnGnh8Y1LacMEU6gvr5FJ",
       "projectId": "prj_nxhGX36eKxxvJGhmmYT0CuelqhEg",
       "projectName": "picshaw-pavilion-dental-group-preview",
       "rootDirectory": "client-previews/pavilion-dental-group",
       "brandedUrl": "https://www.picshaw.com/previews/pavilion-dental-group/",
       "email": {
+        "provider": "gmail",
+        "draftId": "r3176812340451650656",
+        "draftMessageId": "1a1f129760fb883c",
+        "threadId": "1a1f129760fb883c",
+        "from": "hello@picshaw.com",
         "to": "drk@drksmiles.com",
-        "status": "not_yet_drafted",
-        "sendAuthorized": false
+        "subject": "A website idea for Pavilion Dental Group",
+        "status": "draft",
+        "savedAt": "2026-11-19T00:16:29.000Z",
+        "displayUrl": "https://mail.google.com/mail/u/?authuser=hello%40picshaw.com#all/1a1f129760fb883c",
+        "sendAuthorized": false,
+        "doNotRecreateDraft": true
       },
       "deduplication": {
         "checkedOn": "2026-11-18",
         "registry": "No previous business match",
         "gmail": "No matches for domain/email/business identity at qualification"
-      }
+      },
+      "schemaVersion": 1,
+      "firstPublishedAt": "2026-11-19T00:01:03.000Z",
+      "firstPublishedAtEpochMs": 1795046463000,
+      "expiresAt": "2026-11-26T00:01:03.000Z",
+      "expiresAtEpochMs": 1795651263000,
+      "maximumLifetimeHours": 168,
+      "timeZone": "America/Los_Angeles",
+      "repository": "Dual247/picshaw",
+      "branch": "preview/picshaw-outbound",
+      "originUrl": "https://picshaw-pavilion-dental-group-previ.vercel.app/",
+      "routing": {
+        "projectId": "prj_xMMQcSaM02M5xmSqPdMZGuB5PPVj",
+        "routeIds": [
+          "picshaw-pavilion-dental-group-preview-trailing-slash",
+          "picshaw-pavilion-dental-group-preview-proxy"
+        ],
+        "verifiedVersionId": "740ffeb3-4705-4bb2-b16c-ac9a2efbbc4d"
+      },
+      "expirationPolicy": "All requests and assets return server-enforced HTTP410 at or after immutable expiresAt. Never reset publication window on redeploy.",
+      "emailStatus": "draft",
+      "source": {
+        "repository": "Dual247/picshaw",
+        "branch": "preview/picshaw-outbound",
+        "commit": "aa49ef59e94adbf0d3db5818a2d048171b934ed1",
+        "lifecyclePath": "client-previews/pavilion-dental-group/preview-lifecycle.json",
+        "assetProvenancePath": "client-previews/pavilion-dental-group/docs/provenance.json",
+        "verificationPath": "client-previews/pavilion-dental-group/docs/verification.json"
+      },
+      "deployment": {
+        "id": "dpl_9ntAhxdoJbJNfX2LeCjecPLD88CW",
+        "status": "READY",
+        "sourceCommit": "aa49ef59e94adbf0d3db5818a2d048171b934ed1",
+        "guardStatus": "verified",
+        "verifiedAt": "2026-11-19T00:15:29.522953+00:00",
+        "origin": "https://picshaw-pavilion-dental-group-previ.vercel.app/",
+        "stableAliases": [
+          "picshaw-pavilion-dental-group-previ.vercel.app",
+          "picshaw-pavilion-dental-group-preview-ash-patels-projects.vercel.app",
+          "picshaw-pavilion-dental-group-pr-git-2927e4-ash-patels-projects.vercel.app"
+        ],
+        "immutableUrl": "https://picshaw-pavilion-dental-group-preview-5w3vt7tyi.vercel.app/",
+        "evidence": {
+          "brandedRoot": 200,
+          "brandedCss": 200,
+          "brandedScript": 200,
+          "brandedAsset": 200,
+          "primaryOrigin": 200,
+          "stableAliases": {
+            "testedCount": 3,
+            "status": 200
+          },
+          "dynamicExpiryHeader": "2026-11-26T00:01:03.000Z",
+          "cacheControlContains": "no-store",
+          "brandedPost": 405,
+          "originPost": 405,
+          "immutableDeployment": "302 Vercel authentication redirect; no preview content served",
+          "existingRoutes": "Homepage, portal, Expo, Second City and Murphy previews returned200; ten new route additions only"
+        },
+        "browserChecks": {
+          "desktop": "passed",
+          "mobile": {
+            "frameWidth": 375,
+            "usableViewportWidth": 360,
+            "documentWidth": 360,
+            "horizontalOverflow": false,
+            "navigationOpenAndLinkClose": "passed",
+            "serviceOrVisitTabSelection": "passed",
+            "demoSubmit": "success displayed; sample input values cleared; no network or storage in reviewed script"
+          },
+          "production": "Verified branded URL, heading and JavaScript initialization under live CSP"
+        },
+        "expiryTests": {
+          "passed": 4,
+          "cutoff": "2026-11-26T00:01:03.000Z"
+        }
+      },
+      "sourceFacts": [
+        {
+          "fact": "The official homepage has extensive treatment navigation and image-based headings, with drk@drksmiles.com and phone7149531000ext2.",
+          "sourceUrl": "https://drksmiles.com/",
+          "observedOn": "2026-11-18"
+        },
+        {
+          "fact": "The practice describes its own in-house laboratory and dental technician.",
+          "sourceUrl": "https://drksmiles.com/our-laboratory",
+          "observedOn": "2026-11-18"
+        },
+        {
+          "fact": "Dr. Daniel Kantarovich is identified as prosthodontist; the practice is at1140WestLaVetaAvenueSuite530,Orange. No hours or insurance acceptance claims added.",
+          "sourceUrl": "https://drksmiles.com/contact",
+          "observedOn": "2026-11-18"
+        }
+      ],
+      "offer": {
+        "currency": "USD",
+        "monthlyWebsitePrice": 250,
+        "scope": "Website build, hosting, small updates and clear local/service content as foundations for Google and AI discovery"
+      },
+      "cleanup": {
+        "status": "not_due",
+        "routeRemovalAuthorizedOnlyAfter": "2026-11-26T00:01:03.000Z",
+        "retainSourceAndProject": true
+      },
+      "notes": [
+        "User-requested new dental prospect. Duplicates checked against registry and Gmail including known business/email aliases before drafting.",
+        "No measured traffic, rankings or guaranteed AI recommendations claimed.",
+        "All preview forms are demonstrations: no transmission, storage or actual booking.",
+        "Original publication and cutoff timestamps are immutable across redeployments.",
+        "Email is a saved draft; sending and scheduling are not authorized."
+      ]
     },
     {
       "id": "comfort-zone-dental",
@@ -733,22 +1205,136 @@
       "recordKind": "user_requested_dental_batch",
       "countsTowardDailyTarget": true,
       "dailyRunId": "picshaw-preview-five:2026-11-18",
-      "status": "research_verified_preview_building",
+      "status": "draft_saved_preview_active_guard_verified",
       "teamId": "team_152cnGnh8Y1LacMEU6gvr5FJ",
       "projectId": "prj_eqhcgDa1T8v9RDvuiORd5BGyOymx",
       "projectName": "picshaw-comfort-zone-preview",
       "rootDirectory": "client-previews/comfort-zone-dental",
       "brandedUrl": "https://www.picshaw.com/previews/comfort-zone-dental/",
       "email": {
+        "provider": "gmail",
+        "draftId": "r-3767425507390784333",
+        "draftMessageId": "1a1f12979c4ba509",
+        "threadId": "1a1f12979c4ba509",
+        "from": "hello@picshaw.com",
         "to": "comfortzonedental@yahoo.com",
-        "status": "not_yet_drafted",
-        "sendAuthorized": false
+        "subject": "A website idea for Comfort Zone Dental",
+        "status": "draft",
+        "savedAt": "2026-11-19T00:16:29.000Z",
+        "displayUrl": "https://mail.google.com/mail/u/?authuser=hello%40picshaw.com#all/1a1f12979c4ba509",
+        "sendAuthorized": false,
+        "doNotRecreateDraft": true
       },
       "deduplication": {
         "checkedOn": "2026-11-18",
         "registry": "No previous business match",
         "gmail": "No matches for domain, email, business name or doctor name"
-      }
+      },
+      "schemaVersion": 1,
+      "firstPublishedAt": "2026-11-19T00:01:03.000Z",
+      "firstPublishedAtEpochMs": 1795046463000,
+      "expiresAt": "2026-11-26T00:01:03.000Z",
+      "expiresAtEpochMs": 1795651263000,
+      "maximumLifetimeHours": 168,
+      "timeZone": "America/Los_Angeles",
+      "repository": "Dual247/picshaw",
+      "branch": "preview/picshaw-outbound",
+      "originUrl": "https://picshaw-comfort-zone-preview.vercel.app/",
+      "routing": {
+        "projectId": "prj_xMMQcSaM02M5xmSqPdMZGuB5PPVj",
+        "routeIds": [
+          "picshaw-comfort-zone-dental-preview-trailing-slash",
+          "picshaw-comfort-zone-dental-preview-proxy"
+        ],
+        "verifiedVersionId": "740ffeb3-4705-4bb2-b16c-ac9a2efbbc4d"
+      },
+      "expirationPolicy": "All requests and assets return server-enforced HTTP410 at or after immutable expiresAt. Never reset publication window on redeploy.",
+      "emailStatus": "draft",
+      "source": {
+        "repository": "Dual247/picshaw",
+        "branch": "preview/picshaw-outbound",
+        "commit": "aa49ef59e94adbf0d3db5818a2d048171b934ed1",
+        "lifecyclePath": "client-previews/comfort-zone-dental/preview-lifecycle.json",
+        "assetProvenancePath": "client-previews/comfort-zone-dental/docs/asset-provenance.json",
+        "verificationPath": "client-previews/comfort-zone-dental/docs/verification.json"
+      },
+      "deployment": {
+        "id": "dpl_7Vo5jTNP9yj83PnPgeus79bC3Sws",
+        "status": "READY",
+        "sourceCommit": "aa49ef59e94adbf0d3db5818a2d048171b934ed1",
+        "guardStatus": "verified",
+        "verifiedAt": "2026-11-19T00:15:29.522953+00:00",
+        "origin": "https://picshaw-comfort-zone-preview.vercel.app/",
+        "stableAliases": [
+          "picshaw-comfort-zone-preview.vercel.app",
+          "picshaw-comfort-zone-preview-ash-patels-projects.vercel.app",
+          "picshaw-comfort-zone-preview-git-pre-e305b6-ash-patels-projects.vercel.app"
+        ],
+        "immutableUrl": "https://picshaw-comfort-zone-preview-nmdslb4r0-ash-patels-projects.vercel.app/",
+        "evidence": {
+          "brandedRoot": 200,
+          "brandedCss": 200,
+          "brandedScript": 200,
+          "brandedAsset": 200,
+          "primaryOrigin": 200,
+          "stableAliases": {
+            "testedCount": 3,
+            "status": 200
+          },
+          "dynamicExpiryHeader": "2026-11-26T00:01:03.000Z",
+          "cacheControlContains": "no-store",
+          "brandedPost": 405,
+          "originPost": 405,
+          "immutableDeployment": "302 Vercel authentication redirect; no preview content served",
+          "existingRoutes": "Homepage, portal, Expo, Second City and Murphy previews returned200; ten new route additions only"
+        },
+        "browserChecks": {
+          "desktop": "passed",
+          "mobile": {
+            "frameWidth": 375,
+            "usableViewportWidth": 360,
+            "documentWidth": 360,
+            "horizontalOverflow": false,
+            "navigationOpenAndLinkClose": "passed",
+            "serviceOrVisitTabSelection": "passed",
+            "demoSubmit": "success displayed; sample input values cleared; no network or storage in reviewed script"
+          },
+          "production": "Verified branded URL, heading and JavaScript initialization under live CSP"
+        },
+        "expiryTests": {
+          "passed": 4,
+          "cutoff": "2026-11-26T00:01:03.000Z"
+        }
+      },
+      "sourceFacts": [
+        {
+          "fact": "Current homepage has Contact-only primary navigation and treatment descriptions within the doctor biography. It says procedures and services are provided by Dr. David Polushkin personally.",
+          "sourceUrl": "https://www.comfortzonedental.com/",
+          "observedOn": "2026-11-18"
+        },
+        {
+          "fact": "Contact page publishes comfortzonedental@yahoo.com,8189559788,3808WRiversideDrSuite508,Burbank and Tuesday–Thursday9am–5pm hours.",
+          "sourceUrl": "https://www.comfortzonedental.com/contact",
+          "observedOn": "2026-11-18"
+        }
+      ],
+      "offer": {
+        "currency": "USD",
+        "monthlyWebsitePrice": 250,
+        "scope": "Website build, hosting, small updates and clear local/service content as foundations for Google and AI discovery"
+      },
+      "cleanup": {
+        "status": "not_due",
+        "routeRemovalAuthorizedOnlyAfter": "2026-11-26T00:01:03.000Z",
+        "retainSourceAndProject": true
+      },
+      "notes": [
+        "User-requested new dental prospect. Duplicates checked against registry and Gmail including known business/email aliases before drafting.",
+        "No measured traffic, rankings or guaranteed AI recommendations claimed.",
+        "All preview forms are demonstrations: no transmission, storage or actual booking.",
+        "Original publication and cutoff timestamps are immutable across redeployments.",
+        "Email is a saved draft; sending and scheduling are not authorized."
+      ]
     }
   ]
 }
