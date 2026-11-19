@@ -53,16 +53,19 @@
       "finishedAt": null,
       "minimumRequired": 5,
       "reservedProspectIds": [
-        "thomas-loe-dentistry",
         "eve-dental",
         "stephen-giovanisci",
         "andy-kusumo-dds",
-        "pavilion-dental-group"
+        "pavilion-dental-group",
+        "comfort-zone-dental"
       ],
       "completedProspectIds": [],
       "completedCount": 0,
       "shortfallCount": 5,
-      "blockers": []
+      "blockers": [],
+      "excludedProspectIds": [
+        "thomas-loe-dentistry"
+      ]
     }
   ],
   "prospects": [
@@ -498,28 +501,63 @@
       },
       "contact": {
         "name": "Dr. Thomas Loe",
-        "email": "culverdentist@yahoo.com"
+        "email": "culverdentist@yahoo.com",
+        "alternateEmail": "loethomas@gmail.com"
       },
       "phone": "310-838-3177",
       "address": "10320 Venice Boulevard, Culver City, CA 90232",
       "recordKind": "user_requested_dental_batch",
-      "countsTowardDailyTarget": true,
-      "dailyRunId": "picshaw-preview-five:2026-11-18",
-      "status": "research_verified_preview_building",
+      "countsTowardDailyTarget": false,
+      "dailyRunId": null,
+      "status": "excluded_existing_outreach_no_new_draft",
       "teamId": "team_152cnGnh8Y1LacMEU6gvr5FJ",
       "projectId": "prj_USfFZjMjepN4vWUSxUe3dXYz7rOc",
       "projectName": "picshaw-thomas-loe-dentistry-preview",
       "rootDirectory": "client-previews/thomas-loe-dentistry",
       "brandedUrl": "https://www.picshaw.com/previews/thomas-loe-dentistry/",
       "email": {
-        "to": "culverdentist@yahoo.com",
-        "status": "not_yet_drafted",
-        "sendAuthorized": false
+        "provider": "gmail",
+        "status": "sent_previous_campaign",
+        "to": "loethomas@gmail.com",
+        "sentMessageId": "1a13bb9bca21b567",
+        "threadId": "1a13ba14b9c8d34d",
+        "sendAuthorized": false,
+        "doNotRecreateDraft": true
       },
       "deduplication": {
         "checkedOn": "2026-11-18",
         "registry": "No previous business match",
         "gmail": "No matches for domain/email/business identity at qualification"
+      },
+      "exclusion": {
+        "reason": "Existing outreach found at alternate official address before drafting; replaced with Comfort Zone Dental",
+        "existingThreadId": "1a13ba14b9c8d34d",
+        "existingSentMessageId": "1a13bb9bca21b567",
+        "existingSentAt": "2026-10-14T11:43:09-07:00"
+      },
+      "firstPublishedAt": "2026-11-19T00:01:03.000Z",
+      "expiresAt": "2026-11-26T00:01:03.000Z",
+      "maximumLifetimeHours": 168,
+      "originUrl": "https://picshaw-thomas-loe-dentistry-previe.vercel.app/",
+      "routing": {
+        "projectId": "prj_xMMQcSaM02M5xmSqPdMZGuB5PPVj",
+        "routeIds": [],
+        "status": "not_created"
+      },
+      "source": {
+        "repository": "Dual247/picshaw",
+        "branch": "preview/picshaw-outbound",
+        "commit": "9b716b877563eccb0063b52d9246740cef41fd64"
+      },
+      "deployment": {
+        "id": "dpl_6guQUj4oyzjTNHCN5j9EFRopN7hn",
+        "status": "READY",
+        "guardStatus": "local_expiry_tests_passed"
+      },
+      "cleanup": {
+        "status": "not_due",
+        "retainSourceAndProject": true,
+        "routeRemovalAuthorizedOnlyAfter": "2026-11-26T00:01:03.000Z"
       }
     },
     {
@@ -672,6 +710,44 @@
         "checkedOn": "2026-11-18",
         "registry": "No previous business match",
         "gmail": "No matches for domain/email/business identity at qualification"
+      }
+    },
+    {
+      "id": "comfort-zone-dental",
+      "slug": "comfort-zone-dental",
+      "routeSlug": "comfort-zone-dental",
+      "company": "Comfort Zone Dental",
+      "companyDomain": "comfortzonedental.com",
+      "canonicalBusinessKey": "comfortzonedental.com|comfort-zone-dental|8189559788",
+      "geography": {
+        "city": "Burbank",
+        "county": "Los Angeles",
+        "state": "CA"
+      },
+      "contact": {
+        "name": "Dr. David Polushkin",
+        "email": "comfortzonedental@yahoo.com"
+      },
+      "address": "3808 W Riverside Dr, Suite 508, Burbank, CA 91505",
+      "phone": "818-955-9788",
+      "recordKind": "user_requested_dental_batch",
+      "countsTowardDailyTarget": true,
+      "dailyRunId": "picshaw-preview-five:2026-11-18",
+      "status": "research_verified_preview_building",
+      "teamId": "team_152cnGnh8Y1LacMEU6gvr5FJ",
+      "projectId": "prj_eqhcgDa1T8v9RDvuiORd5BGyOymx",
+      "projectName": "picshaw-comfort-zone-preview",
+      "rootDirectory": "client-previews/comfort-zone-dental",
+      "brandedUrl": "https://www.picshaw.com/previews/comfort-zone-dental/",
+      "email": {
+        "to": "comfortzonedental@yahoo.com",
+        "status": "not_yet_drafted",
+        "sendAuthorized": false
+      },
+      "deduplication": {
+        "checkedOn": "2026-11-18",
+        "registry": "No previous business match",
+        "gmail": "No matches for domain, email, business name or doctor name"
       }
     }
   ]
